@@ -1,0 +1,348 @@
+/* === Base layout === */
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  background: #0f172a;            /* Dark background */
+  color: #e5e7eb;                 /* Light text */
+}
+
+a {
+  color: #38bdf8;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.dhc-root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+
+.dhc-header {
+  border-bottom: 1px solid rgba(148, 163, 184, 0.3);
+  backdrop-filter: blur(10px);
+  background: rgba(15, 23, 42, 0.9);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.dhc-header-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0.75rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dhc-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.dhc-logo-mark {
+  width: 32px;
+  height: 32px;
+  border-radius: 0.75rem;
+  background: linear-gradient(135deg, #22c55e, #0ea5e9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #0b1120;
+}
+
+.dhc-logo-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.dhc-logo-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.dhc-logo-subtitle {
+  font-size: 0.7rem;
+  color: #9ca3af;
+}
+
+.dhc-nav {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.dhc-nav-link {
+  font-size: 0.85rem;
+  color: #cbd5f5;
+  text-decoration: none;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+}
+
+.dhc-nav-link:hover {
+  border-color: rgba(148, 163, 184, 0.7);
+  background: rgba(15, 23, 42, 0.7);
+}
+
+/* Main content */
+
+.dhc-content {
+  flex: 1;
+}
+
+.dhc-main {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 3rem;
+}
+
+.dhc-hero {
+  margin-bottom: 1.75rem;
+}
+
+.dhc-hero-title {
+  font-size: 2.1rem;
+  font-weight: 700;
+  margin: 0 0 0.4rem;
+}
+
+.dhc-hero-subtitle {
+  margin: 0;
+  color: #9ca3af;
+}
+
+.dhc-section-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+/* Footer */
+
+.dhc-footer {
+  border-top: 1px solid rgba(148, 163, 184, 0.3);
+  padding: 0.75rem 1.25rem;
+  background: #020617;
+}
+
+.dhc-footer-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+.dhc-footer-secondary {
+  opacity: 0.8;
+}
+
+/* === Workspace: 2-panel layout (Blockly + Inspector) === */
+
+.dhc-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: 1rem;
+  min-height: 520px;
+}
+
+.dhc-panel {
+  background: radial-gradient(circle at top left, #1e293b, #020617);
+  border-radius: 1rem;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  padding: 0.75rem 0.85rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.dhc-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.6rem;
+}
+
+.dhc-panel-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.dhc-panel-tag {
+  font-size: 0.65rem;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  color: #e5e7eb;
+}
+
+.dhc-panel-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  font-size: 0.85rem;
+  color: #9ca3af;
+}
+
+.dhc-panel-help {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+}
+
+/* Canvas */
+
+.dhc-canvas-area {
+  position: relative;
+  flex: 1;
+  border-radius: 0.75rem;
+  background: #020617;
+  border: 1px dashed rgba(148, 163, 184, 0.5);
+  display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+  overflow: hidden;
+  min-height: 500px;
+}
+
+.dhc-canvas-label {
+  position: absolute;
+  top: 0.4rem;
+  left: 0.6rem;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #64748b;
+  z-index: 2;
+}
+
+.dhc-canvas-area > div {
+  flex: 1;
+}
+
+.dhc-canvas-actions {
+  margin-top: 0.75rem;
+  text-align: right;
+}
+
+/* Buttons */
+
+.dhc-button-secondary {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid rgba(34, 197, 94, 0.6);
+  background: rgba(22, 163, 74, 0.12);
+  color: #bbf7d0;
+  cursor: pointer;
+}
+
+.dhc-button-secondary:hover {
+  background: rgba(22, 163, 74, 0.18);
+}
+
+/* Inspector */
+
+.dhc-panel--inspector {
+  max-height: 100%;
+}
+
+.dhc-inspector-field {
+  margin-bottom: 0.5rem;
+}
+
+.dhc-inspector-label {
+  font-size: 0.75rem;
+  margin-bottom: 0.1rem;
+}
+
+.dhc-inspector-input {
+  width: 100%;
+  padding: 0.25rem 0.4rem;
+  border-radius: 0.45rem;
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  background: #020617;
+  color: #e5e7eb;
+  font-size: 0.8rem;
+}
+
+.dhc-inspector-input:focus {
+  outline: none;
+  border-color: #22c55e;
+}
+
+/* Responsive */
+
+@media (max-width: 1024px) {
+  .dhc-workspace {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* === Blockly inside the canvas – DHC dark styling === */
+
+.blocklyMainBackground {
+  fill: #020617 !important;
+}
+
+.blocklyToolboxDiv {
+  background: #020617 !important;
+  border-right: 1px solid rgba(148, 163, 184, 0.3);
+}
+
+.blocklyTreeLabel {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif !important;
+  font-size: 0.8rem !important;
+  color: #e5e7eb !important;
+}
+
+.blocklyTreeSelected > .blocklyTreeLabel {
+  color: #22c55e !important;
+}
+
+.blocklyFlyoutBackground {
+  fill: #020617 !important;
+  fill-opacity: 1 !important;
+}
+
+.blocklyText {
+  fill: #e5e7eb !important;
+}
+
+.blocklyScrollbarHandle {
+  fill: #22c55e !important;
+}
+
+.blocklyScrollbarBackground {
+  fill: rgba(15, 23, 42, 0.8) !important;
+}
+
+.blocklyConnectionIndicator {
+  stroke: #38bdf8 !important;
+}
+
+.blocklyContextMenu {
+  background: #020617 !important;
+  border-radius: 0.75rem !important;
+  border: 1px solid rgba(148, 163, 184, 0.4) !important;
+  color: #e5e7eb !important;
+}
+
+.blocklyContextMenu .blocklyMenuItemHighlight {
+  background: rgba(148, 163, 184, 0.2) !important;
+}

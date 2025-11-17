@@ -1,0 +1,16 @@
+{
+  "app.title": "DHC Modeler (prototype)",
+  "app.subtitle": "Schema and ontology modeling for the DigitalHome.Cloud platform.",
+  "nav.home": "Home",
+  "nav.portal": "Portal",
+  "nav.designer": "Designer",
+  "nav.github": "GitHub",
+  "section.workspace": "Workspace",
+  "workspace.sidebar.title": "Ontology Palette",
+  "workspace.canvas.title": "Model Canvas",
+  "workspace.inspector.title": "Inspector",
+  "workspace.sidebar.help": "Drag elements from the palette to the canvas to build your schema.",
+  "workspace.canvas.help": "This is where your blocks will appear. Later, this will be the main Blockly workspace.",
+  "workspace.inspector.help": "Select a block to see and edit its properties here.",
+  "footer.tagline": "Nature meets technology \u2013 DigitalHome.Cloud"
+}
