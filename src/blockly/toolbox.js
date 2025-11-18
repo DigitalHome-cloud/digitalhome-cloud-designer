@@ -85,3 +85,103 @@ export const dhcToolbox = {
     },
   ],
 };
+
+
+// Smart Home Designer specific toolboxes for different design views.
+
+export const smartHomeSpatialToolbox = {
+  kind: "categoryToolbox",
+  contents: [
+    {
+      kind: "category",
+      name: "Spaces",
+      colour: "210",
+      contents: [
+        { kind: "block", type: "owl_thing" },
+        { kind: "block", type: "dhc_class" },
+      ],
+    },
+    {
+      kind: "category",
+      name: "Equipment types",
+      colour: "280",
+      contents: [
+        { kind: "block", type: "dhc_equipment_type" },
+      ],
+    },
+    {
+      kind: "category",
+      name: "Relations",
+      colour: "160",
+      contents: [
+        { kind: "block", type: "dhc_object_property" },
+        { kind: "block", type: "dhc_data_property" },
+      ],
+    },
+  ],
+};
+
+export const smartHomeElectricalToolbox = {
+  kind: "categoryToolbox",
+  contents: [
+    {
+      kind: "category",
+      name: "Electrical equipment",
+      colour: "20",
+      contents: [
+        { kind: "block", type: "dhc_equipment_type" },
+      ],
+    },
+    {
+      kind: "category",
+      name: "Classes",
+      colour: "120",
+      contents: [
+        { kind: "block", type: "dhc_class" },
+      ],
+    },
+    {
+      kind: "category",
+      name: "Relations",
+      colour: "160",
+      contents: [
+        { kind: "block", type: "dhc_object_property" },
+        { kind: "block", type: "dhc_data_property" },
+      ],
+    },
+  ],
+};
+
+export const smartHomeNetworkToolbox = {
+  kind: "categoryToolbox",
+  contents: [
+    {
+      kind: "category",
+      name: "Network topology",
+      colour: "260",
+      contents: [
+        { kind: "block", type: "dhc_class" },
+      ],
+    },
+    {
+      kind: "category",
+      name: "Equipment types",
+      colour: "280",
+      contents: [
+        { kind: "block", type: "dhc_equipment_type" },
+      ],
+    },
+    {
+      kind: "category",
+      name: "Relations",
+      colour: "160",
+      contents: [
+        { kind: "block", type: "dhc_object_property" },
+        { kind: "block", type: "dhc_data_property" },
+      ],
+    },
+  ],
+};
+
+// "All" view reuses the original ontology toolbox.
+export const smartHomeAllToolbox = dhcToolbox;

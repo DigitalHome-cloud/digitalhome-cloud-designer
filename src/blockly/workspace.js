@@ -1,5 +1,5 @@
 import * as Blockly from "blockly";
-import { dhcToolbox } from "./toolbox";
+import { dhcToolbox, smartHomeSpatialToolbox, smartHomeElectricalToolbox, smartHomeNetworkToolbox, smartHomeAllToolbox } from "./toolbox";
 import "./blocks/dhc";
 
 let workspaceRef = null;
@@ -57,13 +57,27 @@ const dhcTheme = Blockly.Theme.defineTheme("dhcTheme", {
   },
 });
 
+function getToolboxForDesignView(designView) {
+  switch (designView) {
+    case "spatial":
+      return smartHomeSpatialToolbox;
+    case "electrical":
+      return smartHomeElectricalToolbox;
+    case "network":
+      return smartHomeNetworkToolbox;
+    case "all":
+    default:
+      return smartHomeAllToolbox || dhcToolbox;
+  }
+}
+
 /**
  * Initialise the Blockly workspace in the given DOM container.
  */
 export function initModelerWorkspace(container, options = {}) {
   if (!container) return null;
 
-  const { onSelectionChange } = options;
+  const { onSelectionChange, designView = "all" } = options;
   selectionCallback =
     typeof onSelectionChange === "function" ? onSelectionChange : null;
 
@@ -72,15 +86,16 @@ export function initModelerWorkspace(container, options = {}) {
     workspaceRef = null;
   }
 
+  const toolboxConfig = getToolboxForDesignView(designView);
   console.log("[DHC] Injecting Blockly into:", container);
-  console.log("[DHC] Toolbox JSON:", dhcToolbox);
+  console.log("[DHC] Toolbox JSON for view", designView, toolboxConfig);
   console.log(
     "[DHC] Available dhc_* blocks before inject:",
     Object.keys(Blockly.Blocks).filter((k) => k.startsWith("dhc_"))
   );
 
   workspaceRef = Blockly.inject(container, {
-    toolbox: dhcToolbox,
+    toolbox: toolboxConfig,
     theme: dhcTheme,       // 👈 apply our theme
     trashcan: true,
     grid: {
@@ -109,6 +124,15 @@ export function initModelerWorkspace(container, options = {}) {
   });
 
   return workspaceRef;
+}
+
+export function setDesignView(designView) {
+  if (!workspaceRef) return;
+  const toolboxConfig = getToolboxForDesignView(designView);
+  console.log("[DHC] Updating toolbox to view", designView, toolboxConfig);
+  if (workspaceRef.updateToolbox) {
+    workspaceRef.updateToolbox(toolboxConfig);
+  }
 }
 
 export function getWorkspace() {
