@@ -12,5 +12,9 @@
   "workspace.sidebar.help": "Drag elements from the palette to the canvas to build your schema.",
   "workspace.canvas.help": "This is where your blocks will appear. Later, this will be the main Blockly workspace.",
   "workspace.inspector.help": "Select a block to see and edit its properties here.",
-  "footer.tagline": "Nature meets technology \u2013 DigitalHome.Cloud"
+  "footer.tagline": "Nature meets technology \u2013 DigitalHome.Cloud",
+  "nav.signin": "Sign In",
+  "smarthome.label": "SmartHome",
+  "smarthome.demoGroup": "Demo",
+  "smarthome.yourHomes": "Your SmartHomes"
 }

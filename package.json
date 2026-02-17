@@ -5,6 +5,8 @@
   "version": "0.1.0",
   "author": "Kyle Mathews <mathews.kyle@gmail.com>",
   "dependencies": {
+    "@aws-amplify/ui-react": "^6.15.0",
+    "aws-amplify": "^6.16.2",
     "blockly": "^12.3.1",
     "gatsby": "^5.14.6",
     "gatsby-plugin-image": "^3.14.0",
@@ -13,8 +15,10 @@
     "gatsby-plugin-sharp": "^5.14.0",
     "gatsby-source-filesystem": "^5.14.0",
     "gatsby-transformer-sharp": "^5.14.0",
+    "i18next": "^25.8.10",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-i18next": "^16.5.4"
   },
   "devDependencies": {
     "prettier": "^2.8.8"
@@ -25,7 +29,7 @@
   "license": "0BSD",
   "scripts": {
     "build": "gatsby build",
-    "develop": "gatsby develop",
+    "develop": "gatsby develop -p 8001",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md,css}\"",
     "start": "gatsby develop",
     "serve": "gatsby serve",

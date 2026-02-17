@@ -1,12 +1,17 @@
-/**
- * Implement Gatsby's SSR (Server Side Rendering) APIs in this file.
- *
- * See: https://www.gatsbyjs.com/docs/reference/config-files/gatsby-ssr/
- */
+import React from "react";
+import { Amplify } from "aws-amplify";
+import awsExports from "./src/aws-exports.deployment";
+import { AuthProvider } from "./src/context/AuthContext";
+import { SmartHomeProvider } from "./src/context/SmartHomeContext";
 
-/**
- * @type {import('gatsby').GatsbySSR['onRenderBody']}
- */
-exports.onRenderBody = ({ setHtmlAttributes }) => {
-  setHtmlAttributes({ lang: `en` })
-}
+Amplify.configure(awsExports);
+
+export const wrapRootElement = ({ element }) => (
+  <AuthProvider>
+    <SmartHomeProvider>{element}</SmartHomeProvider>
+  </AuthProvider>
+);
+
+export const onRenderBody = ({ setHtmlAttributes }) => {
+  setHtmlAttributes({ lang: "en" });
+};
