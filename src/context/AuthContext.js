@@ -50,10 +50,23 @@ export const AuthProvider = ({ children }) => {
     try {
       setAuthState("loading");
 
-      const session = await fetchAuthSession();
+      // getCurrentUser() checks local tokens — doesn't need Identity Pool.
+      // Call it first so an Identity Pool misconfiguration doesn't break auth.
       const currentUser = await getCurrentUser();
 
-      const idPayload = session?.tokens?.idToken?.payload || {};
+      // User is authenticated. Now try to get the session for group claims.
+      let idPayload = {};
+      try {
+        const session = await fetchAuthSession();
+        idPayload = session?.tokens?.idToken?.payload || {};
+      } catch (sessionErr) {
+        // Identity Pool errors (e.g. DNS resolution) must not block auth.
+        console.warn(
+          "[AuthContext] fetchAuthSession failed (Identity Pool?), proceeding without token payload:",
+          sessionErr
+        );
+      }
+
       const tokenGroups = idPayload["cognito:groups"] || [];
 
       setUser({

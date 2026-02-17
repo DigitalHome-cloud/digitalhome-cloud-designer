@@ -64,6 +64,25 @@ English only (`en`). Translation files in `src/locales/en/common.json`. Uses `ga
 
 Plain CSS in `src/styles/global.css`. Dark-mode theme with slate/blue palette matching the portal. No CSS framework.
 
+### Authentication Resilience
+
+`AuthContext` calls `getCurrentUser()` before `fetchAuthSession()`. This ensures that if the Cognito Identity Pool is misconfigured (e.g. wrong region in `GATSBY_IDENTITY_POOL_ID`), authentication still works. See portal CLAUDE.md for details.
+
+## Dependencies & Licenses
+
+All dependencies are open source. Key libraries:
+
+| Package | License | Notes |
+|---------|---------|-------|
+| react, react-dom | MIT | UI framework |
+| gatsby | MIT | Static site generator |
+| aws-amplify | Apache-2.0 | AWS Amplify JS SDK v6 |
+| @aws-amplify/ui-react | Apache-2.0 | Pre-built auth UI components |
+| blockly | Apache-2.0 | Visual block editor |
+| i18next, react-i18next | MIT | Internationalization |
+
+No copyleft (GPL/LGPL/AGPL) dependencies. Apache-2.0 requires preserving copyright notices and license text in distributions but has no source-sharing obligations.
+
 ## Multi-Repo Ecosystem
 
 | App | Repo | Port | URL |
