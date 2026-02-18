@@ -90,7 +90,8 @@ No copyleft (GPL/LGPL/AGPL) dependencies. Apache-2.0 requires preserving copyrig
 | Portal | `digitalhome-cloud-portal` | 8000 | `portal.digitalhome.cloud` |
 | Designer | `digitalhome-cloud-designer` | 8001 | `designer.digitalhome.cloud` |
 | Modeler | `digitalhome-cloud-modeler` | 8002 | `modeler.digitalhome.cloud` |
-| Semantic Core | `digitalhome-cloud-semantic-core` | — | RDF/OWL ontology repo |
+
+The semantic-core ontology files (TTL, JSON-LD context, SHACL shapes) live inside the modeler repo under `semantic-core/`.
 
 All repos use `stage` branch for staging work before merging to `main`.
 
