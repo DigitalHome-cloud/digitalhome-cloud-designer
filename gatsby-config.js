@@ -19,7 +19,7 @@ module.exports = {
       resolve: `gatsby-plugin-react-i18next`,
       options: {
         localeJsonSourceName: `locales`,
-        languages: [`en`],
+        languages: [`en`, `de`, `fr`],
         defaultLanguage: `en`,
         siteUrl: `https://designer.digitalhome.cloud`,
         i18nextOptions: {

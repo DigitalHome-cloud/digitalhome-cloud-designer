@@ -20,9 +20,15 @@ import { useAuth } from "./AuthContext";
 const STORAGE_KEY = "dhc-active-home";
 
 const DEMO_HOMES = [
-  { id: "DE-DEMO", name: "Demo Germany", isDemo: true },
-  { id: "FR-DEMO", name: "Demo France", isDemo: true },
-  { id: "BE-DEMO", name: "Demo Belgium", isDemo: true },
+  { id: "DE-DEMO-01", name: "Demo Germany", isDemo: true },
+  { id: "FR-DEMO-01", name: "Demo France", isDemo: true },
+  { id: "BE-DEMO-01", name: "Demo Belgium", isDemo: true },
+];
+
+const USER_HOMES = [
+  { id: "DE-39576-HBW22-01", name: "Stendal" },
+  { id: "BE-1160-RDP02-01", name: "Auderghem" },
+  { id: "FR-12400-RDB737-01", name: "Saint-Affrique" },
 ];
 
 const SmartHomeContext = createContext(null);
@@ -43,9 +49,8 @@ export const SmartHomeProvider = ({ children }) => {
     return localStorage.getItem(STORAGE_KEY) || DEMO_HOMES[0].id;
   });
 
-  // TODO: When backend SmartHome model exists, fetch user-linked homes here
-  // const [userHomes, setUserHomes] = useState([]);
-  const userHomes = [];
+  // TODO: When backend SmartHome model exists, fetch user-linked homes via GraphQL
+  const userHomes = authState === "authenticated" ? USER_HOMES : [];
 
   const smartHomes =
     authState === "authenticated"

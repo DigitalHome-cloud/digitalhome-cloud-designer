@@ -5,6 +5,9 @@ import {
   exportWorkspaceJson,
   setDesignView,
 } from "../blockly/workspace";
+import BuilderTab from "./BuilderTab";
+
+/* ── Designer tab: existing Blockly canvas + inspector ── */
 
 const Canvas = ({
   onSelectionChange,
@@ -164,8 +167,7 @@ const Inspector = ({ selectedBlock }) => {
   );
 };
 
-const WorkspaceShell = () => {
-  const { t } = useTranslation();
+const DesignerTab = () => {
   const [selectedBlock, setSelectedBlock] = React.useState(null);
   const [designView, setDesignViewState] = React.useState("all");
   const [isFullscreen, setIsFullscreen] = React.useState(false);
@@ -193,8 +195,7 @@ const WorkspaceShell = () => {
   const sectionClassName = isFullscreen ? "dhc-workspace-fullscreen" : "";
 
   return (
-    <section className={sectionClassName}>
-      <h2 className="dhc-section-title">{t("section.workspace")}</h2>
+    <div className={sectionClassName}>
       <div className="dhc-workspace dhc-workspace--two-columns">
         <Canvas
           onSelectionChange={setSelectedBlock}
@@ -205,6 +206,38 @@ const WorkspaceShell = () => {
         />
         {!isFullscreen && <Inspector selectedBlock={selectedBlock} />}
       </div>
+    </div>
+  );
+};
+
+/* ── WorkspaceShell with tab bar ── */
+
+const WorkspaceShell = () => {
+  const { t } = useTranslation();
+  const [activeTab, setActiveTab] = React.useState("designer");
+
+  return (
+    <section>
+      <h2 className="dhc-section-title">{t("section.workspace")}</h2>
+      <div className="dhc-tab-bar">
+        <button
+          type="button"
+          className={`dhc-tab${activeTab === "designer" ? " dhc-tab--active" : ""}`}
+          onClick={() => setActiveTab("designer")}
+        >
+          {t("tab.designer")}
+        </button>
+        <button
+          type="button"
+          className={`dhc-tab${activeTab === "builder" ? " dhc-tab--active" : ""}`}
+          onClick={() => setActiveTab("builder")}
+        >
+          {t("tab.builder")}
+        </button>
+      </div>
+
+      {activeTab === "designer" && <DesignerTab />}
+      {activeTab === "builder" && <BuilderTab />}
     </section>
   );
 };

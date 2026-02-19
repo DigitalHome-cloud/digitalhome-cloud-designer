@@ -1,11 +1,12 @@
 import * as React from "react";
 import { Link } from "gatsby";
-import { useTranslation } from "gatsby-plugin-react-i18next";
+import { useTranslation, useI18next } from "gatsby-plugin-react-i18next";
 import { useAuth } from "../context/AuthContext";
 import { useSmartHome } from "../context/SmartHomeContext";
 
 const Header = () => {
   const { t } = useTranslation();
+  const { languages, language, changeLanguage } = useI18next();
   const { authState, isAuthenticated, user, signOut } = useAuth();
   const { demoHomes, userHomes, activeHome, setActiveHome } = useSmartHome();
 
@@ -104,6 +105,24 @@ const Header = () => {
                 </button>
               </>
             )}
+
+            {/* Language switcher */}
+            <div className="dhc-lang-switch">
+              {languages.map((lng) => (
+                <button
+                  key={lng}
+                  type="button"
+                  onClick={() => changeLanguage(lng)}
+                  className={
+                    language === lng
+                      ? "dhc-lang-btn dhc-lang-btn--active"
+                      : "dhc-lang-btn"
+                  }
+                >
+                  {lng.toUpperCase()}
+                </button>
+              ))}
+            </div>
           </div>
         </nav>
       </div>

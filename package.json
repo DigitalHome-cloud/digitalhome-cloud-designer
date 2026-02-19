@@ -18,10 +18,15 @@
     "i18next": "^25.8.10",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-i18next": "^16.5.4"
+    "react-force-graph-3d": "^1.25.3",
+    "react-i18next": "^16.5.4",
+    "three": "0.170.0"
   },
   "devDependencies": {
     "prettier": "^2.8.8"
+  },
+  "resolutions": {
+    "three": "0.170.0"
   },
   "keywords": [
     "gatsby"
