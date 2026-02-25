@@ -1,7 +1,7 @@
 module.exports = {
   siteMetadata: {
-    title: `DHC Modeler`,
-    siteUrl: `https://modeler.digitalhome.cloud`,
+    title: `DHC Smart Home Designer`,
+    siteUrl: `https://designer.digitalhome.cloud`,
     description: `Your launchpad for designing, managing and operating smart homes.`,
     author: `D-LAB-5`
   },
@@ -21,7 +21,7 @@ module.exports = {
         localeJsonSourceName: `locales`,
         languages: [`en`],
         defaultLanguage: `en`,
-        siteUrl: `https://modeler.digitalhome.cloud`,
+        siteUrl: `https://designer.digitalhome.cloud`,
         i18nextOptions: {
           fallbackLng: `en`,
           interpolation: {

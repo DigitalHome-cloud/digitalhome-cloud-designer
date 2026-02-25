@@ -1,9 +1,17 @@
 import * as React from "react";
 import { Link } from "gatsby";
 import { useTranslation } from "gatsby-plugin-react-i18next";
+import { useAuth } from "../context/AuthContext";
+import { useSmartHome } from "../context/SmartHomeContext";
 
 const Header = () => {
   const { t } = useTranslation();
+  const { authState, isAuthenticated, user, signOut } = useAuth();
+  const { demoHomes, userHomes, activeHome, setActiveHome } = useSmartHome();
+
+  const handleSignOut = async () => {
+    await signOut();
+  };
 
   return (
     <header className="dhc-header">
@@ -12,38 +20,91 @@ const Header = () => {
           <span className="dhc-logo-mark">DH</span>
           <div className="dhc-logo-text">
             <span className="dhc-logo-title">DigitalHome.Cloud</span>
-            <span className="dhc-logo-subtitle">Modeler</span>
+            <span className="dhc-logo-subtitle">Designer</span>
           </div>
         </div>
 
         <nav className="dhc-nav">
-          <Link to="/" className="dhc-nav-link">
-            {t("nav.home")}
-          </Link>
-          <a
-            href="https://portal.digitalhome.cloud"
-            className="dhc-nav-link"
-            target="_blank"
-            rel="noreferrer"
-          >
-            {t("nav.portal")}
-          </a>
-          <a
-            href="https://designer.digitalhome.cloud"
-            className="dhc-nav-link"
-            target="_blank"
-            rel="noreferrer"
-          >
-            {t("nav.designer")}
-          </a>
-          <a
-            href="https://github.com/DigitalHome-cloud"
-            className="dhc-nav-link"
-            target="_blank"
-            rel="noreferrer"
-          >
-            {t("nav.github")}
-          </a>
+          <div className="dhc-nav-group">
+            <Link to="/" className="dhc-nav-link">
+              {t("nav.home")}
+            </Link>
+            <a
+              href="https://portal.digitalhome.cloud"
+              className="dhc-nav-link"
+              target="_blank"
+              rel="noreferrer"
+            >
+              {t("nav.portal")}
+            </a>
+            <a
+              href="https://github.com/DigitalHome-cloud"
+              className="dhc-nav-link"
+              target="_blank"
+              rel="noreferrer"
+            >
+              {t("nav.github")}
+            </a>
+          </div>
+
+          {/* SmartHome selector */}
+          <div className="dhc-home-selector">
+            <select
+              className="dhc-home-select"
+              value={activeHome.id}
+              onChange={(e) => setActiveHome(e.target.value)}
+              aria-label={t("smarthome.label")}
+            >
+              <optgroup label={t("smarthome.demoGroup")}>
+                {demoHomes.map((h) => (
+                  <option key={h.id} value={h.id}>
+                    {h.id}
+                  </option>
+                ))}
+              </optgroup>
+              {userHomes.length > 0 && (
+                <optgroup label={t("smarthome.yourHomes")}>
+                  {userHomes.map((h) => (
+                    <option key={h.id} value={h.id}>
+                      {h.id}
+                    </option>
+                  ))}
+                </optgroup>
+              )}
+            </select>
+          </div>
+
+          <div className="dhc-nav-group dhc-nav-auth">
+            {authState === "demo" && (
+              <>
+                <span className="dhc-nav-pill">DEMO</span>
+                <a
+                  href="https://portal.digitalhome.cloud/signin"
+                  className="dhc-nav-link"
+                >
+                  {t("nav.signin")}
+                </a>
+              </>
+            )}
+
+            {isAuthenticated && (
+              <>
+                <span className="dhc-nav-pill dhc-nav-pill--ok">
+                  {user?.idTokenPayload?.name ||
+                    user?.idTokenPayload?.email ||
+                    user?.username ||
+                    "Signed in"}
+                </span>
+                <button
+                  type="button"
+                  onClick={handleSignOut}
+                  className="dhc-nav-link dhc-nav-link-button"
+                >
+                  Sign out
+                </button>
+              </>
+            )}
+          </div>
         </nav>
       </div>
     </header>
