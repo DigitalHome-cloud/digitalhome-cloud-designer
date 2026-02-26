@@ -3,11 +3,10 @@ import { useTranslation } from "gatsby-plugin-react-i18next";
 import {
   initModelerWorkspace,
   exportWorkspaceJson,
-  setDesignView,
+  updateToolbox,
+  getWorkspace,
 } from "../blockly/workspace";
-import BuilderTab from "./BuilderTab";
-
-/* ── Designer tab: existing Blockly canvas + inspector ── */
+import { loadToolbox, getToolboxForView } from "../blockly/toolboxLoader";
 
 const Canvas = ({
   onSelectionChange,
@@ -15,20 +14,49 @@ const Canvas = ({
   onDesignViewChange,
   isFullscreen,
   onToggleFullscreen,
+  readOnly,
+  extraActions,
 }) => {
   const { t } = useTranslation();
   const containerRef = React.useRef(null);
+  const [toolboxLoaded, setToolboxLoaded] = React.useState(false);
 
+  // Load toolbox from S3 and init workspace
   React.useEffect(() => {
     if (typeof window === "undefined") return;
-    initModelerWorkspace(containerRef.current, { onSelectionChange, designView: "all" });
-  }, [onSelectionChange]);
 
+    let cancelled = false;
+
+    async function init() {
+      const toolbox = await loadToolbox("latest");
+      if (cancelled) return;
+      setToolboxLoaded(true);
+
+      const toolboxConfig =
+        designView === "all" ? toolbox : getToolboxForView(designView);
+
+      initModelerWorkspace(containerRef.current, {
+        onSelectionChange,
+        toolboxConfig: toolboxConfig || undefined,
+        readOnly,
+      });
+    }
+
+    init();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [onSelectionChange, readOnly]);
+
+  // Update toolbox when designView changes
   React.useEffect(() => {
-    if (typeof window === "undefined") return;
-    if (!designView) return;
-    setDesignView(designView);
-  }, [designView]);
+    if (typeof window === "undefined" || !toolboxLoaded) return;
+    const toolboxConfig = getToolboxForView(designView);
+    if (toolboxConfig) {
+      updateToolbox(toolboxConfig);
+    }
+  }, [designView, toolboxLoaded]);
 
   const handleExport = () => {
     const data = exportWorkspaceJson();
@@ -54,11 +82,11 @@ const Canvas = ({
   const viewLabel = (view) => {
     if (view === "spatial") return "Spatial";
     if (view === "electrical") return "Electrical";
-    if (view === "network") return "Network";
+    if (view === "shared") return "Shared";
     return "All";
   };
 
-  const views = ["spatial", "electrical", "network", "all"];
+  const views = ["spatial", "electrical", "shared", "all"];
 
   return (
     <div className="dhc-panel">
@@ -70,7 +98,9 @@ const Canvas = ({
       </div>
       <div className="dhc-panel-body">
         <div className="dhc-canvas-area">
-          <span className="dhc-canvas-label">Workspace</span>
+          <span className="dhc-canvas-label">
+            {toolboxLoaded ? "Workspace" : "Loading toolbox..."}
+          </span>
           <div
             ref={containerRef}
             style={{ width: "100%", height: "100%", minHeight: "500px" }}
@@ -94,6 +124,7 @@ const Canvas = ({
             ))}
           </div>
           <div className="dhc-canvas-actions-right">
+            {extraActions}
             <button
               type="button"
               className="dhc-button-ghost"
@@ -106,7 +137,7 @@ const Canvas = ({
               className="dhc-button-secondary"
               onClick={handleExport}
             >
-              Export workspace to file
+              Export
             </button>
           </div>
         </div>
@@ -118,12 +149,34 @@ const Canvas = ({
 const Inspector = ({ selectedBlock }) => {
   const { t } = useTranslation();
 
-  const label = selectedBlock?.getFieldValue("LABEL") || "";
-  const iri =
-    selectedBlock?.getFieldValue("IRI") ||
-    selectedBlock?.getFieldValue("BASE") ||
-    "";
-  const comment = selectedBlock?.getFieldValue("COMMENT") || "";
+  // Collect all fields from the block, grouped by type
+  const fields = React.useMemo(() => {
+    if (!selectedBlock) return [];
+    const result = [];
+    for (const input of selectedBlock.inputList) {
+      for (const field of input.fieldRow) {
+        if (!field.name) continue;
+        const value = field.getValue();
+        let fieldType = "text";
+        if (field instanceof Object && field.constructor?.name === "FieldNumber") {
+          fieldType = "number";
+        } else if (field instanceof Object && field.constructor?.name === "FieldCheckbox") {
+          fieldType = "checkbox";
+        } else if (field instanceof Object && field.constructor?.name === "FieldDropdown") {
+          fieldType = "dropdown";
+        }
+        result.push({
+          name: field.name,
+          label: field.name.replace(/_/g, " ").toLowerCase(),
+          value,
+          fieldType,
+        });
+      }
+    }
+    return result;
+  }, [selectedBlock]);
+
+  const blockType = selectedBlock?.type?.replace("dhc_", "").replace(/_/g, " ") || "";
 
   return (
     <div className="dhc-panel dhc-panel--inspector">
@@ -134,40 +187,48 @@ const Inspector = ({ selectedBlock }) => {
         <span className="dhc-panel-tag">Details</span>
       </div>
       <div className="dhc-panel-body">
-        <p className="dhc-panel-help">{t("workspace.inspector.help")}</p>
-        <div className="dhc-inspector-field">
-          <div className="dhc-inspector-label">Label</div>
-          <input
-            className="dhc-inspector-input"
-            type="text"
-            value={label}
-            readOnly
-          />
-        </div>
-        <div className="dhc-inspector-field">
-          <div className="dhc-inspector-label">IRI / Base</div>
-          <input
-            className="dhc-inspector-input"
-            type="text"
-            value={iri}
-            readOnly
-          />
-        </div>
-        <div className="dhc-inspector-field">
-          <div className="dhc-inspector-label">Comment</div>
-          <textarea
-            className="dhc-inspector-input"
-            value={comment}
-            readOnly
-            rows={3}
-          />
-        </div>
+        {!selectedBlock ? (
+          <p className="dhc-panel-help">{t("workspace.inspector.help")}</p>
+        ) : (
+          <>
+            <div className="dhc-inspector-field">
+              <div className="dhc-inspector-label">Block Type</div>
+              <input
+                className="dhc-inspector-input"
+                type="text"
+                value={blockType}
+                readOnly
+              />
+            </div>
+            {fields.map((f) => (
+              <div key={f.name} className="dhc-inspector-field">
+                <div className="dhc-inspector-label">{f.label}</div>
+                {f.fieldType === "checkbox" ? (
+                  <input
+                    className="dhc-inspector-input"
+                    type="checkbox"
+                    checked={f.value === "TRUE"}
+                    readOnly
+                    style={{ width: "auto" }}
+                  />
+                ) : (
+                  <input
+                    className="dhc-inspector-input"
+                    type={f.fieldType === "number" ? "number" : "text"}
+                    value={f.value ?? ""}
+                    readOnly
+                  />
+                )}
+              </div>
+            ))}
+          </>
+        )}
       </div>
     </div>
   );
 };
 
-const DesignerTab = () => {
+const WorkspaceShell = ({ readOnly = false, extraActions, children }) => {
   const [selectedBlock, setSelectedBlock] = React.useState(null);
   const [designView, setDesignViewState] = React.useState("all");
   const [isFullscreen, setIsFullscreen] = React.useState(false);
@@ -203,42 +264,13 @@ const DesignerTab = () => {
           onDesignViewChange={setDesignViewState}
           isFullscreen={isFullscreen}
           onToggleFullscreen={() => setIsFullscreen((prev) => !prev)}
+          readOnly={readOnly}
+          extraActions={extraActions}
         />
         {!isFullscreen && <Inspector selectedBlock={selectedBlock} />}
       </div>
+      {children}
     </div>
-  );
-};
-
-/* ── WorkspaceShell with tab bar ── */
-
-const WorkspaceShell = () => {
-  const { t } = useTranslation();
-  const [activeTab, setActiveTab] = React.useState("designer");
-
-  return (
-    <section>
-      <h2 className="dhc-section-title">{t("section.workspace")}</h2>
-      <div className="dhc-tab-bar">
-        <button
-          type="button"
-          className={`dhc-tab${activeTab === "designer" ? " dhc-tab--active" : ""}`}
-          onClick={() => setActiveTab("designer")}
-        >
-          {t("tab.designer")}
-        </button>
-        <button
-          type="button"
-          className={`dhc-tab${activeTab === "builder" ? " dhc-tab--active" : ""}`}
-          onClick={() => setActiveTab("builder")}
-        >
-          {t("tab.builder")}
-        </button>
-      </div>
-
-      {activeTab === "designer" && <DesignerTab />}
-      {activeTab === "builder" && <BuilderTab />}
-    </section>
   );
 };
 

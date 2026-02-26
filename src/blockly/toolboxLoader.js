@@ -1,0 +1,87 @@
+/**
+ * toolboxLoader.js
+ *
+ * Fetches the Blockly block definitions and toolbox config from S3,
+ * registers all blocks, and returns the toolbox config.
+ * Falls back to local JSON if S3 is unavailable.
+ */
+import { fetchToolboxFromS3 } from "../utils/s3";
+import { registerBlocks } from "./blockRegistrar";
+
+// Local fallback data (generated at modeler build time, copied to designer)
+let localBlocks = null;
+let localToolbox = null;
+
+try {
+  localBlocks = require("../../node_modules/.cache/blockly-blocks.json");
+  localToolbox = require("../../node_modules/.cache/blockly-toolbox.json");
+} catch (e) {
+  // Fallback files not available — will rely on S3
+}
+
+let cachedToolbox = null;
+
+/**
+ * Load and register blocks, return toolbox config.
+ * @param {string} version — ontology version or "latest"
+ * @returns {Promise<object>} — Blockly categoryToolbox config
+ */
+export async function loadToolbox(version = "latest") {
+  if (cachedToolbox) return cachedToolbox;
+
+  // Try S3 first
+  const s3Data = await fetchToolboxFromS3(version);
+
+  if (s3Data) {
+    registerBlocks(s3Data.blocks);
+    cachedToolbox = s3Data.toolbox;
+    console.log("[DHC] Toolbox loaded from S3");
+    return cachedToolbox;
+  }
+
+  // Fallback to local JSON
+  if (localBlocks && localToolbox) {
+    registerBlocks(localBlocks);
+    cachedToolbox = localToolbox;
+    console.log("[DHC] Toolbox loaded from local fallback");
+    return cachedToolbox;
+  }
+
+  console.warn("[DHC] No toolbox data available (S3 + local both failed)");
+  return null;
+}
+
+/**
+ * Load toolbox and register blocks synchronously from inline data.
+ * Used when JSON is already available (e.g. fetched separately).
+ * @param {{ blocks: Array, toolbox: object }} data
+ */
+export function loadToolboxSync(data) {
+  if (!data) return null;
+  registerBlocks(data.blocks);
+  cachedToolbox = data.toolbox;
+  return cachedToolbox;
+}
+
+/**
+ * Get the cached toolbox config (null if not loaded yet).
+ */
+export function getCachedToolbox() {
+  return cachedToolbox;
+}
+
+/**
+ * Filter the cached toolbox to only show a specific design view.
+ * @param {string} designView — "spatial", "electrical", "shared", or "all"
+ */
+export function getToolboxForView(designView) {
+  if (!cachedToolbox) return null;
+  if (designView === "all") return cachedToolbox;
+
+  return {
+    kind: "categoryToolbox",
+    contents: cachedToolbox.contents.filter(
+      (cat) => cat.name.toLowerCase() === designView || designView === "all"
+    ),
+  };
+}

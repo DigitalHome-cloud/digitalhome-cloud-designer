@@ -11,8 +11,8 @@ import { useAuth } from "./AuthContext";
  * SmartHomeContext / SmartHomeProvider
  *
  * Manages the active SmartHome selection. Three demo SmartHomes are
- * always available. When the backend SmartHome model is added, user-linked
- * homes will be fetched via GraphQL and merged in.
+ * always available. When authenticated, user-linked homes are fetched
+ * via GraphQL and merged in.
  *
  * Persists the active selection to localStorage.
  */
@@ -25,21 +25,14 @@ const DEMO_HOMES = [
   { id: "BE-DEMO-01", name: "Demo Belgium", isDemo: true },
 ];
 
-const USER_HOMES = [
-  { id: "DE-39576-HBW22-01", name: "Stendal" },
-  { id: "BE-1160-RDP02-01", name: "Auderghem" },
-  { id: "FR-12400-RDB737-01", name: "Saint-Affrique" },
-];
-
 const SmartHomeContext = createContext(null);
 
 export const SmartHomeProvider = ({ children }) => {
-  const { authState } = useAuth();
+  const { authState, isAuthenticated } = useAuth();
   const isBrowser = typeof window !== "undefined";
 
   const [activeHomeId, setActiveHomeId] = useState(() => {
     if (!isBrowser) return DEMO_HOMES[0].id;
-    // Check ?home= query param first (e.g. coming from the portal)
     const params = new URLSearchParams(window.location.search);
     const fromUrl = params.get("home");
     if (fromUrl) {
@@ -49,8 +42,38 @@ export const SmartHomeProvider = ({ children }) => {
     return localStorage.getItem(STORAGE_KEY) || DEMO_HOMES[0].id;
   });
 
-  // TODO: When backend SmartHome model exists, fetch user-linked homes via GraphQL
-  const userHomes = authState === "authenticated" ? USER_HOMES : [];
+  const [userHomes, setUserHomes] = useState([]);
+
+  // Fetch user-linked SmartHomes when authenticated
+  useEffect(() => {
+    if (!isAuthenticated || !isBrowser) return;
+
+    let cancelled = false;
+
+    async function fetchUserHomes() {
+      try {
+        const { generateClient } = await import("aws-amplify/api");
+        const { listSmartHomes } = await import("../graphql/queries");
+        const client = generateClient();
+        const result = await client.graphql({ query: listSmartHomes });
+        if (!cancelled) {
+          const homes = (result.data.listSmartHomes.items || []).map((h) => ({
+            id: h.id,
+            name: h.address || h.ownerName || h.id,
+            isDemo: false,
+          }));
+          setUserHomes(homes);
+        }
+      } catch (err) {
+        console.warn("[SmartHomeContext] Failed to fetch user homes:", err);
+      }
+    }
+
+    fetchUserHomes();
+    return () => {
+      cancelled = true;
+    };
+  }, [isAuthenticated, isBrowser]);
 
   const smartHomes =
     authState === "authenticated"

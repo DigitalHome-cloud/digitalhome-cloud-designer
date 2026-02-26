@@ -1,0 +1,197 @@
+{
+  "blocks": {
+    "languageVersion": 0,
+    "blocks": [
+      {
+        "type": "dhc_floor",
+        "id": "floor-rdc",
+        "x": 20,
+        "y": 20,
+        "fields": {
+          "LABEL": "Rez-de-chaussée",
+          "FLOOR_LEVEL": 0
+        }
+      },
+      {
+        "type": "dhc_floor",
+        "id": "floor-etage",
+        "x": 20,
+        "y": 300,
+        "fields": {
+          "LABEL": "Premier étage",
+          "FLOOR_LEVEL": 1
+        }
+      },
+      {
+        "type": "dhc_distribution_board",
+        "id": "db-principal",
+        "x": 500,
+        "y": 20,
+        "fields": {
+          "LABEL": "Tableau général"
+        },
+        "inputs": {
+          "HASCIRCUIT": {
+            "block": {
+              "type": "dhc_circuit",
+              "id": "circuit-eclairage",
+              "fields": {
+                "LABEL": "Éclairage RdC",
+                "MAX_POINTS": 8
+              },
+              "inputs": {
+                "FEEDSEQUIPMENT": {
+                  "block": {
+                    "type": "dhc_light",
+                    "id": "sal-lumiere1",
+                    "fields": { "LABEL": "Plafonnier salon" },
+                    "next": {
+                      "block": {
+                        "type": "dhc_light",
+                        "id": "cui-lumiere1",
+                        "fields": { "LABEL": "Plafonnier cuisine" }
+                      }
+                    }
+                  }
+                },
+                "HASPROTECTION": {
+                  "block": {
+                    "type": "dhc_protection_device",
+                    "id": "diff-eclairage",
+                    "fields": {
+                      "LABEL": "Différentiel éclairage 30mA",
+                      "RATED_CURRENT": "10"
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "dhc_circuit",
+                  "id": "circuit-prises",
+                  "fields": {
+                    "LABEL": "Prises RdC",
+                    "MAX_POINTS": 8
+                  },
+                  "inputs": {
+                    "FEEDSEQUIPMENT": {
+                      "block": {
+                        "type": "dhc_socket",
+                        "id": "sal-prise1",
+                        "fields": { "LABEL": "Prise salon" },
+                        "next": {
+                          "block": {
+                            "type": "dhc_socket",
+                            "id": "cui-prise1",
+                            "fields": { "LABEL": "Prise plan de travail" }
+                          }
+                        }
+                      }
+                    },
+                    "HASPROTECTION": {
+                      "block": {
+                        "type": "dhc_protection_device",
+                        "id": "disj-prises",
+                        "fields": {
+                          "LABEL": "Disjoncteur prises 16A",
+                          "RATED_CURRENT": "16"
+                        }
+                      }
+                    }
+                  },
+                  "next": {
+                    "block": {
+                      "type": "dhc_circuit",
+                      "id": "circuit-cuisine",
+                      "fields": {
+                        "LABEL": "Cuisine dédié",
+                        "MAX_POINTS": 8
+                      },
+                      "inputs": {
+                        "HASPROTECTION": {
+                          "block": {
+                            "type": "dhc_protection_device",
+                            "id": "disj-cuisine",
+                            "fields": {
+                              "LABEL": "Disjoncteur cuisine 20A",
+                              "RATED_CURRENT": "20"
+                            }
+                          }
+                        }
+                      },
+                      "next": {
+                        "block": {
+                          "type": "dhc_circuit",
+                          "id": "circuit-chauffage",
+                          "fields": {
+                            "LABEL": "Chauffage",
+                            "MAX_POINTS": 8
+                          },
+                          "inputs": {
+                            "FEEDSEQUIPMENT": {
+                              "block": {
+                                "type": "dhc_heater",
+                                "id": "sal-radiateur",
+                                "fields": { "LABEL": "Radiateur salon" },
+                                "next": {
+                                  "block": {
+                                    "type": "dhc_heater",
+                                    "id": "ch-radiateur",
+                                    "fields": { "LABEL": "Radiateur chambre" }
+                                  }
+                                }
+                              }
+                            },
+                            "HASPROTECTION": {
+                              "block": {
+                                "type": "dhc_protection_device",
+                                "id": "disj-chauffage",
+                                "fields": {
+                                  "LABEL": "Disjoncteur chauffage 20A",
+                                  "RATED_CURRENT": "20"
+                                }
+                              }
+                            }
+                          },
+                          "next": {
+                            "block": {
+                              "type": "dhc_circuit",
+                              "id": "circuit-eclairage-etage",
+                              "fields": {
+                                "LABEL": "Éclairage étage",
+                                "MAX_POINTS": 8
+                              },
+                              "inputs": {
+                                "FEEDSEQUIPMENT": {
+                                  "block": {
+                                    "type": "dhc_light",
+                                    "id": "ch-lumiere1",
+                                    "fields": { "LABEL": "Plafonnier chambre" }
+                                  }
+                                },
+                                "HASPROTECTION": {
+                                  "block": {
+                                    "type": "dhc_protection_device",
+                                    "id": "diff-eclairage-etage",
+                                    "fields": {
+                                      "LABEL": "Différentiel éclairage étage 10A",
+                                      "RATED_CURRENT": "10"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+}

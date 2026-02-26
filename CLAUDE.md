@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-DigitalHome.Cloud Designer — a Gatsby 5 / React 18 web app providing a Blockly-based visual workspace for designing SmartHomes. Part of the DigitalHome.Cloud ecosystem.
+DigitalHome.Cloud Designer — a Gatsby 5 / React 18 web app providing a three-module SmartHome design application: SmartHome Manager, Blockly-based A-Box Design Workspace, and 3D A-Box Viewer. Part of the DigitalHome.Cloud ecosystem.
 
 ## Commands
 
@@ -38,23 +38,54 @@ This app does **not** own an Amplify backend. The backend (Cognito, AppSync, Dyn
 
 ### Authentication & SmartHome Context
 
-Both `AuthContext` and `SmartHomeContext` are copied from the portal and work identically:
 - `AuthContext` (`src/context/AuthContext.js`) — Cognito session, auth state, groups
-- `SmartHomeContext` (`src/context/SmartHomeContext.js`) — active SmartHome selection
+- `SmartHomeContext` (`src/context/SmartHomeContext.js`) — active SmartHome selection, fetches user homes via `listSmartHomes` GraphQL query when authenticated
 
-The SmartHomeContext reads the `?home=` URL query parameter on load (passed from the portal's tile links) and persists the selection to `localStorage`.
+The SmartHomeContext reads the `?home=` URL query parameter on load (passed from the portal's tile links) and persists the selection to `localStorage`. Demo SmartHomes (`DE-DEMO`, `FR-DEMO`, `BE-DEMO`) are always available.
 
 ### SmartHome ID
 
 The SmartHome ID is the top-level tenant/partition key. Format: `{country}-{zip}-{street3letter}{housenumber}-{nn}` (e.g. `DE-80331-MAR12-01`). Three demo homes always available: `DE-DEMO`, `FR-DEMO`, `BE-DEMO`.
 
+### Application Modules
+
+The designer has three modules, each with its own page:
+
+- **SmartHome Manager** (`src/pages/manager.js`) — Create/manage SmartHome IDs and metadata
+- **Blockly Design Workspace** (`src/pages/design.js`) — Drag-and-drop A-Box design with validation and edit locking
+- **3D A-Box Viewer** (`src/pages/viewer.js`) — Interactive 3D visualization of instance models
+
 ### Blockly Workspace
 
-- `src/blockly/blocks/dhc.js` — Custom DHC ontology block definitions
-- `src/blockly/toolbox.js` — Toolbox configuration
-- `src/blockly/workspace.js` — Workspace initialization
-- `src/blockly/smartHomeToolboxes.ts` — Design view-specific toolboxes
-- `src/components/WorkspaceShell.js` — Two-panel layout (Canvas + Inspector)
+- `src/blockly/blockRegistrar.js` — Registers block definitions from JSON (generated from T-Box)
+- `src/blockly/toolboxLoader.js` — Fetches toolbox config from S3 (with local fallback)
+- `src/blockly/workspace.js` — Workspace initialization with dynamic toolbox support
+- `src/blockly/aboxSerializer.js` — Converts workspace to A-Box TTL and JSON
+- `src/blockly/connectionCheckers.js` — Enforces block nesting rules
+- `src/blockly/blocks/dhc.js` — Legacy OWL block definitions (kept for backward compat)
+- `src/components/WorkspaceShell.js` — Two-panel layout (Canvas + field-type-aware Inspector)
+
+Block definitions are **generated from `dhc-core.schema.ttl`** by the modeler's `generate-blockly-toolbox` script and published to S3. The designer fetches them at runtime. For v1.1.0, only spatial, electrical, and shared design views are exposed.
+
+### Validation
+
+- `src/validation/nfc15100.js` — NF C 15-100 validation engine
+- `src/validation/rules/` — Individual rule modules (maxPointsPerCircuit, protectionDeviceSizing, wireCrossSection)
+- `src/components/ValidationPanel.js` — Violation list with click-to-navigate
+
+### Persistence & Edit Locking
+
+- `src/hooks/useDesignLock.js` — State machine for view/edit mode with pessimistic locking
+- `src/components/EditLockToolbar.js` — Lock/save/cancel toolbar
+- `src/utils/s3.js` — S3 operations for toolbox, designs, and A-Box artifacts
+
+Design artifacts are stored on S3 under `public/smarthomes/{smartHomeId}/design/` (workspace.json, abox.ttl, abox.json).
+
+### 3D A-Box Viewer
+
+- `src/components/ABoxGraph.js` — 3D force-directed graph (react-force-graph-3d)
+- `src/components/ABoxInspector.js` — Instance property inspector with catalogue attachment
+- `src/components/CatalogueAttachment.js` — Library item search and attach/detach
 
 ### Internationalization
 
@@ -79,6 +110,8 @@ All dependencies are open source. Key libraries:
 | aws-amplify | Apache-2.0 | AWS Amplify JS SDK v6 |
 | @aws-amplify/ui-react | Apache-2.0 | Pre-built auth UI components |
 | blockly | Apache-2.0 | Visual block editor |
+| react-force-graph-3d | MIT | 3D force-directed graph |
+| three | MIT | WebGL 3D engine |
 | i18next, react-i18next | MIT | Internationalization |
 
 No copyleft (GPL/LGPL/AGPL) dependencies. Apache-2.0 requires preserving copyright notices and license text in distributions but has no source-sharing obligations.

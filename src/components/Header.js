@@ -30,6 +30,15 @@ const Header = () => {
             <Link to="/" className="dhc-nav-link">
               {t("nav.home")}
             </Link>
+            <Link to="/manager/" className="dhc-nav-link">
+              {t("nav.manager")}
+            </Link>
+            <Link to="/design/" className="dhc-nav-link">
+              {t("nav.design")}
+            </Link>
+            <Link to="/viewer/" className="dhc-nav-link">
+              {t("nav.viewer")}
+            </Link>
             <a
               href="https://portal.digitalhome.cloud"
               className="dhc-nav-link"
@@ -37,14 +46,6 @@ const Header = () => {
               rel="noreferrer"
             >
               {t("nav.portal")}
-            </a>
-            <a
-              href="https://github.com/DigitalHome-cloud"
-              className="dhc-nav-link"
-              target="_blank"
-              rel="noreferrer"
-            >
-              {t("nav.github")}
             </a>
           </div>
 

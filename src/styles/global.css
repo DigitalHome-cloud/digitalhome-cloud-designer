@@ -981,3 +981,293 @@ a:hover {
   padding: 1rem;
   overflow: auto;
 }
+
+/* === Dashboard === */
+
+.dhc-dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.dhc-dashboard-card {
+  background: radial-gradient(circle at top left, #1e293b, #020617);
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  border-radius: 1rem;
+  padding: 1.25rem;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.2s;
+}
+
+.dhc-dashboard-card:hover {
+  border-color: rgba(34, 197, 94, 0.6);
+  text-decoration: none;
+}
+
+.dhc-dashboard-card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 0.4rem;
+  color: #e5e7eb;
+}
+
+.dhc-dashboard-card-desc {
+  font-size: 0.85rem;
+  color: #9ca3af;
+  margin: 0;
+}
+
+.dhc-dashboard-status {
+  margin-top: 1rem;
+}
+
+.dhc-dashboard-home-info {
+  font-size: 0.85rem;
+  color: #9ca3af;
+}
+
+/* === Validation Panel === */
+
+.dhc-validation-panel {
+  margin-top: 1rem;
+  background: radial-gradient(circle at top left, #1e293b, #020617);
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  border-radius: 0.75rem;
+  padding: 0.75rem;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.dhc-validation-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.dhc-validation-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dhc-validation-item {
+  font-size: 0.8rem;
+  padding: 0.3rem 0.5rem;
+  border-radius: 0.4rem;
+  margin-bottom: 0.25rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.dhc-validation-item:hover {
+  background: rgba(148, 163, 184, 0.1);
+}
+
+.dhc-validation-item--error {
+  color: #fca5a5;
+  border-left: 3px solid #ef4444;
+}
+
+.dhc-validation-item--warning {
+  color: #fde68a;
+  border-left: 3px solid #f59e0b;
+}
+
+.dhc-validation-item--info {
+  color: #93c5fd;
+  border-left: 3px solid #3b82f6;
+}
+
+.dhc-validation-empty {
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+/* === Edit Lock Toolbar === */
+
+.dhc-lock-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0;
+  flex-wrap: wrap;
+}
+
+.dhc-lock-status {
+  font-size: 0.8rem;
+  color: #9ca3af;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.dhc-lock-status--locked {
+  color: #fca5a5;
+}
+
+.dhc-button-primary {
+  font-size: 0.75rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid rgba(34, 197, 94, 0.8);
+  background: rgba(22, 163, 74, 0.2);
+  color: #bbf7d0;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.dhc-button-primary:hover {
+  background: rgba(22, 163, 74, 0.3);
+}
+
+.dhc-button-danger {
+  font-size: 0.75rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid rgba(239, 68, 68, 0.6);
+  background: rgba(239, 68, 68, 0.12);
+  color: #fca5a5;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.dhc-button-danger:hover {
+  background: rgba(239, 68, 68, 0.2);
+}
+
+/* === SmartHome Manager === */
+
+.dhc-manager-list {
+  margin-bottom: 1.5rem;
+}
+
+.dhc-manager-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.dhc-manager-table th,
+.dhc-manager-table td {
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.dhc-manager-table th {
+  font-weight: 600;
+  color: #9ca3af;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.dhc-manager-form {
+  background: radial-gradient(circle at top left, #1e293b, #020617);
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  max-width: 500px;
+}
+
+.dhc-form-field {
+  margin-bottom: 0.75rem;
+}
+
+.dhc-form-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #9ca3af;
+  margin-bottom: 0.2rem;
+}
+
+.dhc-form-input {
+  width: 100%;
+  padding: 0.35rem 0.5rem;
+  border-radius: 0.45rem;
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  background: #020617;
+  color: #e5e7eb;
+  font-size: 0.85rem;
+  font-family: inherit;
+}
+
+.dhc-form-input:focus {
+  outline: none;
+  border-color: #22c55e;
+}
+
+.dhc-form-error {
+  font-size: 0.75rem;
+  color: #fca5a5;
+  margin-top: 0.15rem;
+}
+
+.dhc-form-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+/* === 3D Viewer === */
+
+.dhc-viewer-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 1rem;
+  min-height: 600px;
+}
+
+.dhc-viewer-graph {
+  background: #020617;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  border-radius: 0.75rem;
+  overflow: hidden;
+  min-height: 600px;
+}
+
+.dhc-viewer-inspector {
+  background: radial-gradient(circle at top left, #1e293b, #020617);
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  border-radius: 0.75rem;
+  padding: 0.75rem;
+  overflow-y: auto;
+}
+
+.dhc-capability-badge {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.1rem 0.35rem;
+  border-radius: 0.25rem;
+  margin-right: 0.25rem;
+}
+
+.dhc-capability-badge--actor {
+  background: rgba(168, 85, 247, 0.2);
+  color: #c084fc;
+  border: 1px solid rgba(168, 85, 247, 0.4);
+}
+
+.dhc-capability-badge--sensor {
+  background: rgba(34, 197, 94, 0.2);
+  color: #4ade80;
+  border: 1px solid rgba(34, 197, 94, 0.4);
+}
+
+.dhc-capability-badge--controller {
+  background: rgba(59, 130, 246, 0.2);
+  color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.4);
+}
+
+@media (max-width: 1024px) {
+  .dhc-viewer-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
