@@ -9,7 +9,7 @@ import { fetchABoxFromS3 } from "../utils/s3";
 import frDemoAbox from "../data/demo/FR-DEMO-abox.json";
 
 const DEMO_ABOX = {
-  "FR-DEMO": frDemoAbox,
+  "FR-DEMO-01": frDemoAbox,
 };
 
 const ViewerPage = () => {

@@ -1,0 +1,475 @@
+[
+  {
+    "type": "dhc_real_estate",
+    "ontologyClass": "dhc:RealEstate",
+    "designView": "spatial",
+    "colour": 142,
+    "message0": "Real Estate %1\nSmartHome ID %2",
+    "args0": [
+      {
+        "type": "field_input",
+        "name": "LABEL",
+        "text": "Real Estate"
+      },
+      {
+        "type": "field_input",
+        "name": "SMART_HOME_ID",
+        "text": ""
+      }
+    ],
+    "inputsInline": false,
+    "tooltip": "A physical property: house, apartment, land with buildings.",
+    "message1": "has area %1",
+    "args1": [
+      {
+        "type": "input_statement",
+        "name": "HASAREA",
+        "check": "dhc_Area"
+      }
+    ],
+    "previousStatement": "dhc_real_estate",
+    "nextStatement": null
+  },
+  {
+    "type": "dhc_area",
+    "ontologyClass": "dhc:Area",
+    "designView": "spatial",
+    "colour": 142,
+    "message0": "Area %1",
+    "args0": [
+      {
+        "type": "field_input",
+        "name": "LABEL",
+        "text": "Area"
+      }
+    ],
+    "inputsInline": false,
+    "tooltip": "A major subdivision of a property (e.g. main building, annex, garden).",
+    "message1": "has floor %1",
+    "args1": [
+      {
+        "type": "input_statement",
+        "name": "HASFLOOR",
+        "check": "dhc_Floor"
+      }
+    ],
+    "message2": "has space %1",
+    "args2": [
+      {
+        "type": "input_statement",
+        "name": "HASSPACE",
+        "check": "dhc_Space"
+      }
+    ],
+    "previousStatement": "dhc_area",
+    "nextStatement": null
+  },
+  {
+    "type": "dhc_floor",
+    "ontologyClass": "dhc:Floor",
+    "designView": "spatial",
+    "colour": 142,
+    "message0": "Floor %1\nfloor level %2",
+    "args0": [
+      {
+        "type": "field_input",
+        "name": "LABEL",
+        "text": "Floor"
+      },
+      {
+        "type": "field_number",
+        "name": "FLOOR_LEVEL",
+        "value": 0,
+        "precision": 1
+      }
+    ],
+    "inputsInline": false,
+    "tooltip": "A storey / level within a building.",
+    "previousStatement": "dhc_floor",
+    "nextStatement": null
+  },
+  {
+    "type": "dhc_space",
+    "ontologyClass": "dhc:Space",
+    "designView": "spatial",
+    "colour": 142,
+    "message0": "Space %1\narea (m²) %2",
+    "args0": [
+      {
+        "type": "field_input",
+        "name": "LABEL",
+        "text": "Space"
+      },
+      {
+        "type": "field_number",
+        "name": "AREA_M2",
+        "value": 0
+      }
+    ],
+    "inputsInline": false,
+    "tooltip": "A specific room or enclosed area (e.g. kitchen, bedroom, garage).",
+    "message1": "has building element %1",
+    "args1": [
+      {
+        "type": "input_statement",
+        "name": "HASBUILDINGELEMENT",
+        "check": "dhc_BuildingElement"
+      }
+    ],
+    "message2": "has equipment %1",
+    "args2": [
+      {
+        "type": "input_statement",
+        "name": "HASEQUIPMENT",
+        "check": "dhc_Equipment"
+      }
+    ],
+    "message3": "belongs to zone %1",
+    "args3": [
+      {
+        "type": "input_value",
+        "name": "BELONGSTOZONE",
+        "check": "dhc_Zone"
+      }
+    ],
+    "previousStatement": "dhc_space",
+    "nextStatement": null
+  },
+  {
+    "type": "dhc_zone",
+    "ontologyClass": "dhc:Zone",
+    "designView": "spatial",
+    "colour": 142,
+    "message0": "Zone %1",
+    "args0": [
+      {
+        "type": "field_input",
+        "name": "LABEL",
+        "text": "Zone"
+      }
+    ],
+    "inputsInline": false,
+    "tooltip": "A logical zone spanning one or more spaces (e.g. thermal zone, fire compartment).",
+    "previousStatement": "dhc_zone",
+    "nextStatement": null
+  },
+  {
+    "type": "dhc_circuit",
+    "ontologyClass": "dhc:Circuit",
+    "designView": "electrical",
+    "colour": 220,
+    "message0": "Circuit %1\nmax points on circuit %2",
+    "args0": [
+      {
+        "type": "field_input",
+        "name": "LABEL",
+        "text": "Circuit"
+      },
+      {
+        "type": "field_number",
+        "name": "MAX_POINTS",
+        "value": 8,
+        "precision": 1
+      }
+    ],
+    "inputsInline": false,
+    "tooltip": "An electrical circuit connecting equipment to a distribution board.",
+    "message1": "feeds equipment %1",
+    "args1": [
+      {
+        "type": "input_statement",
+        "name": "FEEDSEQUIPMENT",
+        "check": "dhc_Equipment"
+      }
+    ],
+    "message2": "has wiring %1",
+    "args2": [
+      {
+        "type": "input_statement",
+        "name": "HASWIRING",
+        "check": "dhc_WiringSegment"
+      }
+    ],
+    "message3": "has protection %1",
+    "args3": [
+      {
+        "type": "input_value",
+        "name": "HASPROTECTION",
+        "check": "dhc_ProtectionDevice"
+      }
+    ],
+    "message4": "has circuit type %1",
+    "args4": [
+      {
+        "type": "input_value",
+        "name": "HASCIRCUITTYPE",
+        "check": "dhc_CircuitType"
+      }
+    ],
+    "previousStatement": "dhc_circuit",
+    "nextStatement": null
+  },
+  {
+    "type": "dhc_circuit_type",
+    "ontologyClass": "dhc:CircuitType",
+    "designView": "electrical",
+    "colour": 220,
+    "message0": "Circuit Type %1",
+    "args0": [
+      {
+        "type": "field_input",
+        "name": "LABEL",
+        "text": "Circuit Type"
+      }
+    ],
+    "inputsInline": false,
+    "tooltip": "Classification: lighting, sockets, dedicated, etc.",
+    "previousStatement": "dhc_circuit_type",
+    "nextStatement": null
+  },
+  {
+    "type": "dhc_distribution_board",
+    "ontologyClass": "dhc:DistributionBoard",
+    "designView": "electrical",
+    "colour": 220,
+    "message0": "Distribution Board %1",
+    "args0": [
+      {
+        "type": "field_input",
+        "name": "LABEL",
+        "text": "Distribution Board"
+      }
+    ],
+    "inputsInline": false,
+    "tooltip": "Main or sub distribution panel.",
+    "message1": "has circuit %1",
+    "args1": [
+      {
+        "type": "input_statement",
+        "name": "HASCIRCUIT",
+        "check": "dhc_Circuit"
+      }
+    ],
+    "previousStatement": "dhc_distribution_board",
+    "nextStatement": null
+  },
+  {
+    "type": "dhc_protection_device",
+    "ontologyClass": "dhc:ProtectionDevice",
+    "designView": "electrical",
+    "colour": 220,
+    "message0": "Protection Device %1\nrated current (A) %2",
+    "args0": [
+      {
+        "type": "field_input",
+        "name": "LABEL",
+        "text": "Protection Device"
+      },
+      {
+        "type": "field_dropdown",
+        "name": "RATED_CURRENT",
+        "options": [
+          [
+            "10 A",
+            "10"
+          ],
+          [
+            "16 A",
+            "16"
+          ],
+          [
+            "20 A",
+            "20"
+          ],
+          [
+            "25 A",
+            "25"
+          ],
+          [
+            "32 A",
+            "32"
+          ]
+        ]
+      }
+    ],
+    "inputsInline": false,
+    "tooltip": "Circuit breaker, RCD, fuse, surge protector.",
+    "previousStatement": "dhc_protection_device",
+    "nextStatement": null
+  },
+  {
+    "type": "dhc_wiring_segment",
+    "ontologyClass": "dhc:WiringSegment",
+    "designView": "electrical",
+    "colour": 220,
+    "message0": "Wiring Segment %1\ncross section (mm²) %2",
+    "args0": [
+      {
+        "type": "field_input",
+        "name": "LABEL",
+        "text": "Wiring Segment"
+      },
+      {
+        "type": "field_number",
+        "name": "CROSS_SECTION",
+        "value": 0
+      }
+    ],
+    "inputsInline": false,
+    "tooltip": "A run of cable between two points.",
+    "previousStatement": "dhc_wiring_segment",
+    "nextStatement": null
+  },
+  {
+    "type": "dhc_equipment",
+    "ontologyClass": "dhc:Equipment",
+    "designView": "shared",
+    "colour": 230,
+    "message0": "Equipment %1\npower rating (W) %2",
+    "args0": [
+      {
+        "type": "field_input",
+        "name": "LABEL",
+        "text": "Equipment"
+      },
+      {
+        "type": "field_number",
+        "name": "POWER_RATING",
+        "value": 0
+      }
+    ],
+    "inputsInline": false,
+    "tooltip": "A physical device: sensor, actuator, appliance, fixture.",
+    "message1": "connected to network %1",
+    "args1": [
+      {
+        "type": "input_value",
+        "name": "CONNECTEDTONETWORK",
+        "check": "dhc_NetworkSegment"
+      }
+    ],
+    "message2": "has equipment type %1",
+    "args2": [
+      {
+        "type": "input_value",
+        "name": "HASEQUIPMENTTYPE",
+        "check": "dhc_EquipmentType"
+      }
+    ],
+    "message3": "has part %1",
+    "args3": [
+      {
+        "type": "input_value",
+        "name": "HASPART",
+        "check": "dhc_Equipment"
+      }
+    ],
+    "previousStatement": "dhc_Equipment",
+    "nextStatement": null
+  },
+  {
+    "type": "dhc_equipment_type",
+    "ontologyClass": "dhc:EquipmentType",
+    "designView": "shared",
+    "colour": 230,
+    "message0": "Equipment Type %1\nbrand %2\nmodel %3\ncatalog reference %4",
+    "args0": [
+      {
+        "type": "field_input",
+        "name": "LABEL",
+        "text": "Equipment Type"
+      },
+      {
+        "type": "field_input",
+        "name": "BRAND",
+        "text": ""
+      },
+      {
+        "type": "field_input",
+        "name": "MODEL",
+        "text": ""
+      },
+      {
+        "type": "field_input",
+        "name": "CATALOG_REF",
+        "text": ""
+      }
+    ],
+    "inputsInline": false,
+    "tooltip": "Classification of equipment by category, brand, model.",
+    "previousStatement": "dhc_equipment_type",
+    "nextStatement": null
+  },
+  {
+    "type": "dhc_socket",
+    "ontologyClass": "dhc:Socket",
+    "designView": "electrical",
+    "colour": 220,
+    "message0": "Socket %1",
+    "args0": [
+      {
+        "type": "field_input",
+        "name": "LABEL",
+        "text": "Socket"
+      }
+    ],
+    "inputsInline": false,
+    "tooltip": "Socket",
+    "previousStatement": "dhc_Equipment",
+    "nextStatement": null
+  },
+  {
+    "type": "dhc_switch",
+    "ontologyClass": "dhc:Switch",
+    "designView": "electrical",
+    "colour": 220,
+    "message0": "Switch %1",
+    "args0": [
+      {
+        "type": "field_input",
+        "name": "LABEL",
+        "text": "Switch"
+      }
+    ],
+    "inputsInline": false,
+    "tooltip": "Switch",
+    "previousStatement": "dhc_Equipment",
+    "nextStatement": null
+  },
+  {
+    "type": "dhc_light",
+    "ontologyClass": "dhc:Light",
+    "designView": "electrical",
+    "colour": 220,
+    "message0": "Light %1",
+    "args0": [
+      {
+        "type": "field_input",
+        "name": "LABEL",
+        "text": "Light"
+      }
+    ],
+    "inputsInline": false,
+    "tooltip": "Light",
+    "previousStatement": "dhc_Equipment",
+    "nextStatement": null
+  },
+  {
+    "type": "dhc_heater",
+    "ontologyClass": "dhc:Heater",
+    "designView": "electrical",
+    "colour": 220,
+    "message0": "Heater %1",
+    "args0": [
+      {
+        "type": "field_input",
+        "name": "LABEL",
+        "text": "Heater"
+      }
+    ],
+    "inputsInline": false,
+    "tooltip": "Heater",
+    "previousStatement": "dhc_Equipment",
+    "nextStatement": null
+  }
+]

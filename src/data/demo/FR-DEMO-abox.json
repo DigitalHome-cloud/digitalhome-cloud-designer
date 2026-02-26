@@ -1,7 +1,7 @@
 {
   "nodes": [
     {
-      "id": "dhc-instance:FR-DEMO/dhc_floor/floor-rdc",
+      "id": "dhc-instance:FR-DEMO-01/dhc_floor/floor-rdc",
       "blockId": "floor-rdc",
       "type": "dhc:Floor",
       "label": "Rez-de-chaussée",
@@ -9,7 +9,7 @@
       "properties": { "LABEL": "Rez-de-chaussée", "FLOOR_LEVEL": 0 }
     },
     {
-      "id": "dhc-instance:FR-DEMO/dhc_floor/floor-etage",
+      "id": "dhc-instance:FR-DEMO-01/dhc_floor/floor-etage",
       "blockId": "floor-etage",
       "type": "dhc:Floor",
       "label": "Premier étage",
@@ -17,7 +17,7 @@
       "properties": { "LABEL": "Premier étage", "FLOOR_LEVEL": 1 }
     },
     {
-      "id": "dhc-instance:FR-DEMO/dhc_distribution_board/db-principal",
+      "id": "dhc-instance:FR-DEMO-01/dhc_distribution_board/db-principal",
       "blockId": "db-principal",
       "type": "dhc:DistributionBoard",
       "label": "Tableau général",
@@ -25,7 +25,7 @@
       "properties": { "LABEL": "Tableau général" }
     },
     {
-      "id": "dhc-instance:FR-DEMO/dhc_circuit/circuit-eclairage",
+      "id": "dhc-instance:FR-DEMO-01/dhc_circuit/circuit-eclairage",
       "blockId": "circuit-eclairage",
       "type": "dhc:Circuit",
       "label": "Éclairage RdC",
@@ -33,7 +33,7 @@
       "properties": { "LABEL": "Éclairage RdC", "MAX_POINTS": 8 }
     },
     {
-      "id": "dhc-instance:FR-DEMO/dhc_circuit/circuit-prises",
+      "id": "dhc-instance:FR-DEMO-01/dhc_circuit/circuit-prises",
       "blockId": "circuit-prises",
       "type": "dhc:Circuit",
       "label": "Prises RdC",
@@ -41,7 +41,7 @@
       "properties": { "LABEL": "Prises RdC", "MAX_POINTS": 8 }
     },
     {
-      "id": "dhc-instance:FR-DEMO/dhc_circuit/circuit-cuisine",
+      "id": "dhc-instance:FR-DEMO-01/dhc_circuit/circuit-cuisine",
       "blockId": "circuit-cuisine",
       "type": "dhc:Circuit",
       "label": "Cuisine dédié",
@@ -49,7 +49,7 @@
       "properties": { "LABEL": "Cuisine dédié", "MAX_POINTS": 8 }
     },
     {
-      "id": "dhc-instance:FR-DEMO/dhc_circuit/circuit-chauffage",
+      "id": "dhc-instance:FR-DEMO-01/dhc_circuit/circuit-chauffage",
       "blockId": "circuit-chauffage",
       "type": "dhc:Circuit",
       "label": "Chauffage",
@@ -57,7 +57,7 @@
       "properties": { "LABEL": "Chauffage", "MAX_POINTS": 8 }
     },
     {
-      "id": "dhc-instance:FR-DEMO/dhc_circuit/circuit-eclairage-etage",
+      "id": "dhc-instance:FR-DEMO-01/dhc_circuit/circuit-eclairage-etage",
       "blockId": "circuit-eclairage-etage",
       "type": "dhc:Circuit",
       "label": "Éclairage étage",
@@ -65,7 +65,7 @@
       "properties": { "LABEL": "Éclairage étage", "MAX_POINTS": 8 }
     },
     {
-      "id": "dhc-instance:FR-DEMO/dhc_protection_device/diff-eclairage",
+      "id": "dhc-instance:FR-DEMO-01/dhc_protection_device/diff-eclairage",
       "blockId": "diff-eclairage",
       "type": "dhc:ProtectionDevice",
       "label": "Différentiel éclairage 30mA",
@@ -73,7 +73,7 @@
       "properties": { "LABEL": "Différentiel éclairage 30mA", "RATED_CURRENT": "10" }
     },
     {
-      "id": "dhc-instance:FR-DEMO/dhc_protection_device/disj-prises",
+      "id": "dhc-instance:FR-DEMO-01/dhc_protection_device/disj-prises",
       "blockId": "disj-prises",
       "type": "dhc:ProtectionDevice",
       "label": "Disjoncteur prises 16A",
@@ -81,7 +81,7 @@
       "properties": { "LABEL": "Disjoncteur prises 16A", "RATED_CURRENT": "16" }
     },
     {
-      "id": "dhc-instance:FR-DEMO/dhc_protection_device/disj-cuisine",
+      "id": "dhc-instance:FR-DEMO-01/dhc_protection_device/disj-cuisine",
       "blockId": "disj-cuisine",
       "type": "dhc:ProtectionDevice",
       "label": "Disjoncteur cuisine 20A",
@@ -89,7 +89,7 @@
       "properties": { "LABEL": "Disjoncteur cuisine 20A", "RATED_CURRENT": "20" }
     },
     {
-      "id": "dhc-instance:FR-DEMO/dhc_protection_device/disj-chauffage",
+      "id": "dhc-instance:FR-DEMO-01/dhc_protection_device/disj-chauffage",
       "blockId": "disj-chauffage",
       "type": "dhc:ProtectionDevice",
       "label": "Disjoncteur chauffage 20A",
@@ -97,7 +97,7 @@
       "properties": { "LABEL": "Disjoncteur chauffage 20A", "RATED_CURRENT": "20" }
     },
     {
-      "id": "dhc-instance:FR-DEMO/dhc_protection_device/diff-eclairage-etage",
+      "id": "dhc-instance:FR-DEMO-01/dhc_protection_device/diff-eclairage-etage",
       "blockId": "diff-eclairage-etage",
       "type": "dhc:ProtectionDevice",
       "label": "Différentiel éclairage étage 10A",
@@ -105,7 +105,7 @@
       "properties": { "LABEL": "Différentiel éclairage étage 10A", "RATED_CURRENT": "10" }
     },
     {
-      "id": "dhc-instance:FR-DEMO/dhc_light/sal-lumiere1",
+      "id": "dhc-instance:FR-DEMO-01/dhc_light/sal-lumiere1",
       "blockId": "sal-lumiere1",
       "type": "dhc:Light",
       "label": "Plafonnier salon",
@@ -113,7 +113,7 @@
       "properties": { "LABEL": "Plafonnier salon" }
     },
     {
-      "id": "dhc-instance:FR-DEMO/dhc_light/cui-lumiere1",
+      "id": "dhc-instance:FR-DEMO-01/dhc_light/cui-lumiere1",
       "blockId": "cui-lumiere1",
       "type": "dhc:Light",
       "label": "Plafonnier cuisine",
@@ -121,7 +121,7 @@
       "properties": { "LABEL": "Plafonnier cuisine" }
     },
     {
-      "id": "dhc-instance:FR-DEMO/dhc_light/ch-lumiere1",
+      "id": "dhc-instance:FR-DEMO-01/dhc_light/ch-lumiere1",
       "blockId": "ch-lumiere1",
       "type": "dhc:Light",
       "label": "Plafonnier chambre",
@@ -129,7 +129,7 @@
       "properties": { "LABEL": "Plafonnier chambre" }
     },
     {
-      "id": "dhc-instance:FR-DEMO/dhc_socket/sal-prise1",
+      "id": "dhc-instance:FR-DEMO-01/dhc_socket/sal-prise1",
       "blockId": "sal-prise1",
       "type": "dhc:Socket",
       "label": "Prise salon",
@@ -137,7 +137,7 @@
       "properties": { "LABEL": "Prise salon" }
     },
     {
-      "id": "dhc-instance:FR-DEMO/dhc_socket/cui-prise1",
+      "id": "dhc-instance:FR-DEMO-01/dhc_socket/cui-prise1",
       "blockId": "cui-prise1",
       "type": "dhc:Socket",
       "label": "Prise plan de travail",
@@ -145,7 +145,7 @@
       "properties": { "LABEL": "Prise plan de travail" }
     },
     {
-      "id": "dhc-instance:FR-DEMO/dhc_heater/sal-radiateur",
+      "id": "dhc-instance:FR-DEMO-01/dhc_heater/sal-radiateur",
       "blockId": "sal-radiateur",
       "type": "dhc:Heater",
       "label": "Radiateur salon",
@@ -153,7 +153,7 @@
       "properties": { "LABEL": "Radiateur salon" }
     },
     {
-      "id": "dhc-instance:FR-DEMO/dhc_heater/ch-radiateur",
+      "id": "dhc-instance:FR-DEMO-01/dhc_heater/ch-radiateur",
       "blockId": "ch-radiateur",
       "type": "dhc:Heater",
       "label": "Radiateur chambre",
@@ -163,104 +163,104 @@
   ],
   "links": [
     {
-      "source": "dhc-instance:FR-DEMO/dhc_distribution_board/db-principal",
-      "target": "dhc-instance:FR-DEMO/dhc_circuit/circuit-eclairage",
+      "source": "dhc-instance:FR-DEMO-01/dhc_distribution_board/db-principal",
+      "target": "dhc-instance:FR-DEMO-01/dhc_circuit/circuit-eclairage",
       "label": "hasCircuit",
       "type": "containment"
     },
     {
-      "source": "dhc-instance:FR-DEMO/dhc_distribution_board/db-principal",
-      "target": "dhc-instance:FR-DEMO/dhc_circuit/circuit-prises",
+      "source": "dhc-instance:FR-DEMO-01/dhc_distribution_board/db-principal",
+      "target": "dhc-instance:FR-DEMO-01/dhc_circuit/circuit-prises",
       "label": "hasCircuit",
       "type": "containment"
     },
     {
-      "source": "dhc-instance:FR-DEMO/dhc_distribution_board/db-principal",
-      "target": "dhc-instance:FR-DEMO/dhc_circuit/circuit-cuisine",
+      "source": "dhc-instance:FR-DEMO-01/dhc_distribution_board/db-principal",
+      "target": "dhc-instance:FR-DEMO-01/dhc_circuit/circuit-cuisine",
       "label": "hasCircuit",
       "type": "containment"
     },
     {
-      "source": "dhc-instance:FR-DEMO/dhc_distribution_board/db-principal",
-      "target": "dhc-instance:FR-DEMO/dhc_circuit/circuit-chauffage",
+      "source": "dhc-instance:FR-DEMO-01/dhc_distribution_board/db-principal",
+      "target": "dhc-instance:FR-DEMO-01/dhc_circuit/circuit-chauffage",
       "label": "hasCircuit",
       "type": "containment"
     },
     {
-      "source": "dhc-instance:FR-DEMO/dhc_distribution_board/db-principal",
-      "target": "dhc-instance:FR-DEMO/dhc_circuit/circuit-eclairage-etage",
+      "source": "dhc-instance:FR-DEMO-01/dhc_distribution_board/db-principal",
+      "target": "dhc-instance:FR-DEMO-01/dhc_circuit/circuit-eclairage-etage",
       "label": "hasCircuit",
       "type": "containment"
     },
     {
-      "source": "dhc-instance:FR-DEMO/dhc_circuit/circuit-eclairage",
-      "target": "dhc-instance:FR-DEMO/dhc_light/sal-lumiere1",
+      "source": "dhc-instance:FR-DEMO-01/dhc_circuit/circuit-eclairage",
+      "target": "dhc-instance:FR-DEMO-01/dhc_light/sal-lumiere1",
       "label": "feedsEquipment",
       "type": "containment"
     },
     {
-      "source": "dhc-instance:FR-DEMO/dhc_circuit/circuit-eclairage",
-      "target": "dhc-instance:FR-DEMO/dhc_light/cui-lumiere1",
+      "source": "dhc-instance:FR-DEMO-01/dhc_circuit/circuit-eclairage",
+      "target": "dhc-instance:FR-DEMO-01/dhc_light/cui-lumiere1",
       "label": "feedsEquipment",
       "type": "containment"
     },
     {
-      "source": "dhc-instance:FR-DEMO/dhc_circuit/circuit-eclairage",
-      "target": "dhc-instance:FR-DEMO/dhc_protection_device/diff-eclairage",
+      "source": "dhc-instance:FR-DEMO-01/dhc_circuit/circuit-eclairage",
+      "target": "dhc-instance:FR-DEMO-01/dhc_protection_device/diff-eclairage",
       "label": "hasProtection",
       "type": "reference"
     },
     {
-      "source": "dhc-instance:FR-DEMO/dhc_circuit/circuit-prises",
-      "target": "dhc-instance:FR-DEMO/dhc_socket/sal-prise1",
+      "source": "dhc-instance:FR-DEMO-01/dhc_circuit/circuit-prises",
+      "target": "dhc-instance:FR-DEMO-01/dhc_socket/sal-prise1",
       "label": "feedsEquipment",
       "type": "containment"
     },
     {
-      "source": "dhc-instance:FR-DEMO/dhc_circuit/circuit-prises",
-      "target": "dhc-instance:FR-DEMO/dhc_socket/cui-prise1",
+      "source": "dhc-instance:FR-DEMO-01/dhc_circuit/circuit-prises",
+      "target": "dhc-instance:FR-DEMO-01/dhc_socket/cui-prise1",
       "label": "feedsEquipment",
       "type": "containment"
     },
     {
-      "source": "dhc-instance:FR-DEMO/dhc_circuit/circuit-prises",
-      "target": "dhc-instance:FR-DEMO/dhc_protection_device/disj-prises",
+      "source": "dhc-instance:FR-DEMO-01/dhc_circuit/circuit-prises",
+      "target": "dhc-instance:FR-DEMO-01/dhc_protection_device/disj-prises",
       "label": "hasProtection",
       "type": "reference"
     },
     {
-      "source": "dhc-instance:FR-DEMO/dhc_circuit/circuit-cuisine",
-      "target": "dhc-instance:FR-DEMO/dhc_protection_device/disj-cuisine",
+      "source": "dhc-instance:FR-DEMO-01/dhc_circuit/circuit-cuisine",
+      "target": "dhc-instance:FR-DEMO-01/dhc_protection_device/disj-cuisine",
       "label": "hasProtection",
       "type": "reference"
     },
     {
-      "source": "dhc-instance:FR-DEMO/dhc_circuit/circuit-chauffage",
-      "target": "dhc-instance:FR-DEMO/dhc_heater/sal-radiateur",
+      "source": "dhc-instance:FR-DEMO-01/dhc_circuit/circuit-chauffage",
+      "target": "dhc-instance:FR-DEMO-01/dhc_heater/sal-radiateur",
       "label": "feedsEquipment",
       "type": "containment"
     },
     {
-      "source": "dhc-instance:FR-DEMO/dhc_circuit/circuit-chauffage",
-      "target": "dhc-instance:FR-DEMO/dhc_heater/ch-radiateur",
+      "source": "dhc-instance:FR-DEMO-01/dhc_circuit/circuit-chauffage",
+      "target": "dhc-instance:FR-DEMO-01/dhc_heater/ch-radiateur",
       "label": "feedsEquipment",
       "type": "containment"
     },
     {
-      "source": "dhc-instance:FR-DEMO/dhc_circuit/circuit-chauffage",
-      "target": "dhc-instance:FR-DEMO/dhc_protection_device/disj-chauffage",
+      "source": "dhc-instance:FR-DEMO-01/dhc_circuit/circuit-chauffage",
+      "target": "dhc-instance:FR-DEMO-01/dhc_protection_device/disj-chauffage",
       "label": "hasProtection",
       "type": "reference"
     },
     {
-      "source": "dhc-instance:FR-DEMO/dhc_circuit/circuit-eclairage-etage",
-      "target": "dhc-instance:FR-DEMO/dhc_light/ch-lumiere1",
+      "source": "dhc-instance:FR-DEMO-01/dhc_circuit/circuit-eclairage-etage",
+      "target": "dhc-instance:FR-DEMO-01/dhc_light/ch-lumiere1",
       "label": "feedsEquipment",
       "type": "containment"
     },
     {
-      "source": "dhc-instance:FR-DEMO/dhc_circuit/circuit-eclairage-etage",
-      "target": "dhc-instance:FR-DEMO/dhc_protection_device/diff-eclairage-etage",
+      "source": "dhc-instance:FR-DEMO-01/dhc_circuit/circuit-eclairage-etage",
+      "target": "dhc-instance:FR-DEMO-01/dhc_protection_device/diff-eclairage-etage",
       "label": "hasProtection",
       "type": "reference"
     }

@@ -1,0 +1,90 @@
+{
+  "kind": "categoryToolbox",
+  "contents": [
+    {
+      "kind": "category",
+      "name": "Spatial",
+      "colour": 142,
+      "contents": [
+        {
+          "kind": "block",
+          "type": "dhc_real_estate"
+        },
+        {
+          "kind": "block",
+          "type": "dhc_area"
+        },
+        {
+          "kind": "block",
+          "type": "dhc_floor"
+        },
+        {
+          "kind": "block",
+          "type": "dhc_space"
+        },
+        {
+          "kind": "block",
+          "type": "dhc_zone"
+        }
+      ]
+    },
+    {
+      "kind": "category",
+      "name": "Electrical",
+      "colour": 220,
+      "contents": [
+        {
+          "kind": "block",
+          "type": "dhc_circuit"
+        },
+        {
+          "kind": "block",
+          "type": "dhc_circuit_type"
+        },
+        {
+          "kind": "block",
+          "type": "dhc_distribution_board"
+        },
+        {
+          "kind": "block",
+          "type": "dhc_protection_device"
+        },
+        {
+          "kind": "block",
+          "type": "dhc_wiring_segment"
+        },
+        {
+          "kind": "block",
+          "type": "dhc_socket"
+        },
+        {
+          "kind": "block",
+          "type": "dhc_switch"
+        },
+        {
+          "kind": "block",
+          "type": "dhc_light"
+        },
+        {
+          "kind": "block",
+          "type": "dhc_heater"
+        }
+      ]
+    },
+    {
+      "kind": "category",
+      "name": "Shared",
+      "colour": 230,
+      "contents": [
+        {
+          "kind": "block",
+          "type": "dhc_equipment"
+        },
+        {
+          "kind": "block",
+          "type": "dhc_equipment_type"
+        }
+      ]
+    }
+  ]
+}
