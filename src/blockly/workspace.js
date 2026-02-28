@@ -109,6 +109,8 @@ export function initModelerWorkspace(container, options = {}) {
  */
 export function updateToolbox(toolboxConfig) {
   if (!workspaceRef || !toolboxConfig) return;
+  // Only update if the workspace was initialised with a toolbox
+  if (!workspaceRef.options.languageTree) return;
   workspaceRef.updateToolbox(toolboxConfig);
 }
 

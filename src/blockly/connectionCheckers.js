@@ -14,6 +14,20 @@
  */
 
 /**
+ * Check if a block type is a Circuit subclass (Core or NFC module circuit).
+ */
+function isCircuitType(type) {
+  return type === "dhc_circuit" || type.startsWith("dhc_nfc15100_");
+}
+
+/**
+ * Check if a block type is an ElectricalTechnicalSpace subclass.
+ */
+function isElectricalTechnicalSpaceType(type) {
+  return type === "dhc_electrical_technical_space" || type.startsWith("dhc_nfc15100_gtl");
+}
+
+/**
  * Validate that a block is in a valid parent context.
  * Returns an array of { message, severity } objects.
  * @param {Blockly.Block} block
@@ -36,7 +50,8 @@ export function checkBlockContext(block) {
   if (equipmentTypes.includes(type) && parent) {
     const parentType = parent.type;
     const validParents = ["dhc_space", "dhc_circuit"];
-    if (!validParents.includes(parentType)) {
+    // Also allow NFC module circuit types as valid parents
+    if (!validParents.includes(parentType) && !isCircuitType(parentType)) {
       issues.push({
         message: `${getLabel(block)} should be inside a Space or Circuit, not ${getLabel(parent)}.`,
         severity: "warning",
@@ -44,9 +59,9 @@ export function checkBlockContext(block) {
     }
   }
 
-  // ProtectionDevice should be inside a Circuit
+  // ProtectionDevice should be inside a Circuit (Core or NFC module)
   if (type === "dhc_protection_device" && parent) {
-    if (parent.type !== "dhc_circuit") {
+    if (!isCircuitType(parent.type)) {
       issues.push({
         message: `${getLabel(block)} should be attached to a Circuit.`,
         severity: "warning",
@@ -54,8 +69,8 @@ export function checkBlockContext(block) {
     }
   }
 
-  // Circuit should be inside a DistributionBoard
-  if (type === "dhc_circuit" && parent) {
+  // Circuit (Core or NFC module) should be inside a DistributionBoard
+  if (isCircuitType(type) && parent) {
     if (parent.type !== "dhc_distribution_board") {
       issues.push({
         message: `${getLabel(block)} should be inside a Distribution Board.`,
@@ -69,6 +84,17 @@ export function checkBlockContext(block) {
     if (parent.type !== "dhc_floor" && parent.type !== "dhc_area") {
       issues.push({
         message: `${getLabel(block)} should be inside a Floor or Area.`,
+        severity: "warning",
+      });
+    }
+  }
+
+  // ElectricalTechnicalSpace / GTL can be inside Floor, Area, or Space
+  if (isElectricalTechnicalSpaceType(type) && parent) {
+    const validParents = ["dhc_floor", "dhc_area", "dhc_space"];
+    if (!validParents.includes(parent.type)) {
+      issues.push({
+        message: `${getLabel(block)} should be inside a Floor, Area, or Space.`,
         severity: "warning",
       });
     }

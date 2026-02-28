@@ -1,6 +1,38 @@
 {
   "nodes": [
     {
+      "id": "dhc-instance:FR-DEMO-01/dhc_energy_delivery/livraison",
+      "blockId": "livraison",
+      "type": "dhc:EnergyDelivery",
+      "label": "Livraison Enedis",
+      "designView": "electrical",
+      "properties": { "LABEL": "Livraison Enedis", "ENERGY_PROVIDER_NAME": "Enedis", "CURRENT_TYPE": "SinglePhase", "NEUTRAL_SYSTEM": "TT", "CONTRACTED_POWER_K_V_A": 6.0 }
+    },
+    {
+      "id": "dhc-instance:FR-DEMO-01/dhc_nfc14100_nf14_energy_meter/compteur",
+      "blockId": "compteur",
+      "type": "dhc-nfc14100:NF14EnergyMeter",
+      "label": "Compteur Linky",
+      "designView": "electrical",
+      "properties": { "LABEL": "Compteur Linky" }
+    },
+    {
+      "id": "dhc-instance:FR-DEMO-01/dhc_nfc14100_nf14_emergency_disconnect/agcp",
+      "blockId": "agcp",
+      "type": "dhc-nfc14100:NF14EmergencyDisconnect",
+      "label": "Disjoncteur de branchement 30/60A",
+      "designView": "electrical",
+      "properties": { "LABEL": "Disjoncteur de branchement 30/60A" }
+    },
+    {
+      "id": "dhc-instance:FR-DEMO-01/dhc_nfc15100_gtl/gtl",
+      "blockId": "gtl",
+      "type": "dhc-nfc15100:GTL",
+      "label": "GTL",
+      "designView": "electrical",
+      "properties": { "LABEL": "GTL" }
+    },
+    {
       "id": "dhc-instance:FR-DEMO-01/dhc_floor/floor-rdc",
       "blockId": "floor-rdc",
       "type": "dhc:Floor",
@@ -162,6 +194,24 @@
     }
   ],
   "links": [
+    {
+      "source": "dhc-instance:FR-DEMO-01/dhc_energy_delivery/livraison",
+      "target": "dhc-instance:FR-DEMO-01/dhc_nfc14100_nf14_energy_meter/compteur",
+      "label": "feeds",
+      "type": "containment"
+    },
+    {
+      "source": "dhc-instance:FR-DEMO-01/dhc_nfc14100_nf14_energy_meter/compteur",
+      "target": "dhc-instance:FR-DEMO-01/dhc_nfc14100_nf14_emergency_disconnect/agcp",
+      "label": "feeds",
+      "type": "containment"
+    },
+    {
+      "source": "dhc-instance:FR-DEMO-01/dhc_nfc14100_nf14_emergency_disconnect/agcp",
+      "target": "dhc-instance:FR-DEMO-01/dhc_distribution_board/db-principal",
+      "label": "feeds",
+      "type": "containment"
+    },
     {
       "source": "dhc-instance:FR-DEMO-01/dhc_distribution_board/db-principal",
       "target": "dhc-instance:FR-DEMO-01/dhc_circuit/circuit-eclairage",

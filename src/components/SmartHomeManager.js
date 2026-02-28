@@ -9,6 +9,8 @@ import {
   updateSmartHome,
   deleteSmartHome,
 } from "../graphql/mutations";
+import { generateShellWorkspace } from "../utils/shellGenerator";
+import { saveDesignToS3, fetchDesignFromS3 } from "../utils/s3";
 
 const SmartHomeManager = () => {
   const { authState, isAuthenticated } = useAuth();
@@ -72,6 +74,19 @@ const SmartHomeManager = () => {
           },
         },
       });
+
+      // Generate electrical shell for new SmartHome
+      try {
+        const shellWorkspace = generateShellWorkspace(data.id, data.country);
+        await saveDesignToS3(data.id, {
+          workspaceJson: shellWorkspace,
+          aboxTtl: "",
+          aboxJson: { nodes: [], links: [] },
+        });
+        console.log("[Manager] Electrical shell generated for", data.id);
+      } catch (shellErr) {
+        console.warn("[Manager] Failed to generate electrical shell:", shellErr.message);
+      }
     }
 
     setShowForm(false);
@@ -97,6 +112,30 @@ const SmartHomeManager = () => {
   const handleCreate = () => {
     setEditingItem(null);
     setShowForm(true);
+  };
+
+  const handleGenerateShell = async (item) => {
+    // Check if a design already exists
+    const existing = await fetchDesignFromS3(item.id);
+    if (existing) {
+      if (!window.confirm(`SmartHome ${item.id} already has a design. Overwrite with a new electrical shell?`)) {
+        return;
+      }
+    }
+
+    try {
+      const country = item.country || item.id.split("-")[0] || "";
+      const shellWorkspace = generateShellWorkspace(item.id, country);
+      await saveDesignToS3(item.id, {
+        workspaceJson: shellWorkspace,
+        aboxTtl: "",
+        aboxJson: { nodes: [], links: [] },
+      });
+      window.alert(`Electrical shell generated for ${item.id}.`);
+    } catch (err) {
+      console.error("[Manager] Shell generation failed:", err);
+      window.alert(`Failed to generate shell: ${err.message}`);
+    }
   };
 
   if (authState !== "authenticated") {
@@ -225,6 +264,15 @@ const SmartHomeManager = () => {
                     style={{ marginRight: "0.4rem" }}
                   >
                     Edit
+                  </button>
+                  <button
+                    type="button"
+                    className="dhc-button-ghost"
+                    onClick={() => handleGenerateShell(item)}
+                    style={{ marginRight: "0.4rem" }}
+                    title="Generate electrical delivery chain skeleton"
+                  >
+                    Shell
                   </button>
                   <button
                     type="button"

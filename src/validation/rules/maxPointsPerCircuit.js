@@ -3,13 +3,19 @@
  * - Lighting circuits: max 8 points
  * - Socket circuits: max 8 points
  * - Dedicated circuits: 1 point
+ *
+ * Supports both Core Circuit blocks and NFC 15-100 module circuit subclasses.
  */
+
+function isCircuitBlock(block) {
+  return block.type === "dhc_circuit" || block.type.startsWith("dhc_nfc15100_");
+}
 
 export function validateMaxPointsPerCircuit(workspace) {
   const violations = [];
   const allBlocks = workspace.getAllBlocks(false);
 
-  const circuits = allBlocks.filter((b) => b.type === "dhc_circuit");
+  const circuits = allBlocks.filter(isCircuitBlock);
 
   for (const circuit of circuits) {
     const maxPoints = Number(circuit.getFieldValue("MAX_POINTS")) || 8;

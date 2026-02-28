@@ -6,16 +6,59 @@
  */
 import * as Blockly from "blockly";
 
+const INPUT_TYPES = Blockly.inputs?.inputTypes || { VALUE: 1, STATEMENT: 3 };
 const DHC_NS = "https://digitalhome.cloud/ontology#";
+const DHC_NFC14100_NS = "https://digitalhome.cloud/ontology/nfc14100#";
+const DHC_NFC15100_NS = "https://digitalhome.cloud/ontology/nfc15100#";
 const DHC_INSTANCE_NS = "https://digitalhome.cloud/instance#";
+
+// Module prefix mappings: block type prefix → ontology namespace prefix
+const MODULE_PREFIXES = {
+  dhc_nfc14100_: "dhc-nfc14100",
+  dhc_nfc15100_: "dhc-nfc15100",
+};
+
+// Block type → ontology class lookup map, populated from block definitions
+const blockTypeClassMap = new Map();
+
+/**
+ * Initialize the block type → class map from loaded block definitions.
+ * Called once when block definitions are registered.
+ */
+export function initBlockTypeMap(blockDefs) {
+  blockTypeClassMap.clear();
+  for (const def of blockDefs) {
+    if (def.type && def.ontologyClass) {
+      blockTypeClassMap.set(def.type, def.ontologyClass);
+    }
+  }
+}
 
 /**
  * Get the ontology class IRI for a block type.
- * Block types follow the pattern dhc_class_name → dhc:ClassName
+ * Uses the lookup map populated by initBlockTypeMap(), with a fallback
+ * that converts snake_case to PascalCase.
  */
 function blockTypeToClass(blockType) {
   if (!blockType.startsWith("dhc_")) return null;
-  // Convert snake_case to PascalCase
+
+  // Use lookup map if available
+  if (blockTypeClassMap.has(blockType)) {
+    return blockTypeClassMap.get(blockType);
+  }
+
+  // Fallback: convert snake_case to PascalCase
+  for (const [prefix, ontPrefix] of Object.entries(MODULE_PREFIXES)) {
+    if (blockType.startsWith(prefix)) {
+      const localName = blockType
+        .replace(prefix, "")
+        .split("_")
+        .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+        .join("");
+      return `${ontPrefix}:${localName}`;
+    }
+  }
+
   const localName = blockType
     .replace("dhc_", "")
     .split("_")
@@ -67,6 +110,8 @@ function inputToProperty(inputName) {
     HASCIRCUITTYPE: "hasCircuitType",
     CONNECTEDTONETWORK: "connectedToNetwork",
     HASPART: "hasPart",
+    FEEDS: "feeds",
+    LOCATEDIN: "locatedIn",
   };
   return `dhc:${propertyMap[inputName] || lower}`;
 }
@@ -82,6 +127,8 @@ export function serializeToTTL(workspace, smartHomeId) {
 
   const lines = [];
   lines.push(`@prefix dhc: <${DHC_NS}> .`);
+  lines.push(`@prefix dhc-nfc14100: <${DHC_NFC14100_NS}> .`);
+  lines.push(`@prefix dhc-nfc15100: <${DHC_NFC15100_NS}> .`);
   lines.push(`@prefix dhc-instance: <${DHC_INSTANCE_NS}> .`);
   lines.push(`@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .`);
   lines.push(`@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .`);
@@ -121,7 +168,7 @@ export function serializeToTTL(workspace, smartHomeId) {
 
     // Statement inputs (containment)
     for (const input of block.inputList) {
-      if (input.type === Blockly.inputTypes.STATEMENT) {
+      if (input.type === INPUT_TYPES.STATEMENT) {
         let child = input.connection?.targetBlock();
         while (child) {
           const childIri = instanceIri(smartHomeId, child.type, child.id);
@@ -134,7 +181,7 @@ export function serializeToTTL(workspace, smartHomeId) {
 
     // Value inputs (references)
     for (const input of block.inputList) {
-      if (input.type === Blockly.inputTypes.VALUE) {
+      if (input.type === INPUT_TYPES.VALUE) {
         const connected = input.connection?.targetBlock();
         if (connected) {
           const connIri = instanceIri(smartHomeId, connected.type, connected.id);
@@ -153,14 +200,14 @@ export function serializeToTTL(workspace, smartHomeId) {
 
     // Process children recursively
     for (const input of block.inputList) {
-      if (input.type === Blockly.inputTypes.STATEMENT) {
+      if (input.type === INPUT_TYPES.STATEMENT) {
         let child = input.connection?.targetBlock();
         while (child) {
           processBlock(child);
           child = child.getNextBlock();
         }
       }
-      if (input.type === Blockly.inputTypes.VALUE) {
+      if (input.type === INPUT_TYPES.VALUE) {
         const connected = input.connection?.targetBlock();
         if (connected) {
           processBlock(connected);
@@ -211,8 +258,9 @@ export function serializeToJSON(workspace, smartHomeId) {
     // Determine designView from block definition
     const blockDef = block.type;
     let designView = "shared";
-    if (blockDef.match(/floor|space|zone|area|real_estate/)) designView = "spatial";
-    else if (blockDef.match(/circuit|distribution|protection|wiring|socket|switch|light|heater/)) designView = "electrical";
+    if (blockDef.startsWith("dhc_nfc14100_") || blockDef.startsWith("dhc_nfc15100_")) designView = "electrical";
+    else if (blockDef.match(/floor|space|zone|area|real_estate/)) designView = "spatial";
+    else if (blockDef.match(/circuit|distribution|protection|wiring|socket|switch|light|heater|energy|emergency|electrical/)) designView = "electrical";
 
     nodes.push({
       id: iri,
@@ -225,7 +273,7 @@ export function serializeToJSON(workspace, smartHomeId) {
 
     // Statement inputs (containment links)
     for (const input of block.inputList) {
-      if (input.type === Blockly.inputTypes.STATEMENT) {
+      if (input.type === INPUT_TYPES.STATEMENT) {
         let child = input.connection?.targetBlock();
         while (child) {
           const childIri = instanceIri(smartHomeId, child.type, child.id);
@@ -239,7 +287,7 @@ export function serializeToJSON(workspace, smartHomeId) {
           child = child.getNextBlock();
         }
       }
-      if (input.type === Blockly.inputTypes.VALUE) {
+      if (input.type === INPUT_TYPES.VALUE) {
         const connected = input.connection?.targetBlock();
         if (connected) {
           const connIri = instanceIri(smartHomeId, connected.type, connected.id);

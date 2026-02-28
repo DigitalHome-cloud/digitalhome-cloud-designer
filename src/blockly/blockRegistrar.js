@@ -5,6 +5,7 @@
  * and registers each as a Blockly block type.
  */
 import * as Blockly from "blockly";
+import { initBlockTypeMap } from "./aboxSerializer";
 
 let registered = false;
 
@@ -26,6 +27,9 @@ export function registerBlocks(blockDefs) {
       },
     };
   }
+
+  // Build the block type → ontology class lookup map for A-Box serialization
+  initBlockTypeMap(blockDefs);
 
   registered = true;
   console.log(`[DHC] Registered ${blockDefs.length} dynamic block types`);

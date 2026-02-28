@@ -8,11 +8,13 @@
 import { validateMaxPointsPerCircuit } from "./rules/maxPointsPerCircuit";
 import { validateProtectionDeviceSizing } from "./rules/protectionDeviceSizing";
 import { validateWireCrossSection } from "./rules/wireCrossSection";
+import { validateDeliveryChain } from "./rules/deliveryChain";
 
 const RULES = [
   validateMaxPointsPerCircuit,
   validateProtectionDeviceSizing,
   validateWireCrossSection,
+  validateDeliveryChain,
 ];
 
 /**
