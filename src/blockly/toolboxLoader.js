@@ -3,7 +3,7 @@
  *
  * Fetches the Blockly block definitions and toolbox config from S3,
  * registers all blocks, and returns the toolbox config.
- * Falls back to local JSON if S3 is unavailable.
+ * Falls back to local JSON if S3 is unavailable (localhost only).
  */
 import { fetchToolboxFromS3 } from "../utils/s3";
 import { registerBlocks } from "./blockRegistrar";
@@ -22,12 +22,26 @@ try {
 let cachedToolbox = null;
 
 /**
+ * Detect current environment from hostname.
+ * @returns {"localhost"|"stage"|"production"}
+ */
+function detectEnvironment() {
+  if (typeof window === "undefined") return "production";
+  const hostname = window.location.hostname;
+  if (hostname === "localhost" || hostname === "127.0.0.1") return "localhost";
+  if (hostname.startsWith("stage-")) return "stage";
+  return "production";
+}
+
+/**
  * Load and register blocks, return toolbox config.
  * @param {string} version — ontology version or "latest"
- * @returns {Promise<object>} — Blockly categoryToolbox config
+ * @returns {Promise<object|null>} — Blockly categoryToolbox config, or null on failure
  */
 export async function loadToolbox(version = "latest") {
   if (cachedToolbox) return cachedToolbox;
+
+  const env = detectEnvironment();
 
   // Try S3 first
   const s3Data = await fetchToolboxFromS3(version);
@@ -39,15 +53,28 @@ export async function loadToolbox(version = "latest") {
     return cachedToolbox;
   }
 
-  // Fallback to local JSON
+  // S3 failed — environment-aware handling
+  if (env !== "localhost") {
+    console.error(
+      `[DHC] CRITICAL: S3 toolbox fetch failed in ${env} environment. ` +
+      "Blocks will not be available. Ensure 'npm run publish-ontology' has been run " +
+      "as part of the modeler CI/CD pipeline."
+    );
+  }
+
+  // Fallback to local JSON (development safety net)
   if (localBlocks && localToolbox) {
     registerBlocks(localBlocks);
     cachedToolbox = localToolbox;
-    console.log("[DHC] Toolbox loaded from local fallback");
+    if (env === "localhost") {
+      console.log("[DHC] Toolbox loaded from local fallback (dev mode)");
+    } else {
+      console.warn("[DHC] Toolbox loaded from local fallback — S3 artifacts may be stale");
+    }
     return cachedToolbox;
   }
 
-  console.warn("[DHC] No toolbox data available (S3 + local both failed)");
+  console.error("[DHC] No toolbox data available (S3 + local both failed)");
   return null;
 }
 

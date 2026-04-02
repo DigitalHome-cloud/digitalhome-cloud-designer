@@ -17,6 +17,12 @@ const ValidationPanel = ({ violations = [] }) => {
     return "i";
   };
 
+  const sourceClass = (source) => {
+    if (!source) return "";
+    const key = source.toLowerCase().replace(/\s+/g, "-");
+    return `dhc-validation-source dhc-validation-source--${key}`;
+  };
+
   return (
     <div className="dhc-validation-panel">
       <div className="dhc-validation-title">
@@ -38,6 +44,9 @@ const ValidationPanel = ({ violations = [] }) => {
               }}
             >
               <span>{severityIcon(v.severity)}</span>
+              {v.source && (
+                <span className={sourceClass(v.source)}>{v.source}</span>
+              )}
               <span>{v.message}</span>
             </li>
           ))}

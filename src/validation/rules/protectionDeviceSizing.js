@@ -41,6 +41,7 @@ export function validateProtectionDeviceSizing(workspace) {
 
   for (const circuit of circuits) {
     const circuitLabel = circuit.getFieldValue("LABEL") || "unnamed";
+    const isNfc15100 = circuit.type.startsWith("dhc_nfc15100_");
 
     // Find attached protection device
     let protectionDevice = null;
@@ -57,6 +58,7 @@ export function validateProtectionDeviceSizing(workspace) {
         message: `Circuit "${circuitLabel}" has no protection device.`,
         blockId: circuit.id,
         ruleId: "nfc15100-protection-missing",
+        source: isNfc15100 ? "NFC 15-100" : "Core",
       });
       continue;
     }
@@ -64,7 +66,7 @@ export function validateProtectionDeviceSizing(workspace) {
     const protectionRating = Number(protectionDevice.getFieldValue("RATED_CURRENT")) || 0;
 
     // NFC 15-100 module circuits have mandated ratedCurrent as a direct field
-    if (circuit.type.startsWith("dhc_nfc15100_")) {
+    if (isNfc15100) {
       const mandatedRating = Number(circuit.getFieldValue("RATED_CURRENT")) || 0;
       if (mandatedRating > 0 && protectionRating !== mandatedRating) {
         violations.push({
@@ -72,6 +74,7 @@ export function validateProtectionDeviceSizing(workspace) {
           message: `Circuit "${circuitLabel}" requires ${mandatedRating}A protection, but has ${protectionRating}A.`,
           blockId: protectionDevice.id,
           ruleId: "nfc15100-protection-sizing",
+          source: "NFC 15-100",
         });
       }
     } else {
@@ -84,6 +87,7 @@ export function validateProtectionDeviceSizing(workspace) {
           message: `Circuit "${circuitLabel}" (lighting) has ${protectionRating}A breaker, max 10A required.`,
           blockId: protectionDevice.id,
           ruleId: "nfc15100-protection-sizing",
+          source: "Core",
         });
       } else if (circuitType === "sockets" && protectionRating > 16) {
         violations.push({
@@ -91,6 +95,7 @@ export function validateProtectionDeviceSizing(workspace) {
           message: `Circuit "${circuitLabel}" (sockets) has ${protectionRating}A breaker, max 16A required.`,
           blockId: protectionDevice.id,
           ruleId: "nfc15100-protection-sizing",
+          source: "Core",
         });
       } else if (circuitType === "dedicated" && protectionRating < 20) {
         violations.push({
@@ -98,6 +103,7 @@ export function validateProtectionDeviceSizing(workspace) {
           message: `Circuit "${circuitLabel}" (dedicated) has ${protectionRating}A breaker, typically needs 20A or 32A.`,
           blockId: protectionDevice.id,
           ruleId: "nfc15100-protection-sizing",
+          source: "Core",
         });
       }
     }

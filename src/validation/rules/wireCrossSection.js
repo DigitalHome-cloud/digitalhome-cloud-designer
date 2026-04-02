@@ -47,6 +47,7 @@ export function validateWireCrossSection(workspace) {
             message: `Circuit "${circuitLabel}": ${mandatedCrossSection}mm² wire insufficient for ${mandatedRating}A, needs at least ${rule.minCrossSection}mm².`,
             blockId: circuit.id,
             ruleId: "nfc15100-wire-cross-section",
+            source: "NFC 15-100",
           });
         }
       }
@@ -83,6 +84,7 @@ export function validateWireCrossSection(workspace) {
                 message: `Circuit "${circuitLabel}": ${crossSection}mm² wire too small for ${ratedCurrent}A, needs at least ${rule.minCrossSection}mm².`,
                 blockId: wiring.id,
                 ruleId: "nfc15100-wire-cross-section",
+                source: "Core",
               });
             }
           }

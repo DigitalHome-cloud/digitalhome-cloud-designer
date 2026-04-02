@@ -3,6 +3,7 @@ import { Link } from "gatsby";
 import { useTranslation, useI18next } from "gatsby-plugin-react-i18next";
 import { useAuth } from "../context/AuthContext";
 import { useSmartHome } from "../context/SmartHomeContext";
+import { getAppUrl } from "../utils/getAppUrl";
 
 const Header = () => {
   const { t } = useTranslation();
@@ -40,10 +41,8 @@ const Header = () => {
               {t("nav.viewer")}
             </Link>
             <a
-              href="https://portal.digitalhome.cloud"
+              href={`${getAppUrl("portal")}?home=${encodeURIComponent(activeHome.id)}`}
               className="dhc-nav-link"
-              target="_blank"
-              rel="noreferrer"
             >
               {t("nav.portal")}
             </a>
@@ -81,7 +80,7 @@ const Header = () => {
               <>
                 <span className="dhc-nav-pill">DEMO</span>
                 <a
-                  href="https://portal.digitalhome.cloud/signin"
+                  href={`${getAppUrl("portal")}/signin`}
                   className="dhc-nav-link"
                 >
                   {t("nav.signin")}

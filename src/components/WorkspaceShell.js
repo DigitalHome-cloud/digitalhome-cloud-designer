@@ -20,6 +20,7 @@ const Canvas = ({
   const { t } = useTranslation();
   const containerRef = React.useRef(null);
   const [toolboxLoaded, setToolboxLoaded] = React.useState(false);
+  const [toolboxError, setToolboxError] = React.useState(false);
 
   // Load toolbox from S3 and init workspace
   React.useEffect(() => {
@@ -30,7 +31,15 @@ const Canvas = ({
     async function init() {
       const toolbox = await loadToolbox("latest");
       if (cancelled) return;
+
+      if (!toolbox) {
+        setToolboxError(true);
+        setToolboxLoaded(false);
+        return;
+      }
+
       setToolboxLoaded(true);
+      setToolboxError(false);
 
       const toolboxConfig =
         designView === "all" ? toolbox : getToolboxForView(designView);
@@ -99,8 +108,24 @@ const Canvas = ({
       <div className="dhc-panel-body">
         <div className="dhc-canvas-area">
           <span className="dhc-canvas-label">
-            {toolboxLoaded ? "Workspace" : "Loading toolbox..."}
+            {toolboxError
+              ? "Block loading failed"
+              : toolboxLoaded
+              ? "Workspace"
+              : "Loading toolbox..."}
           </span>
+          {toolboxError && (
+            <div className="dhc-toolbox-error-banner">
+              <span>Failed to load block definitions. Check console for details.</span>
+              <button
+                type="button"
+                className="dhc-button-ghost"
+                onClick={() => window.location.reload()}
+              >
+                Reload
+              </button>
+            </div>
+          )}
           <div
             ref={containerRef}
             style={{ width: "100%", height: "100%", minHeight: "500px" }}

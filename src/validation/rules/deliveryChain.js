@@ -43,6 +43,7 @@ export function validateDeliveryChain(workspace) {
         "NFC 14-100 delivery chain incomplete: Energy Delivery block is required.",
       blockId: nfc14100Blocks[0].id,
       ruleId: "nfc14100-delivery-chain",
+      source: "NFC 14-100",
     });
   }
 
@@ -53,6 +54,7 @@ export function validateDeliveryChain(workspace) {
         "NFC 14-100 delivery chain incomplete: NF14 Energy Meter is required.",
       blockId: nfc14100Blocks[0].id,
       ruleId: "nfc14100-delivery-chain",
+      source: "NFC 14-100",
     });
   }
 
@@ -63,6 +65,7 @@ export function validateDeliveryChain(workspace) {
         "NFC 14-100 delivery chain incomplete: NF14 Emergency Disconnect is required.",
       blockId: nfc14100Blocks[0].id,
       ruleId: "nfc14100-delivery-chain",
+      source: "NFC 14-100",
     });
   }
 
@@ -73,6 +76,7 @@ export function validateDeliveryChain(workspace) {
         "NFC 14-100 delivery chain incomplete: Distribution Board is required.",
       blockId: nfc14100Blocks[0].id,
       ruleId: "nfc14100-delivery-chain",
+      source: "NFC 14-100",
     });
   }
 

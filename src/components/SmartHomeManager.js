@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { navigate } from "gatsby";
 import { useAuth } from "../context/AuthContext";
 import { useSmartHome } from "../context/SmartHomeContext";
 import SmartHomeForm from "./SmartHomeForm";
@@ -84,6 +85,8 @@ const SmartHomeManager = () => {
           aboxJson: { nodes: [], links: [] },
         });
         console.log("[Manager] Electrical shell generated for", data.id);
+        navigate(`/design/?home=${encodeURIComponent(data.id)}`);
+        return;
       } catch (shellErr) {
         console.warn("[Manager] Failed to generate electrical shell:", shellErr.message);
       }
@@ -131,7 +134,7 @@ const SmartHomeManager = () => {
         aboxTtl: "",
         aboxJson: { nodes: [], links: [] },
       });
-      window.alert(`Electrical shell generated for ${item.id}.`);
+      navigate(`/design/?home=${encodeURIComponent(item.id)}`);
     } catch (err) {
       console.error("[Manager] Shell generation failed:", err);
       window.alert(`Failed to generate shell: ${err.message}`);

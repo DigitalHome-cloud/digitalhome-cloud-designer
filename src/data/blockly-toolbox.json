@@ -175,6 +175,10 @@
             },
             {
               "kind": "block",
+              "type": "dhc_nfc15100_floor_heating5400_w40_a_dedicated"
+            },
+            {
+              "kind": "block",
               "type": "dhc_nfc15100_floor_heating7500_w"
             },
             {

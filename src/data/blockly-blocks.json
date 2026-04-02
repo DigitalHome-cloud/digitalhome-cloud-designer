@@ -693,12 +693,12 @@
     "ontologyClass": "dhc-nfc15100:GTL",
     "designView": "electrical",
     "colour": 220,
-    "message0": "GTL %1\narea (m²) %2",
+    "message0": "GTL (Gaine Technique Logement) %1\narea (m²) %2",
     "args0": [
       {
         "type": "field_input",
         "name": "LABEL",
-        "text": "GTL"
+        "text": "GTL (Gaine Technique Logement)"
       },
       {
         "type": "field_number",
@@ -2485,6 +2485,125 @@
     ],
     "inputsInline": false,
     "tooltip": "Floor heating circuit ≤4200W: 32A breaker, 6mm² (3G6).",
+    "message1": "feeds equipment %1",
+    "args1": [
+      {
+        "type": "input_statement",
+        "name": "FEEDSEQUIPMENT",
+        "check": "dhc_Equipment"
+      }
+    ],
+    "message2": "has wiring %1",
+    "args2": [
+      {
+        "type": "input_statement",
+        "name": "HASWIRING",
+        "check": "dhc_WiringSegment"
+      }
+    ],
+    "message3": "has protection %1",
+    "args3": [
+      {
+        "type": "input_value",
+        "name": "HASPROTECTION",
+        "check": "dhc_ProtectionDevice"
+      }
+    ],
+    "message4": "has circuit type %1",
+    "args4": [
+      {
+        "type": "input_value",
+        "name": "HASCIRCUITTYPE",
+        "check": "dhc_CircuitType"
+      }
+    ],
+    "nextStatement": null,
+    "previousStatement": "dhc_Circuit"
+  },
+  {
+    "type": "dhc_nfc15100_floor_heating5400_w40_a_dedicated",
+    "ontologyClass": "dhc-nfc15100:FloorHeating5400W40ADedicated",
+    "designView": "electrical",
+    "colour": 220,
+    "message0": "Floor Heating ≤5400W (40A, dedicated) %1\nmax points on circuit %2\nphase %3\ncross section (mm²) %4\nrated current (A) %5\nwiring %6",
+    "args0": [
+      {
+        "type": "field_input",
+        "name": "LABEL",
+        "text": "Floor Heating ≤5400W (40A, dedicated)"
+      },
+      {
+        "type": "field_number",
+        "name": "MAX_POINTS",
+        "value": 1,
+        "precision": 1
+      },
+      {
+        "type": "field_dropdown",
+        "name": "PHASE",
+        "options": [
+          [
+            "Phase 1",
+            "1"
+          ],
+          [
+            "Phase 2",
+            "2"
+          ],
+          [
+            "Phase 3",
+            "3"
+          ]
+        ]
+      },
+      {
+        "type": "field_number",
+        "name": "CROSS_SECTION",
+        "value": 6
+      },
+      {
+        "type": "field_dropdown",
+        "name": "RATED_CURRENT",
+        "options": [
+          [
+            "10 A",
+            "10"
+          ],
+          [
+            "16 A",
+            "16"
+          ],
+          [
+            "20 A",
+            "20"
+          ],
+          [
+            "25 A",
+            "25"
+          ],
+          [
+            "32 A",
+            "32"
+          ],
+          [
+            "40 A",
+            "40"
+          ],
+          [
+            "50 A",
+            "50"
+          ]
+        ],
+        "default": "40"
+      },
+      {
+        "type": "field_input",
+        "name": "WIRING",
+        "text": "4G6"
+      }
+    ],
+    "inputsInline": false,
+    "tooltip": "Floor heating circuit ≤5400W: 40A breaker, 6mm² (4G6), dedicated.",
     "message1": "feeds equipment %1",
     "args1": [
       {

@@ -33,11 +33,13 @@ export function validateMaxPointsPerCircuit(workspace) {
     }
 
     if (equipmentCount > maxPoints) {
+      const source = circuit.type.startsWith("dhc_nfc15100_") ? "NFC 15-100" : "Core";
       violations.push({
         severity: "error",
         message: `Circuit "${circuit.getFieldValue("LABEL") || "unnamed"}" has ${equipmentCount} points but max is ${maxPoints}.`,
         blockId: circuit.id,
         ruleId: "nfc15100-max-points",
+        source,
       });
     }
   }
