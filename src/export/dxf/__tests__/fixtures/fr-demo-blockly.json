@@ -1,0 +1,69 @@
+{
+  "_comment": "Snapshot of serializeToJSON(workspace, 'FR-DEMO') for the FR demo house. Hand-authored to mirror the shape produced by src/blockly/aboxSerializer.js (nodes + links) so the DXF pipeline can be exercised end-to-end without Blockly. Pavillon individuel ~100 m², monophasé 45 A, 3 DDR (A/AC/A), 8 circuits covering éclairage / prises / cuisine / ECS.",
+  "smartHomeId": "FR-DEMO",
+  "nodes": [
+    { "id": "dhc-instance:FR-DEMO/dhc_nfc15100_real_estate/re1", "blockId": "re1",
+      "type": "dhc-nfc15100:RealEstate", "label": "Pavillon FR-DEMO",
+      "designView": "spatial", "properties": { "LABEL": "Pavillon FR-DEMO" } },
+
+    { "id": "dhc-instance:FR-DEMO/dhc_nfc15100_main_switch/agcp1", "blockId": "agcp1",
+      "type": "dhc-nfc15100:MainSwitch", "label": "AGCP 45 A / 500 mA sélectif",
+      "designView": "electrical", "properties": { "RATING": "45", "SENSITIVITY": "500", "LABEL": "AGCP 45 A / 500 mA sélectif" } },
+
+    { "id": "dhc-instance:FR-DEMO/dhc_nfc15100_distribution_board/tgbt1", "blockId": "tgbt1",
+      "type": "dhc-nfc15100:DistributionBoard", "label": "Tableau général — FR-DEMO",
+      "designView": "electrical", "properties": { "LABEL": "Tableau général — FR-DEMO" } },
+
+    { "id": "dhc-instance:FR-DEMO/dhc_nfc15100_rcd/ddr1", "blockId": "ddr1",
+      "type": "dhc-nfc15100:ResidualCurrentDevice", "label": "DDR 30 mA type AC",
+      "designView": "electrical", "properties": { "SENSITIVITY": "30", "RCD_TYPE": "AC", "LABEL": "DDR 30 mA type AC" } },
+    { "id": "dhc-instance:FR-DEMO/dhc_nfc15100_rcd/ddr2", "blockId": "ddr2",
+      "type": "dhc-nfc15100:ResidualCurrentDevice", "label": "DDR 30 mA type A",
+      "designView": "electrical", "properties": { "SENSITIVITY": "30", "RCD_TYPE": "A", "LABEL": "DDR 30 mA type A" } },
+    { "id": "dhc-instance:FR-DEMO/dhc_nfc15100_rcd/ddr3", "blockId": "ddr3",
+      "type": "dhc-nfc15100:ResidualCurrentDevice", "label": "DDR 30 mA type A (cuisine)",
+      "designView": "electrical", "properties": { "SENSITIVITY": "30", "RCD_TYPE": "A", "LABEL": "DDR 30 mA type A (cuisine)" } },
+
+    { "id": "dhc-instance:FR-DEMO/dhc_nfc15100_lighting_circuit/c1", "blockId": "c1",
+      "type": "dhc-nfc15100:LightingCircuit", "label": "Éclairage séjour / chambres",
+      "designView": "electrical", "properties": { "BREAKER_RATING": "16", "BREAKER_CURVE": "C", "WIRE_SECTION": "1.5", "MAX_POINTS": "8", "LABEL": "Éclairage séjour / chambres" } },
+    { "id": "dhc-instance:FR-DEMO/dhc_nfc15100_lighting_circuit/c2", "blockId": "c2",
+      "type": "dhc-nfc15100:LightingCircuit", "label": "Éclairage extérieur",
+      "designView": "electrical", "properties": { "BREAKER_RATING": "10", "BREAKER_CURVE": "C", "WIRE_SECTION": "1.5", "MAX_POINTS": "8", "LABEL": "Éclairage extérieur" } },
+    { "id": "dhc-instance:FR-DEMO/dhc_nfc15100_socket_circuit16_a/c3", "blockId": "c3",
+      "type": "dhc-nfc15100:SocketCircuit16A", "label": "Prises séjour",
+      "designView": "electrical", "properties": { "BREAKER_RATING": "16", "BREAKER_CURVE": "C", "WIRE_SECTION": "2.5", "MAX_POINTS": "8", "LABEL": "Prises séjour" } },
+    { "id": "dhc-instance:FR-DEMO/dhc_nfc15100_socket_circuit16_a/c4", "blockId": "c4",
+      "type": "dhc-nfc15100:SocketCircuit16A", "label": "Prises chambres",
+      "designView": "electrical", "properties": { "BREAKER_RATING": "16", "BREAKER_CURVE": "C", "WIRE_SECTION": "2.5", "MAX_POINTS": "8", "LABEL": "Prises chambres" } },
+    { "id": "dhc-instance:FR-DEMO/dhc_nfc15100_water_heater_circuit/c5", "blockId": "c5",
+      "type": "dhc-nfc15100:WaterHeaterCircuit", "label": "Chauffe-eau",
+      "designView": "electrical", "properties": { "BREAKER_RATING": "20", "BREAKER_CURVE": "C", "WIRE_SECTION": "2.5", "LABEL": "Chauffe-eau" } },
+    { "id": "dhc-instance:FR-DEMO/dhc_nfc15100_kitchen_socket_circuit/c6", "blockId": "c6",
+      "type": "dhc-nfc15100:KitchenSocketCircuit", "label": "Prises cuisine",
+      "designView": "electrical", "properties": { "BREAKER_RATING": "20", "BREAKER_CURVE": "C", "WIRE_SECTION": "2.5", "MAX_POINTS": "12", "LABEL": "Prises cuisine" } },
+    { "id": "dhc-instance:FR-DEMO/dhc_nfc15100_cooking_circuit/c7", "blockId": "c7",
+      "type": "dhc-nfc15100:CookingCircuit", "label": "Plaque de cuisson",
+      "designView": "electrical", "properties": { "BREAKER_RATING": "32", "BREAKER_CURVE": "C", "WIRE_SECTION": "6", "LABEL": "Plaque de cuisson" } },
+    { "id": "dhc-instance:FR-DEMO/dhc_nfc15100_washing_machine_circuit/c8", "blockId": "c8",
+      "type": "dhc-nfc15100:WashingMachineCircuit", "label": "Lave-linge",
+      "designView": "electrical", "properties": { "BREAKER_RATING": "20", "BREAKER_CURVE": "C", "WIRE_SECTION": "2.5", "LABEL": "Lave-linge" } }
+  ],
+  "links": [
+    { "source": "dhc-instance:FR-DEMO/dhc_nfc15100_real_estate/re1", "target": "dhc-instance:FR-DEMO/dhc_nfc15100_distribution_board/tgbt1", "label": "hasDistributionBoard", "type": "containment" },
+    { "source": "dhc-instance:FR-DEMO/dhc_nfc15100_distribution_board/tgbt1", "target": "dhc-instance:FR-DEMO/dhc_nfc15100_rcd/ddr1", "label": "hasProtection", "type": "containment" },
+    { "source": "dhc-instance:FR-DEMO/dhc_nfc15100_distribution_board/tgbt1", "target": "dhc-instance:FR-DEMO/dhc_nfc15100_rcd/ddr2", "label": "hasProtection", "type": "containment" },
+    { "source": "dhc-instance:FR-DEMO/dhc_nfc15100_distribution_board/tgbt1", "target": "dhc-instance:FR-DEMO/dhc_nfc15100_rcd/ddr3", "label": "hasProtection", "type": "containment" },
+
+    { "source": "dhc-instance:FR-DEMO/dhc_nfc15100_rcd/ddr1", "target": "dhc-instance:FR-DEMO/dhc_nfc15100_lighting_circuit/c1", "label": "protects", "type": "containment" },
+    { "source": "dhc-instance:FR-DEMO/dhc_nfc15100_rcd/ddr1", "target": "dhc-instance:FR-DEMO/dhc_nfc15100_lighting_circuit/c2", "label": "protects", "type": "containment" },
+    { "source": "dhc-instance:FR-DEMO/dhc_nfc15100_rcd/ddr1", "target": "dhc-instance:FR-DEMO/dhc_nfc15100_socket_circuit16_a/c3", "label": "protects", "type": "containment" },
+    { "source": "dhc-instance:FR-DEMO/dhc_nfc15100_rcd/ddr1", "target": "dhc-instance:FR-DEMO/dhc_nfc15100_socket_circuit16_a/c4", "label": "protects", "type": "containment" },
+
+    { "source": "dhc-instance:FR-DEMO/dhc_nfc15100_rcd/ddr2", "target": "dhc-instance:FR-DEMO/dhc_nfc15100_water_heater_circuit/c5", "label": "protects", "type": "containment" },
+    { "source": "dhc-instance:FR-DEMO/dhc_nfc15100_rcd/ddr2", "target": "dhc-instance:FR-DEMO/dhc_nfc15100_washing_machine_circuit/c8", "label": "protects", "type": "containment" },
+
+    { "source": "dhc-instance:FR-DEMO/dhc_nfc15100_rcd/ddr3", "target": "dhc-instance:FR-DEMO/dhc_nfc15100_kitchen_socket_circuit/c6", "label": "protects", "type": "containment" },
+    { "source": "dhc-instance:FR-DEMO/dhc_nfc15100_rcd/ddr3", "target": "dhc-instance:FR-DEMO/dhc_nfc15100_cooking_circuit/c7", "label": "protects", "type": "containment" }
+  ]
+}

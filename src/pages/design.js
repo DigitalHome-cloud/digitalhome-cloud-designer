@@ -4,6 +4,7 @@ import Layout from "../components/Layout";
 import WorkspaceShell from "../components/WorkspaceShell";
 import ValidationPanel from "../components/ValidationPanel";
 import EditLockToolbar from "../components/EditLockToolbar";
+import ExportDxfButton from "../components/ExportDxfButton";
 import { useTranslation } from "gatsby-plugin-react-i18next";
 import { getWorkspace } from "../blockly/workspace";
 import { validateWorkspace } from "../validation/nfc15100";
@@ -46,8 +47,14 @@ const DesignPage = () => {
     };
   }, []);
 
+  const hasBlockingViolations = violations.some(
+    (v) => v.severity === "error" || v.level === "error",
+  );
+
   const lockToolbar = (
-    <EditLockToolbar
+    <>
+      <ExportDxfButton hasBlockingViolations={hasBlockingViolations} />
+      <EditLockToolbar
       mode={lock.mode}
       lockedBy={lock.lockedBy}
       isLockStale={lock.isLockStale}
@@ -59,6 +66,7 @@ const DesignPage = () => {
       onCancel={lock.cancelEdit}
       onForceUnlock={lock.forceUnlock}
     />
+    </>
   );
 
   return (
