@@ -136,6 +136,7 @@ export function serializeToTTL(workspace, smartHomeId) {
   lines.push("");
 
   const topBlocks = workspace.getTopBlocks(true);
+  const emittedZones = new Map();
 
   function processBlock(block) {
     const blockType = block.type;
@@ -163,6 +164,19 @@ export function serializeToTTL(workspace, smartHomeId) {
       } else {
         const escaped = String(value).replace(/"/g, '\\"');
         lines.push(`  ${prop} "${escaped}" ;`);
+      }
+    }
+
+    // Zone variable (Space blocks with ZONE_VAR field)
+    const zoneField = block.getField("ZONE_VAR");
+    if (zoneField) {
+      const zoneName = zoneField.getValue();
+      if (zoneName && zoneName !== "None") {
+        const zoneIri = `dhc-instance:${smartHomeId}/zone/${encodeURIComponent(zoneName)}`;
+        lines.push(`  dhc:belongsToZone ${zoneIri} ;`);
+        if (!emittedZones.has(zoneName)) {
+          emittedZones.set(zoneName, zoneIri);
+        }
       }
     }
 
@@ -220,6 +234,14 @@ export function serializeToTTL(workspace, smartHomeId) {
     processBlock(block);
   }
 
+  // Emit Zone instances collected from variable references
+  for (const [name, iri] of emittedZones) {
+    lines.push(`${iri}`);
+    lines.push(`  a dhc:Zone ;`);
+    lines.push(`  rdfs:label "${name.replace(/"/g, '\\"')}" .`);
+    lines.push("");
+  }
+
   return lines.join("\n");
 }
 
@@ -234,6 +256,7 @@ export function serializeToJSON(workspace, smartHomeId) {
 
   const nodes = [];
   const links = [];
+  const emittedZones = new Map();
   const topBlocks = workspace.getTopBlocks(true);
 
   function processBlock(block) {
@@ -271,6 +294,24 @@ export function serializeToJSON(workspace, smartHomeId) {
       properties,
     });
 
+    // Zone variable (Space blocks with ZONE_VAR field)
+    const zoneField = block.getField("ZONE_VAR");
+    if (zoneField) {
+      const zoneName = zoneField.getValue();
+      if (zoneName && zoneName !== "None") {
+        const zoneIri = `dhc-instance:${smartHomeId}/zone/${encodeURIComponent(zoneName)}`;
+        links.push({
+          source: iri,
+          target: zoneIri,
+          label: "belongsToZone",
+          type: "reference",
+        });
+        if (!emittedZones.has(zoneName)) {
+          emittedZones.set(zoneName, zoneIri);
+        }
+      }
+    }
+
     // Statement inputs (containment links)
     for (const input of block.inputList) {
       if (input.type === INPUT_TYPES.STATEMENT) {
@@ -305,6 +346,18 @@ export function serializeToJSON(workspace, smartHomeId) {
 
   for (const block of topBlocks) {
     processBlock(block);
+  }
+
+  // Emit Zone nodes collected from variable references
+  for (const [name, zoneIri] of emittedZones) {
+    nodes.push({
+      id: zoneIri,
+      blockId: null,
+      type: "dhc:Zone",
+      label: name,
+      designView: "spatial",
+      properties: {},
+    });
   }
 
   return { nodes, links };

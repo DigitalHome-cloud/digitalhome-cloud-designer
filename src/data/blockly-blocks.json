@@ -3,13 +3,13 @@
     "type": "dhc_real_estate",
     "ontologyClass": "dhc:RealEstate",
     "designView": "spatial",
-    "colour": 142,
-    "message0": "Real Estate %1\nSmartHome ID %2",
+    "colour": 120,
+    "message0": "🏠 Real Estate %1\nSmartHome ID %2",
     "args0": [
       {
         "type": "field_input",
         "name": "LABEL",
-        "text": "Real Estate"
+        "text": "My Property"
       },
       {
         "type": "field_input",
@@ -18,13 +18,13 @@
       }
     ],
     "inputsInline": false,
-    "tooltip": "A physical property: house, apartment, land with buildings.",
+    "tooltip": "The root physical container for the property.",
     "message1": "has area %1",
     "args1": [
       {
         "type": "input_statement",
         "name": "HASAREA",
-        "check": "dhc_Area"
+        "check": "AreaType"
       }
     ],
     "nextStatement": null,
@@ -34,41 +34,47 @@
     "type": "dhc_area",
     "ontologyClass": "dhc:Area",
     "designView": "spatial",
-    "colour": 142,
-    "message0": "Area %1",
+    "colour": 100,
+    "message0": "📍 Area %1\nFloor %2",
     "args0": [
       {
         "type": "field_input",
         "name": "LABEL",
-        "text": "Area"
+        "text": "Main Building"
+      },
+      {
+        "type": "field_number",
+        "name": "FLOOR_LEVEL",
+        "value": 0,
+        "precision": 1
       }
     ],
     "inputsInline": false,
-    "tooltip": "A major subdivision of a property (e.g. main building, annex, garden).",
-    "message1": "has floor %1",
+    "tooltip": "Physical subdivision of the property (e.g. main building, annex).",
+    "message1": "has space %1",
     "args1": [
+      {
+        "type": "input_statement",
+        "name": "HASSPACE",
+        "check": "SpaceType"
+      }
+    ],
+    "previousStatement": "AreaType",
+    "nextStatement": "AreaType",
+    "message2": "has floor %1",
+    "args2": [
       {
         "type": "input_statement",
         "name": "HASFLOOR",
         "check": "dhc_Floor"
       }
-    ],
-    "message2": "has space %1",
-    "args2": [
-      {
-        "type": "input_statement",
-        "name": "HASSPACE",
-        "check": "dhc_Space"
-      }
-    ],
-    "nextStatement": null,
-    "previousStatement": "dhc_area"
+    ]
   },
   {
     "type": "dhc_floor",
     "ontologyClass": "dhc:Floor",
     "designView": "spatial",
-    "colour": 142,
+    "colour": 110,
     "message0": "Floor %1\nfloor level %2",
     "args0": [
       {
@@ -84,7 +90,15 @@
       }
     ],
     "inputsInline": false,
-    "tooltip": "A storey / level within a building.",
+    "tooltip": "Legacy — prefer using the Floor field on Area blocks instead.",
+    "message1": "has space %1",
+    "args1": [
+      {
+        "type": "input_statement",
+        "name": "HASSPACE",
+        "check": "SpaceType"
+      }
+    ],
     "nextStatement": null,
     "previousStatement": "dhc_floor"
   },
@@ -92,54 +106,59 @@
     "type": "dhc_space",
     "ontologyClass": "dhc:Space",
     "designView": "spatial",
-    "colour": 142,
-    "message0": "Space %1\narea (m²) %2",
+    "colour": 70,
+    "message0": "🚪 Space %1\nSurface %2 m²",
     "args0": [
       {
         "type": "field_input",
         "name": "LABEL",
-        "text": "Space"
+        "text": "Kitchen"
       },
       {
         "type": "field_number",
         "name": "AREA_M2",
-        "value": 0
+        "value": 15,
+        "min": 0
       }
     ],
     "inputsInline": false,
-    "tooltip": "A specific room or enclosed area (e.g. kitchen, bedroom, garage).",
-    "message1": "has building element %1",
+    "tooltip": "Specific room or enclosed area assigned to a logical Zone.",
+    "message1": "🌐 Zone %1",
     "args1": [
+      {
+        "type": "field_variable",
+        "name": "ZONE_VAR",
+        "variable": "None",
+        "variableTypes": [
+          "Zone"
+        ],
+        "defaultType": "Zone"
+      }
+    ],
+    "message2": "has building element %1",
+    "args2": [
       {
         "type": "input_statement",
         "name": "HASBUILDINGELEMENT",
         "check": "dhc_BuildingElement"
       }
     ],
-    "message2": "has equipment %1",
-    "args2": [
+    "message3": "has equipment %1",
+    "args3": [
       {
         "type": "input_statement",
         "name": "HASEQUIPMENT",
         "check": "dhc_Equipment"
       }
     ],
-    "message3": "belongs to zone %1",
-    "args3": [
-      {
-        "type": "input_value",
-        "name": "BELONGSTOZONE",
-        "check": "dhc_Zone"
-      }
-    ],
-    "nextStatement": null,
-    "previousStatement": "dhc_space"
+    "previousStatement": "SpaceType",
+    "nextStatement": "SpaceType"
   },
   {
     "type": "dhc_zone",
     "ontologyClass": "dhc:Zone",
     "designView": "spatial",
-    "colour": 142,
+    "colour": 90,
     "message0": "Zone %1",
     "args0": [
       {
@@ -149,7 +168,7 @@
       }
     ],
     "inputsInline": false,
-    "tooltip": "A logical zone spanning one or more spaces (e.g. thermal zone, fire compartment).",
+    "tooltip": "Legacy — prefer using Zone variables on Space blocks instead.",
     "nextStatement": null,
     "previousStatement": "dhc_zone"
   },
@@ -443,6 +462,13 @@
     ],
     "inputsInline": false,
     "tooltip": "Root entry point: contractual and physical energy supply to the property.",
+    "message1": "feeds %1",
+    "args1": [
+      {
+        "type": "input_statement",
+        "name": "FEEDS"
+      }
+    ],
     "nextStatement": null,
     "previousStatement": "dhc_energy_delivery"
   },

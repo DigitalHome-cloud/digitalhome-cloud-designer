@@ -92,6 +92,39 @@ export function initModelerWorkspace(container, options = {}) {
 
   workspaceRef = Blockly.inject(container, config);
 
+  // Register Zone variable category for the toolbox
+  workspaceRef.registerToolboxCategoryCallback(
+    "ZONE_VARIABLE",
+    function (ws) {
+      const blockList = [];
+      const variables = ws.getVariablesOfType("Zone");
+      if (variables.length > 0) {
+        const lastVar = variables[variables.length - 1];
+        const block = Blockly.utils.xml.textToDom(
+          '<block type="variables_get"><field name="VAR" id="' +
+            lastVar.getId() +
+            '" variabletype="Zone">' +
+            lastVar.name +
+            "</field></block>"
+        );
+        blockList.push(block);
+      }
+      const button = document.createElement("button");
+      button.setAttribute("text", "Create New Zone");
+      button.setAttribute("callbackKey", "CREATE_ZONE");
+      blockList.unshift(button);
+      return blockList;
+    }
+  );
+
+  workspaceRef.registerButtonCallback("CREATE_ZONE", function () {
+    Blockly.Variables.createVariableButtonHandler(
+      workspaceRef,
+      undefined,
+      "Zone"
+    );
+  });
+
   workspaceRef.addChangeListener((event) => {
     if (!selectionCallback) return;
     if (event.type !== Blockly.Events.SELECTED) return;

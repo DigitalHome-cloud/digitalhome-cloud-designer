@@ -9,7 +9,7 @@ const Header = () => {
   const { t } = useTranslation();
   const { languages, language, changeLanguage } = useI18next();
   const { authState, isAuthenticated, user, signOut } = useAuth();
-  const { demoHomes, userHomes, activeHome, setActiveHome } = useSmartHome();
+  const { activeHome } = useSmartHome();
 
   const handleSignOut = async () => {
     await signOut();
@@ -40,6 +40,15 @@ const Header = () => {
             <Link to="/viewer/" className="dhc-nav-link">
               {t("nav.viewer")}
             </Link>
+            <Link to="/drawing/" className="dhc-nav-link">
+              {t("nav.drawing")}
+            </Link>
+            <Link to="/bom/" className="dhc-nav-link">
+              {t("nav.bom")}
+            </Link>
+            <Link to="/debug/" className="dhc-nav-link">
+              {t("nav.debug")}
+            </Link>
             <a
               href={`${getAppUrl("portal")}?home=${encodeURIComponent(activeHome.id)}`}
               className="dhc-nav-link"
@@ -48,43 +57,16 @@ const Header = () => {
             </a>
           </div>
 
-          {/* SmartHome selector */}
-          <div className="dhc-home-selector">
-            <select
-              className="dhc-home-select"
-              value={activeHome.id}
-              onChange={(e) => setActiveHome(e.target.value)}
-              aria-label={t("smarthome.label")}
-            >
-              <optgroup label={t("smarthome.demoGroup")}>
-                {demoHomes.map((h) => (
-                  <option key={h.id} value={h.id}>
-                    {h.id}
-                  </option>
-                ))}
-              </optgroup>
-              {userHomes.length > 0 && (
-                <optgroup label={t("smarthome.yourHomes")}>
-                  {userHomes.map((h) => (
-                    <option key={h.id} value={h.id}>
-                      {h.id}
-                    </option>
-                  ))}
-                </optgroup>
-              )}
-            </select>
-          </div>
-
           <div className="dhc-nav-group dhc-nav-auth">
+            <span className="dhc-nav-pill" title={t("smarthome.label")}>
+              {activeHome.id}
+            </span>
             {authState === "demo" && (
               <>
-                <span className="dhc-nav-pill">DEMO</span>
-                <a
-                  href={`${getAppUrl("portal")}/signin`}
-                  className="dhc-nav-link"
-                >
+                <span className="dhc-nav-pill">{t("role.guest")}</span>
+                <Link to="/signin/" className="dhc-nav-link">
                   {t("nav.signin")}
-                </a>
+                </Link>
               </>
             )}
 

@@ -58,7 +58,7 @@ const IndexPage = () => {
             {t("dashboard.activeHome")}: <strong>{activeHome.id}</strong>
             {activeHome.isDemo && (
               <span className="dhc-nav-pill" style={{ marginLeft: "0.5rem" }}>
-                DEMO
+                {t("role.guest")}
               </span>
             )}
           </p>

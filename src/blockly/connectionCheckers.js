@@ -79,6 +79,16 @@ export function checkBlockContext(block) {
     }
   }
 
+  // Area should be inside a RealEstate
+  if (type === "dhc_area" && parent) {
+    if (parent.type !== "dhc_real_estate") {
+      issues.push({
+        message: `${getLabel(block)} should be inside a Real Estate.`,
+        severity: "warning",
+      });
+    }
+  }
+
   // Space should be inside a Floor or Area
   if (type === "dhc_space" && parent) {
     if (parent.type !== "dhc_floor" && parent.type !== "dhc_area") {

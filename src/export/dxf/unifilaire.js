@@ -15,6 +15,7 @@
  */
 
 import { createDxf } from "./dxfWriter";
+import { createSvg } from "./svgWriter";
 import { registerNfc15100Symbols } from "./library/symbolsNfc15100";
 import { drawDlab5Frame, PAPER_SIZES, registerFrameBlocks } from "./library/frames";
 
@@ -35,7 +36,15 @@ const SPACING = {
 };
 
 export function renderUnifilaire(input) {
-  const dxf = createDxf();
+  return renderUnifilaireWith(input, createDxf);
+}
+
+export function renderUnifilaireSvg(input) {
+  return renderUnifilaireWith(input, createSvg);
+}
+
+function renderUnifilaireWith(input, createWriter) {
+  const dxf = createWriter();
   for (const { name, color } of Object.values(LAYERS)) dxf.ensureLayer(name, color);
   registerFrameBlocks(dxf);
   registerNfc15100Symbols(dxf);

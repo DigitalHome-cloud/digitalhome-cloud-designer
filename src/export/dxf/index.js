@@ -6,10 +6,10 @@
  */
 
 import { aboxToUnifilaireInput } from "./fromAbox";
-import { renderUnifilaire } from "./unifilaire";
+import { renderUnifilaire, renderUnifilaireSvg } from "./unifilaire";
 import { buildDxfLibrary } from "./library/buildLibrary";
 
-export { aboxToUnifilaireInput, renderUnifilaire, buildDxfLibrary };
+export { aboxToUnifilaireInput, renderUnifilaire, renderUnifilaireSvg, buildDxfLibrary };
 export * from "./library";
 
 export function exportUnifilaire(input) {
@@ -18,6 +18,14 @@ export function exportUnifilaire(input) {
 
 export function exportUnifilaireFromAbox(aboxJson, smartHomeId) {
   return renderUnifilaire(aboxToUnifilaireInput(aboxJson, smartHomeId));
+}
+
+export function exportUnifilaireSvg(input) {
+  return renderUnifilaireSvg(input);
+}
+
+export function exportUnifilaireFromAboxSvg(aboxJson, smartHomeId) {
+  return renderUnifilaireSvg(aboxToUnifilaireInput(aboxJson, smartHomeId));
 }
 
 export function exportLibrary(opts) {

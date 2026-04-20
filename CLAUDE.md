@@ -16,7 +16,15 @@ DigitalHome.Cloud Designer — a Gatsby 5 / React 18 web app providing a three-m
 
 ## Local Dev Setup
 
-This app shares the Amplify Gen1 backend owned by the portal repo (`digitalhome-cloud-portal`). After running `amplify pull` against the portal's backend, run:
+This app shares the Amplify Gen1 backend owned by the portal repo. The `amplify/` folder and `src/aws-exports.js` are **symlinks** to the umbrella repo (`digitalhome-cloud-darkfactory`), not local copies. Setup is handled centrally:
+
+```bash
+# From the umbrella repo root:
+amplify pull                    # once, creates amplify/ + src/aws-exports.js at umbrella level
+./scripts/sync-env.sh           # symlinks into each repo, generates .env.development, runs amplify codegen
+```
+
+If working standalone (without the umbrella), you can still run:
 
 ```bash
 node scripts/generate-aws-config-from-master.js
@@ -26,15 +34,13 @@ This produces:
 - `src/aws-exports.deployment.js` — env-var-driven config, **safe to commit**
 - `.env.development` — actual values as `GATSBY_*` env vars, **gitignored, never commit**
 
-Alternatively, copy `.env.development` from the portal repo (same backend, same values).
-
-**Files that must never be committed:** `src/aws-exports.js`, `.env.development` (both gitignored).
+**Files that must never be committed:** `src/aws-exports.js`, `.env.development`, `amplify/` (all gitignored or symlinked).
 
 ## Architecture
 
 ### Shared Backend
 
-This app does **not** own an Amplify backend. The backend (Cognito, AppSync, DynamoDB, S3) lives in `digitalhome-cloud-portal/amplify/`. This repo is a frontend-only consumer using the same `aws-exports.deployment.js` pattern and `GATSBY_*` env vars.
+This app does **not** own an Amplify backend. The backend (Cognito, AppSync, DynamoDB, S3) is defined in the umbrella repo's `amplify/` directory and symlinked into this repo. This repo is a frontend-only consumer using the same `aws-exports.deployment.js` pattern and `GATSBY_*` env vars.
 
 ### Authentication & SmartHome Context
 

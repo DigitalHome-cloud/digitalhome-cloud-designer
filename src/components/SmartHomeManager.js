@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { navigate } from "gatsby";
+import { useTranslation } from "gatsby-plugin-react-i18next";
 import { useAuth } from "../context/AuthContext";
 import { useSmartHome } from "../context/SmartHomeContext";
+import { useTier } from "@dhc/shared/useTier";
+import { UpgradePrompt } from "@dhc/shared/components/UpgradePrompt";
 import SmartHomeForm from "./SmartHomeForm";
 import { generateClient } from "aws-amplify/api";
 import { listSmartHomes, getSmartHome } from "../graphql/queries";
@@ -14,8 +17,12 @@ import { generateShellWorkspace } from "../utils/shellGenerator";
 import { saveDesignToS3, fetchDesignFromS3 } from "../utils/s3";
 
 const SmartHomeManager = () => {
-  const { authState, isAuthenticated } = useAuth();
-  const { demoHomes, setActiveHome } = useSmartHome();
+  const { t } = useTranslation();
+  const auth = useAuth();
+  const { authState, isAuthenticated } = auth;
+  const { demoHomes, activeHome, setActiveHome } = useSmartHome();
+  const { tier, can } = useTier(auth);
+  const createResult = can("create.new_home");
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -141,60 +148,53 @@ const SmartHomeManager = () => {
     }
   };
 
-  if (authState !== "authenticated") {
+  const isAuth = authState === "authenticated";
+
+  const renderIdCell = (id) => {
+    const isActive = activeHome.id === id;
     return (
-      <div className="dhc-manager-list">
-        <h3 style={{ fontSize: "0.95rem", marginBottom: "1rem" }}>
-          Demo SmartHomes
-        </h3>
-        <table className="dhc-manager-table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {demoHomes.map((h) => (
-              <tr key={h.id}>
-                <td>{h.id}</td>
-                <td>{h.name}</td>
-                <td>
-                  <span className="dhc-nav-pill">DEMO</span>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <p style={{ fontSize: "0.85rem", color: "#9ca3af", marginTop: "1rem" }}>
-          Sign in to create and manage your own SmartHomes.
-        </p>
-      </div>
+      <button
+        type="button"
+        className={`dhc-home-pick${isActive ? " dhc-home-pick--active" : ""}`}
+        onClick={() => setActiveHome(id)}
+      >
+        <span className="dhc-home-pick-check" aria-hidden="true">
+          {isActive ? "✓" : ""}
+        </span>
+        <span className="dhc-home-pick-id">{id}</span>
+      </button>
     );
-  }
+  };
 
   return (
     <div className="dhc-manager-list">
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: "1rem",
-        }}
-      >
-        <h3 style={{ fontSize: "0.95rem", margin: 0 }}>Your SmartHomes</h3>
-        {!showForm && (
-          <button
-            type="button"
-            className="dhc-button-primary"
-            onClick={handleCreate}
-          >
-            + Create SmartHome
-          </button>
-        )}
-      </div>
+      {!showForm && (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "flex-end",
+            alignItems: "center",
+            gap: "0.75rem",
+            marginBottom: "1rem",
+          }}
+        >
+          {createResult.allowed ? (
+            <button
+              type="button"
+              className="dhc-button-primary"
+              onClick={handleCreate}
+            >
+              + Create SmartHome
+            </button>
+          ) : tier !== "guest" ? (
+            <UpgradePrompt
+              required={createResult.requiredTier}
+              current={tier}
+              compact
+            />
+          ) : null}
+        </div>
+      )}
 
       {error && (
         <p style={{ color: "#fca5a5", fontSize: "0.85rem" }}>{error}</p>
@@ -228,35 +228,17 @@ const SmartHomeManager = () => {
           <tbody>
             {demoHomes.map((h) => (
               <tr key={h.id}>
-                <td>
-                  <button
-                    type="button"
-                    className="dhc-nav-link"
-                    style={{ padding: 0 }}
-                    onClick={() => setActiveHome(h.id)}
-                  >
-                    {h.id}
-                  </button>
-                </td>
+                <td>{renderIdCell(h.id)}</td>
                 <td>{h.name}</td>
-                <td>—</td>
+                <td>{t("role.guest")}</td>
                 <td>
-                  <span className="dhc-nav-pill">DEMO</span>
+                  <span className="dhc-nav-pill">{t("role.guest")}</span>
                 </td>
               </tr>
             ))}
             {items.map((item) => (
               <tr key={item.id}>
-                <td>
-                  <button
-                    type="button"
-                    className="dhc-nav-link"
-                    style={{ padding: 0 }}
-                    onClick={() => setActiveHome(item.id)}
-                  >
-                    {item.id}
-                  </button>
-                </td>
+                <td>{renderIdCell(item.id)}</td>
                 <td>{item.address || "—"}</td>
                 <td>{item.ownerName || "—"}</td>
                 <td>
@@ -289,6 +271,12 @@ const SmartHomeManager = () => {
             ))}
           </tbody>
         </table>
+      )}
+
+      {tier === "guest" && (
+        <p style={{ fontSize: "0.85rem", color: "#9ca3af", marginTop: "1rem" }}>
+          Sign in to create and manage your own SmartHomes.
+        </p>
       )}
     </div>
   );

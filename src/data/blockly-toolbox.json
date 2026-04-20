@@ -4,7 +4,7 @@
     {
       "kind": "category",
       "name": "Spatial",
-      "colour": 142,
+      "colour": 120,
       "contents": [
         {
           "kind": "block",
@@ -16,17 +16,15 @@
         },
         {
           "kind": "block",
-          "type": "dhc_floor"
-        },
-        {
-          "kind": "block",
           "type": "dhc_space"
-        },
-        {
-          "kind": "block",
-          "type": "dhc_zone"
         }
       ]
+    },
+    {
+      "kind": "category",
+      "name": "Zones",
+      "colour": 90,
+      "custom": "ZONE_VARIABLE"
     },
     {
       "kind": "category",
