@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 56 64">
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#22c55e"></stop>
+      <stop offset="100%" stop-color="#0ea5e9"></stop>
+    </linearGradient>
+  </defs>
+  
+  <polygon points="28,2 54,16 54,48 28,62 2,48 2,16" fill="#020617" stroke="url(#g)" stroke-width="2"></polygon>
+  
+  <polyline points="2,24 2,16 9,12" stroke="#22c55e" stroke-width="3" stroke-linecap="round" fill="none"></polyline>
+  <polyline points="47,12 54,16 54,24" stroke="#0ea5e9" stroke-width="3" stroke-linecap="round" fill="none"></polyline>
+  <polyline points="54,40 54,48 47,52" stroke="#22c55e" stroke-width="3" stroke-linecap="round" fill="none"></polyline>
+  <polyline points="9,52 2,48 2,40" stroke="#0ea5e9" stroke-width="3" stroke-linecap="round" fill="none"></polyline>
+  
+  <text x="28" y="19" text-anchor="middle" dominant-baseline="middle" font-family="&#39;SF Mono&#39;,&#39;Fira Code&#39;,Menlo,Consolas,monospace" font-size="13" font-weight="700" fill="url(#g)">D</text>
+  
+  <text x="17" y="35" text-anchor="middle" dominant-baseline="middle" font-family="&#39;SF Mono&#39;,&#39;Fira Code&#39;,Menlo,Consolas,monospace" font-size="13" font-weight="700" fill="#22c55e">L</text>
+  
+  <text x="28" y="36" text-anchor="middle" dominant-baseline="middle" font-family="&#39;SF Mono&#39;,&#39;Fira Code&#39;,Menlo,Consolas,monospace" font-size="8" font-weight="700" fill="url(#g)">A</text>
+  
+  <text x="39" y="35" text-anchor="middle" dominant-baseline="middle" font-family="&#39;SF Mono&#39;,&#39;Fira Code&#39;,Menlo,Consolas,monospace" font-size="13" font-weight="700" fill="#0ea5e9">B</text>
+  
+  <text x="28" y="51" text-anchor="middle" dominant-baseline="middle" font-family="&#39;SF Mono&#39;,&#39;Fira Code&#39;,Menlo,Consolas,monospace" font-size="13" font-weight="700" fill="url(#g)">5</text>
+</svg>

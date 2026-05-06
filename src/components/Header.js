@@ -19,7 +19,7 @@ const Header = () => {
     <header className="dhc-header">
       <div className="dhc-header-inner">
         <div className="dhc-logo">
-          <span className="dhc-logo-mark">DH</span>
+          <span className="dhc-logo-mark">DH.C</span>
           <div className="dhc-logo-text">
             <span className="dhc-logo-title">DigitalHome.Cloud</span>
             <span className="dhc-logo-subtitle">Designer</span>

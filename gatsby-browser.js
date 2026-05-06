@@ -1,3 +1,4 @@
+import "./src/styles/dhc-tokens.css";
 import "./src/styles/global.css";
 import React from "react";
 import { Amplify } from "aws-amplify";
