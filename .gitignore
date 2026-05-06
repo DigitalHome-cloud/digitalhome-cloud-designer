@@ -13,6 +13,7 @@ build/
 
 # Amplify — never commit
 src/aws-exports.js
+amplify
 
 # OS
 .DS_Store
