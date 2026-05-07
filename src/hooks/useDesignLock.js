@@ -122,12 +122,19 @@ export function useDesignLock() {
           lockedAt: now,
         }));
       } else {
-        // Create new
+        // Create new. The `owners` array gates per-tenant access via the
+        // SmartHomeDesign @auth rule (allow: owner, ownerField: "owners").
+        // We seed it with the current user; if multi-owner support is added
+        // later, mirror the parent SmartHome.owners here instead.
+        const designOwners = (activeHome?.owners && activeHome.owners.length > 0)
+          ? activeHome.owners
+          : [currentUser];
         const result = await client.graphql({
           query: createSmartHomeDesign,
           variables: {
             input: {
               smartHomeId,
+              owners: designOwners,
               version: 1,
               lastModified: now,
               lockedBy: currentUser,
