@@ -4,8 +4,9 @@
 export const onCreateUserProfile = /* GraphQL */ `
   subscription OnCreateUserProfile(
     $filter: ModelSubscriptionUserProfileFilterInput
+    $owner: String
   ) {
-    onCreateUserProfile(filter: $filter) {
+    onCreateUserProfile(filter: $filter, owner: $owner) {
       id
       owner
       displayName
@@ -21,8 +22,9 @@ export const onCreateUserProfile = /* GraphQL */ `
 export const onUpdateUserProfile = /* GraphQL */ `
   subscription OnUpdateUserProfile(
     $filter: ModelSubscriptionUserProfileFilterInput
+    $owner: String
   ) {
-    onUpdateUserProfile(filter: $filter) {
+    onUpdateUserProfile(filter: $filter, owner: $owner) {
       id
       owner
       displayName
@@ -38,8 +40,9 @@ export const onUpdateUserProfile = /* GraphQL */ `
 export const onDeleteUserProfile = /* GraphQL */ `
   subscription OnDeleteUserProfile(
     $filter: ModelSubscriptionUserProfileFilterInput
+    $owner: String
   ) {
-    onDeleteUserProfile(filter: $filter) {
+    onDeleteUserProfile(filter: $filter, owner: $owner) {
       id
       owner
       displayName
@@ -185,6 +188,7 @@ export const onCreateSmartHomeDesign = /* GraphQL */ `
     onCreateSmartHomeDesign(filter: $filter) {
       id
       smartHomeId
+      owners
       version
       lastModified
       lockedBy
@@ -203,6 +207,7 @@ export const onUpdateSmartHomeDesign = /* GraphQL */ `
     onUpdateSmartHomeDesign(filter: $filter) {
       id
       smartHomeId
+      owners
       version
       lastModified
       lockedBy
@@ -221,6 +226,7 @@ export const onDeleteSmartHomeDesign = /* GraphQL */ `
     onDeleteSmartHomeDesign(filter: $filter) {
       id
       smartHomeId
+      owners
       version
       lastModified
       lockedBy

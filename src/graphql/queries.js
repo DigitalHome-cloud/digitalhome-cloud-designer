@@ -136,6 +136,7 @@ export const getSmartHomeDesign = /* GraphQL */ `
     getSmartHomeDesign(id: $id) {
       id
       smartHomeId
+      owners
       version
       lastModified
       lockedBy
@@ -161,6 +162,7 @@ export const listSmartHomeDesigns = /* GraphQL */ `
       items {
         id
         smartHomeId
+        owners
         version
         lastModified
         lockedBy

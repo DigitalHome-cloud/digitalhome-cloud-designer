@@ -195,6 +195,7 @@ export const createSmartHomeDesign = /* GraphQL */ `
     createSmartHomeDesign(input: $input, condition: $condition) {
       id
       smartHomeId
+      owners
       version
       lastModified
       lockedBy
@@ -214,6 +215,7 @@ export const updateSmartHomeDesign = /* GraphQL */ `
     updateSmartHomeDesign(input: $input, condition: $condition) {
       id
       smartHomeId
+      owners
       version
       lastModified
       lockedBy
@@ -233,6 +235,7 @@ export const deleteSmartHomeDesign = /* GraphQL */ `
     deleteSmartHomeDesign(input: $input, condition: $condition) {
       id
       smartHomeId
+      owners
       version
       lastModified
       lockedBy
