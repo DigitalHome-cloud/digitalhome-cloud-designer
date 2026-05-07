@@ -45,7 +45,7 @@
  *   Communication (ETEL)     attente RJ45
  */
 
-import manifest from "./manifest.json" with { type: "json" };
+import manifest from "./manifest.json";
 
 const L = "SYMBOLS";
 

@@ -24,7 +24,7 @@
  * `dxf.insert(blockName, x, y, { layer: "SYMBOLS" })`.
  */
 
-import manifest from "./manifest.json" with { type: "json" };
+import manifest from "./manifest.json";
 
 /**
  * List of symbol block names derived from the manifest. Source of truth for

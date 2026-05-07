@@ -17,7 +17,7 @@ import { createDxf } from "../dxfWriter";
 import { PAPER_SIZES, registerFrameBlocks, drawDlab5Frame } from "./frames";
 import { registerNfc15100Symbols, NFC15100_SYMBOLS } from "./symbolsNfc15100";
 import { registerCircuitBlocks, CIRCUIT_CATALOGUE } from "./circuits";
-import manifest from "./manifest.json" with { type: "json" };
+import manifest from "./manifest.json";
 
 const SHEET_GAP = 50;
 const PICTURES = manifest.blocks.filter((b) => b.kind === "picture");

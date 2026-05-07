@@ -9,4 +9,4 @@ export {
   CIRCUIT_MANIFEST,
 } from "./circuits";
 export { buildDxfLibrary } from "./buildLibrary";
-export { default as MANIFEST } from "./manifest.json" with { type: "json" };
+export { default as MANIFEST } from "./manifest.json";
