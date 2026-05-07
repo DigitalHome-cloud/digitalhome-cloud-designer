@@ -1,6 +1,34 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const requestDesignReadUrl = /* GraphQL */ `
+  mutation RequestDesignReadUrl($smartHomeId: ID!, $fileName: String!) {
+    requestDesignReadUrl(smartHomeId: $smartHomeId, fileName: $fileName) {
+      url
+      expiresAt
+      contentType
+      __typename
+    }
+  }
+`;
+export const requestDesignWriteUrl = /* GraphQL */ `
+  mutation RequestDesignWriteUrl(
+    $smartHomeId: ID!
+    $fileName: String!
+    $contentType: String
+  ) {
+    requestDesignWriteUrl(
+      smartHomeId: $smartHomeId
+      fileName: $fileName
+      contentType: $contentType
+    ) {
+      url
+      expiresAt
+      contentType
+      __typename
+    }
+  }
+`;
 export const createUserProfile = /* GraphQL */ `
   mutation CreateUserProfile(
     $input: CreateUserProfileInput!
