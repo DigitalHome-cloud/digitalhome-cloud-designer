@@ -25,6 +25,12 @@ const DEMO_HOMES = [
   { id: "BE-DEMO-01", name: "Demo Belgium", isDemo: true },
 ];
 
+// Exported for non-React utilities (e.g. s3.js) that need to switch storage
+// paths between demo (world-readable) and real (owner-private) without
+// pulling in the React context.
+export const DEMO_HOME_IDS = DEMO_HOMES.map((h) => h.id);
+export const isDemoSmartHome = (id) => DEMO_HOME_IDS.includes(id);
+
 const SmartHomeContext = createContext(null);
 
 export const SmartHomeProvider = ({ children }) => {
