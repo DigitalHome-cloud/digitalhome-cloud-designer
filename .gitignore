@@ -11,9 +11,15 @@ build/
 # Env — never commit
 .env*
 
-# Amplify — never commit
+# Amplify Gen 2 — local sandbox state, never commit
+.amplify/
+# (amplify_outputs.json IS committed — it holds the public Cognito/AppSync IDs
+# that the frontend needs to talk to the deployed backend.)
+
+# Legacy Gen 1 leftovers (kept ignored just in case any old branch still
+# references these paths)
 src/aws-exports.js
-amplify
+src/aws-exports.deployment.js
 
 # OS
 .DS_Store
@@ -23,25 +29,3 @@ amplify
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-
-#amplify-do-not-edit-begin
-amplify/\#current-cloud-backend
-amplify/.config/local-*
-amplify/logs
-amplify/mock-data
-amplify/mock-api-resources
-amplify/backend/amplify-meta.json
-amplify/backend/.temp
-build/
-dist/
-node_modules/
-aws-exports.js
-awsconfiguration.json
-amplifyconfiguration.json
-amplifyconfiguration.dart
-amplify-build-config.json
-amplify-gradle-config.json
-amplifytools.xcconfig
-.secret-*
-**.sample
-#amplify-do-not-edit-end
