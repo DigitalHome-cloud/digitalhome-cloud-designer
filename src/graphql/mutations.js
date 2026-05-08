@@ -1,127 +1,83 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const requestDesignReadUrl = /* GraphQL */ `
-  mutation RequestDesignReadUrl($smartHomeId: ID!, $fileName: String!) {
-    requestDesignReadUrl(smartHomeId: $smartHomeId, fileName: $fileName) {
-      url
-      expiresAt
-      contentType
+export const createLibraryItem = /* GraphQL */ `
+  mutation CreateLibraryItem(
+    $condition: ModelLibraryItemConditionInput
+    $input: CreateLibraryItemInput!
+  ) {
+    createLibraryItem(condition: $condition, input: $input) {
+      compatibleClasses
+      createdAt
+      description
+      hasActorCapability
+      hasControllerCapability
+      hasSensorCapability
+      id
+      region
+      standards
+      title
+      updatedAt
+      version
       __typename
     }
   }
 `;
-export const requestDesignWriteUrl = /* GraphQL */ `
-  mutation RequestDesignWriteUrl(
-    $smartHomeId: ID!
-    $fileName: String!
-    $contentType: String
+export const createSmartHome = /* GraphQL */ `
+  mutation CreateSmartHome(
+    $condition: ModelSmartHomeConditionInput
+    $input: CreateSmartHomeInput!
   ) {
-    requestDesignWriteUrl(
-      smartHomeId: $smartHomeId
-      fileName: $fileName
-      contentType: $contentType
-    ) {
-      url
-      expiresAt
-      contentType
+    createSmartHome(condition: $condition, input: $input) {
+      address
+      country
+      createdAt
+      description
+      houseNumber
+      id
+      ownerName
+      owners
+      streetCode
+      suffix
+      updatedAt
+      zip
+      __typename
+    }
+  }
+`;
+export const createSmartHomeDesign = /* GraphQL */ `
+  mutation CreateSmartHomeDesign(
+    $condition: ModelSmartHomeDesignConditionInput
+    $input: CreateSmartHomeDesignInput!
+  ) {
+    createSmartHomeDesign(condition: $condition, input: $input) {
+      createdAt
+      id
+      lastModified
+      lockedAt
+      lockedBy
+      ontologyVersion
+      owners
+      smartHomeId
+      updatedAt
+      version
       __typename
     }
   }
 `;
 export const createUserProfile = /* GraphQL */ `
   mutation CreateUserProfile(
+    $condition: ModelUserProfileConditionInput
     $input: CreateUserProfileInput!
-    $condition: ModelUserProfileConditionInput
   ) {
-    createUserProfile(input: $input, condition: $condition) {
-      id
-      owner
+    createUserProfile(condition: $condition, input: $input) {
+      createdAt
       displayName
       email
+      id
       locale
       marketingOptIn
-      createdAt
-      updatedAt
-      __typename
-    }
-  }
-`;
-export const updateUserProfile = /* GraphQL */ `
-  mutation UpdateUserProfile(
-    $input: UpdateUserProfileInput!
-    $condition: ModelUserProfileConditionInput
-  ) {
-    updateUserProfile(input: $input, condition: $condition) {
-      id
       owner
-      displayName
-      email
-      locale
-      marketingOptIn
-      createdAt
-      updatedAt
-      __typename
-    }
-  }
-`;
-export const deleteUserProfile = /* GraphQL */ `
-  mutation DeleteUserProfile(
-    $input: DeleteUserProfileInput!
-    $condition: ModelUserProfileConditionInput
-  ) {
-    deleteUserProfile(input: $input, condition: $condition) {
-      id
-      owner
-      displayName
-      email
-      locale
-      marketingOptIn
-      createdAt
-      updatedAt
-      __typename
-    }
-  }
-`;
-export const createLibraryItem = /* GraphQL */ `
-  mutation CreateLibraryItem(
-    $input: CreateLibraryItemInput!
-    $condition: ModelLibraryItemConditionInput
-  ) {
-    createLibraryItem(input: $input, condition: $condition) {
-      id
-      title
-      compatibleClasses
-      region
-      standards
-      version
-      description
-      hasActorCapability
-      hasSensorCapability
-      hasControllerCapability
-      createdAt
-      updatedAt
-      __typename
-    }
-  }
-`;
-export const updateLibraryItem = /* GraphQL */ `
-  mutation UpdateLibraryItem(
-    $input: UpdateLibraryItemInput!
-    $condition: ModelLibraryItemConditionInput
-  ) {
-    updateLibraryItem(input: $input, condition: $condition) {
-      id
-      title
-      compatibleClasses
-      region
-      standards
-      version
-      description
-      hasActorCapability
-      hasSensorCapability
-      hasControllerCapability
-      createdAt
       updatedAt
       __typename
     }
@@ -129,147 +85,191 @@ export const updateLibraryItem = /* GraphQL */ `
 `;
 export const deleteLibraryItem = /* GraphQL */ `
   mutation DeleteLibraryItem(
-    $input: DeleteLibraryItemInput!
     $condition: ModelLibraryItemConditionInput
+    $input: DeleteLibraryItemInput!
   ) {
-    deleteLibraryItem(input: $input, condition: $condition) {
-      id
-      title
+    deleteLibraryItem(condition: $condition, input: $input) {
       compatibleClasses
-      region
-      standards
-      version
+      createdAt
       description
       hasActorCapability
-      hasSensorCapability
       hasControllerCapability
-      createdAt
-      updatedAt
-      __typename
-    }
-  }
-`;
-export const createSmartHome = /* GraphQL */ `
-  mutation CreateSmartHome(
-    $input: CreateSmartHomeInput!
-    $condition: ModelSmartHomeConditionInput
-  ) {
-    createSmartHome(input: $input, condition: $condition) {
+      hasSensorCapability
       id
-      owners
-      country
-      zip
-      streetCode
-      houseNumber
-      suffix
-      address
-      description
-      ownerName
-      createdAt
+      region
+      standards
+      title
       updatedAt
-      __typename
-    }
-  }
-`;
-export const updateSmartHome = /* GraphQL */ `
-  mutation UpdateSmartHome(
-    $input: UpdateSmartHomeInput!
-    $condition: ModelSmartHomeConditionInput
-  ) {
-    updateSmartHome(input: $input, condition: $condition) {
-      id
-      owners
-      country
-      zip
-      streetCode
-      houseNumber
-      suffix
-      address
-      description
-      ownerName
-      createdAt
-      updatedAt
+      version
       __typename
     }
   }
 `;
 export const deleteSmartHome = /* GraphQL */ `
   mutation DeleteSmartHome(
-    $input: DeleteSmartHomeInput!
     $condition: ModelSmartHomeConditionInput
+    $input: DeleteSmartHomeInput!
   ) {
-    deleteSmartHome(input: $input, condition: $condition) {
-      id
-      owners
-      country
-      zip
-      streetCode
-      houseNumber
-      suffix
+    deleteSmartHome(condition: $condition, input: $input) {
       address
+      country
+      createdAt
       description
+      houseNumber
+      id
       ownerName
-      createdAt
-      updatedAt
-      __typename
-    }
-  }
-`;
-export const createSmartHomeDesign = /* GraphQL */ `
-  mutation CreateSmartHomeDesign(
-    $input: CreateSmartHomeDesignInput!
-    $condition: ModelSmartHomeDesignConditionInput
-  ) {
-    createSmartHomeDesign(input: $input, condition: $condition) {
-      id
-      smartHomeId
       owners
-      version
-      lastModified
-      lockedBy
-      lockedAt
-      ontologyVersion
-      createdAt
+      streetCode
+      suffix
       updatedAt
-      __typename
-    }
-  }
-`;
-export const updateSmartHomeDesign = /* GraphQL */ `
-  mutation UpdateSmartHomeDesign(
-    $input: UpdateSmartHomeDesignInput!
-    $condition: ModelSmartHomeDesignConditionInput
-  ) {
-    updateSmartHomeDesign(input: $input, condition: $condition) {
-      id
-      smartHomeId
-      owners
-      version
-      lastModified
-      lockedBy
-      lockedAt
-      ontologyVersion
-      createdAt
-      updatedAt
+      zip
       __typename
     }
   }
 `;
 export const deleteSmartHomeDesign = /* GraphQL */ `
   mutation DeleteSmartHomeDesign(
-    $input: DeleteSmartHomeDesignInput!
     $condition: ModelSmartHomeDesignConditionInput
+    $input: DeleteSmartHomeDesignInput!
   ) {
-    deleteSmartHomeDesign(input: $input, condition: $condition) {
-      id
-      smartHomeId
-      owners
-      version
-      lastModified
-      lockedBy
-      lockedAt
-      ontologyVersion
+    deleteSmartHomeDesign(condition: $condition, input: $input) {
       createdAt
+      id
+      lastModified
+      lockedAt
+      lockedBy
+      ontologyVersion
+      owners
+      smartHomeId
+      updatedAt
+      version
+      __typename
+    }
+  }
+`;
+export const deleteUserProfile = /* GraphQL */ `
+  mutation DeleteUserProfile(
+    $condition: ModelUserProfileConditionInput
+    $input: DeleteUserProfileInput!
+  ) {
+    deleteUserProfile(condition: $condition, input: $input) {
+      createdAt
+      displayName
+      email
+      id
+      locale
+      marketingOptIn
+      owner
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const requestDesignReadUrl = /* GraphQL */ `
+  mutation RequestDesignReadUrl($fileName: String!, $smartHomeId: ID!) {
+    requestDesignReadUrl(fileName: $fileName, smartHomeId: $smartHomeId) {
+      contentType
+      expiresAt
+      url
+      __typename
+    }
+  }
+`;
+export const requestDesignWriteUrl = /* GraphQL */ `
+  mutation RequestDesignWriteUrl(
+    $contentType: String
+    $fileName: String!
+    $smartHomeId: ID!
+  ) {
+    requestDesignWriteUrl(
+      contentType: $contentType
+      fileName: $fileName
+      smartHomeId: $smartHomeId
+    ) {
+      contentType
+      expiresAt
+      url
+      __typename
+    }
+  }
+`;
+export const updateLibraryItem = /* GraphQL */ `
+  mutation UpdateLibraryItem(
+    $condition: ModelLibraryItemConditionInput
+    $input: UpdateLibraryItemInput!
+  ) {
+    updateLibraryItem(condition: $condition, input: $input) {
+      compatibleClasses
+      createdAt
+      description
+      hasActorCapability
+      hasControllerCapability
+      hasSensorCapability
+      id
+      region
+      standards
+      title
+      updatedAt
+      version
+      __typename
+    }
+  }
+`;
+export const updateSmartHome = /* GraphQL */ `
+  mutation UpdateSmartHome(
+    $condition: ModelSmartHomeConditionInput
+    $input: UpdateSmartHomeInput!
+  ) {
+    updateSmartHome(condition: $condition, input: $input) {
+      address
+      country
+      createdAt
+      description
+      houseNumber
+      id
+      ownerName
+      owners
+      streetCode
+      suffix
+      updatedAt
+      zip
+      __typename
+    }
+  }
+`;
+export const updateSmartHomeDesign = /* GraphQL */ `
+  mutation UpdateSmartHomeDesign(
+    $condition: ModelSmartHomeDesignConditionInput
+    $input: UpdateSmartHomeDesignInput!
+  ) {
+    updateSmartHomeDesign(condition: $condition, input: $input) {
+      createdAt
+      id
+      lastModified
+      lockedAt
+      lockedBy
+      ontologyVersion
+      owners
+      smartHomeId
+      updatedAt
+      version
+      __typename
+    }
+  }
+`;
+export const updateUserProfile = /* GraphQL */ `
+  mutation UpdateUserProfile(
+    $condition: ModelUserProfileConditionInput
+    $input: UpdateUserProfileInput!
+  ) {
+    updateUserProfile(condition: $condition, input: $input) {
+      createdAt
+      displayName
+      email
+      id
+      locale
+      marketingOptIn
+      owner
       updatedAt
       __typename
     }
