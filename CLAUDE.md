@@ -16,31 +16,25 @@ DigitalHome.Cloud Designer — a Gatsby 5 / React 18 web app providing a three-m
 
 ## Local Dev Setup
 
-This app shares the Amplify Gen1 backend owned by the portal repo. The `amplify/` folder and `src/aws-exports.js` are **symlinks** to the umbrella repo (`digitalhome-cloud-darkfactory`), not local copies. Setup is handled centrally:
+This app is a **frontend-only consumer** of the Amplify Gen 2 backend defined in the umbrella repo (`digitalhome-cloud-darkfactory/amplify/`). Connection details are committed here as `src/amplify_outputs.json`.
+
+After a backend change in the umbrella, copy the regenerated outputs in:
 
 ```bash
-# From the umbrella repo root:
-amplify pull                    # once, creates amplify/ + src/aws-exports.js at umbrella level
-./scripts/sync-env.sh           # symlinks into each repo, generates .env.development, runs amplify codegen
+cp ~/digitalhomeCloud/digitalhome-cloud-darkfactory/amplify_outputs.json src/
 ```
 
-If working standalone (without the umbrella), you can still run:
+Then `yarn develop` (port 8001). For backend authoring see the umbrella's `dhc-amplify-gen2` skill.
 
-```bash
-node scripts/generate-aws-config-from-master.js
-```
+`.env.development` (gitignored) is for cross-app URL overrides only.
 
-This produces:
-- `src/aws-exports.deployment.js` — env-var-driven config, **safe to commit**
-- `.env.development` — actual values as `GATSBY_*` env vars, **gitignored, never commit**
-
-**Files that must never be committed:** `src/aws-exports.js`, `.env.development`, `amplify/` (all gitignored or symlinked).
+**Files that must never be committed:** `.env.development`, `.amplify/`. (`src/amplify_outputs.json` IS committed.)
 
 ## Architecture
 
 ### Shared Backend
 
-This app does **not** own an Amplify backend. The backend (Cognito, AppSync, DynamoDB, S3) is defined in the umbrella repo's `amplify/` directory and symlinked into this repo. This repo is a frontend-only consumer using the same `aws-exports.deployment.js` pattern and `GATSBY_*` env vars.
+This app does **not** own an Amplify backend. The Gen 2 backend (Cognito User Pool + Identity Pool, AppSync, DynamoDB, S3, Lambdas) is defined in the umbrella repo's `amplify/` directory in TypeScript. This repo is a frontend-only consumer that imports `src/amplify_outputs.json` and configures Amplify JS v6 with it.
 
 ### Authentication & SmartHome Context
 
@@ -85,7 +79,7 @@ Block definitions are **generated from `dhc-core.schema.ttl`** by the modeler's 
 - `src/components/EditLockToolbar.js` — Lock/save/cancel toolbar
 - `src/utils/s3.js` — S3 operations for toolbox, designs, and A-Box artifacts
 
-Design artifacts are stored on S3 under `public/smarthomes/{smartHomeId}/design/` (workspace.json, abox.ttl, abox.json).
+Design artifacts are stored on S3 under tenant-scoped paths. Real SmartHome designs use `tenant/{smartHomeId}/design/...` and are accessed exclusively through the umbrella's `dhcDesignStorageProxy` Lambda via `requestDesignReadUrl` / `requestDesignWriteUrl` AppSync mutations (DH-SPEC-203). Demo SmartHomes (`DE-DEMO`, `FR-DEMO`, `BE-DEMO`) use `public/smarthomes/{demoId}/design/...` for direct read access.
 
 ### 3D A-Box Viewer
 
@@ -103,7 +97,7 @@ Plain CSS in `src/styles/global.css`. Dark-mode theme with slate/blue palette ma
 
 ### Authentication Resilience
 
-`AuthContext` calls `getCurrentUser()` before `fetchAuthSession()`. This ensures that if the Cognito Identity Pool is misconfigured (e.g. wrong region in `GATSBY_IDENTITY_POOL_ID`), authentication still works. See portal CLAUDE.md for details.
+`AuthContext` calls `getCurrentUser()` before `fetchAuthSession()`. If the Identity Pool ever errors, authentication still works — the user stays authenticated and only group/token-payload data may be missing. See portal CLAUDE.md for details.
 
 ## Dependencies & Licenses
 
@@ -130,7 +124,7 @@ No copyleft (GPL/LGPL/AGPL) dependencies. Apache-2.0 requires preserving copyrig
 | Designer | `digitalhome-cloud-designer` | 8001 | `designer.digitalhome.cloud` |
 | Modeler | `digitalhome-cloud-modeler` | 8002 | `modeler.digitalhome.cloud` |
 
-The semantic-core ontology files (TTL, JSON-LD context, SHACL shapes) live inside the modeler repo under `semantic-core/`.
+The semantic-core ontology files (TTL, JSON-LD context, SHACL shapes) live in the `core` repo under `src/ontology/`.
 
 All repos use `stage` branch for staging work before merging to `main`.
 
@@ -140,4 +134,4 @@ Amplify Hosting with branch-to-environment mapping:
 - `main` → production (`designer.digitalhome.cloud`)
 - `stage` → staging
 
-Build spec is in `amplify.yml`. The build runs `npm run build` and deploys `public/`.
+Build spec is in `amplify.yml`. The build runs `npm ci && npm run build` and deploys `public/`. The backend deploy (`npx ampx pipeline-deploy`) runs from the umbrella repo's Hosting build, not this app's.
