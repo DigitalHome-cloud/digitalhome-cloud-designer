@@ -4,12 +4,10 @@ frontend:
     preBuild:
       commands:
         - node -v
-        - npm install
-        # Set AMPLIFY_BACKEND_APP_ID on this Hosting app to the umbrella's
-        # Amplify App ID (d16j3iwmdgx3tq for stage). Amplify Hosting then
-        # auto-generates amplify_outputs.json at the project root before
-        # this preBuild phase runs. We copy it to src/ where Gatsby's
-        # gatsby-browser.js + gatsby-ssr.js expect it.
+        - npm ci
+        # Use the variable to pull the outputs from the remote backend
+        - npx ampx generate outputs --app-id $AMPLIFY_BACKEND_APP_ID --branch stage
+        # Copy to src/ for Gatsby compatibility
         - cp amplify_outputs.json src/amplify_outputs.json
     build:
       commands:
