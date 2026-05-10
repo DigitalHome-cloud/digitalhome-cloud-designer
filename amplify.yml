@@ -5,11 +5,12 @@ frontend:
       commands:
         - node -v
         - npm install
-        # Fetch the Amplify Gen 2 backend's outputs from the umbrella's
-        # deployed CFN stack matching this branch. Requires UMBRELLA_APP_ID
-        # to be set as an env var on the Hosting app and the service role
-        # to have cloudformation:DescribeStacks on the umbrella's stacks.
-        - npx ampx generate outputs --branch $AWS_BRANCH --app-id $UMBRELLA_APP_ID --out-dir src/
+        # Set AMPLIFY_BACKEND_APP_ID on this Hosting app to the umbrella's
+        # Amplify App ID (d16j3iwmdgx3tq for stage). Amplify Hosting then
+        # auto-generates amplify_outputs.json at the project root before
+        # this preBuild phase runs. We copy it to src/ where Gatsby's
+        # gatsby-browser.js + gatsby-ssr.js expect it.
+        - cp amplify_outputs.json src/amplify_outputs.json
     build:
       commands:
         - npm run build
