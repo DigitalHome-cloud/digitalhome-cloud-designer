@@ -1,13 +1,31 @@
 import * as React from "react";
 import { graphql, Link } from "gatsby";
 import Layout from "../components/Layout";
+import HomeFlowBoard from "../components/HomeFlowBoard";
 import { useTranslation } from "gatsby-plugin-react-i18next";
 import { useSmartHome } from "../context/SmartHomeContext";
+import { useAuth } from "../context/AuthContext";
 
 const IndexPage = () => {
   const { t } = useTranslation();
   const { activeHome } = useSmartHome();
+  const { isAuthenticated, hasGroup } = useAuth();
+  const devopsOnly = !!hasGroup("dhc-devops-engineers");
 
+  if (isAuthenticated) {
+    return (
+      <Layout>
+        <main className="dhc-main">
+          <HomeFlowBoard
+            activeHomeId={activeHome?.id || null}
+            devopsOnly={devopsOnly}
+          />
+        </main>
+      </Layout>
+    );
+  }
+
+  // Unauthenticated landing — keep the existing module-card layout.
   const modules = [
     {
       key: "manager",
@@ -51,17 +69,6 @@ const IndexPage = () => {
               </Link>
             ))}
           </div>
-        </section>
-
-        <section className="dhc-dashboard-status">
-          <p className="dhc-dashboard-home-info">
-            {t("dashboard.activeHome")}: <strong>{activeHome.id}</strong>
-            {activeHome.isDemo && (
-              <span className="dhc-nav-pill" style={{ marginLeft: "0.5rem" }}>
-                {t("role.guest")}
-              </span>
-            )}
-          </p>
         </section>
       </main>
     </Layout>

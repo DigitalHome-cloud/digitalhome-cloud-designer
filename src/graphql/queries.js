@@ -1,5 +1,8 @@
 /* eslint-disable */
-// this is an auto generated file. This will be overwritten
+// Hand-curated query operations for the Designer.
+// After backend changes, run `ampx generate graphql-client-code` from the
+// umbrella to regenerate the full set; the ops below cover what the Designer
+// needs at minimum.
 
 export const getLibraryItem = /* GraphQL */ `
   query GetLibraryItem($id: ID!) {
@@ -20,57 +23,7 @@ export const getLibraryItem = /* GraphQL */ `
     }
   }
 `;
-export const getSmartHome = /* GraphQL */ `
-  query GetSmartHome($id: ID!) {
-    getSmartHome(id: $id) {
-      address
-      country
-      createdAt
-      description
-      houseNumber
-      id
-      ownerName
-      owners
-      streetCode
-      suffix
-      updatedAt
-      zip
-      __typename
-    }
-  }
-`;
-export const getSmartHomeDesign = /* GraphQL */ `
-  query GetSmartHomeDesign($id: ID!) {
-    getSmartHomeDesign(id: $id) {
-      createdAt
-      id
-      lastModified
-      lockedAt
-      lockedBy
-      ontologyVersion
-      owners
-      smartHomeId
-      updatedAt
-      version
-      __typename
-    }
-  }
-`;
-export const getUserProfile = /* GraphQL */ `
-  query GetUserProfile($id: ID!) {
-    getUserProfile(id: $id) {
-      createdAt
-      displayName
-      email
-      id
-      locale
-      marketingOptIn
-      owner
-      updatedAt
-      __typename
-    }
-  }
-`;
+
 export const listLibraryItems = /* GraphQL */ `
   query ListLibraryItems(
     $filter: ModelLibraryItemFilterInput
@@ -98,6 +51,77 @@ export const listLibraryItems = /* GraphQL */ `
     }
   }
 `;
+
+export const getDigitalHome = /* GraphQL */ `
+  query GetDigitalHome($smartHomeId: ID!) {
+    getDigitalHome(smartHomeId: $smartHomeId) {
+      smartHomeId
+      country
+      postalCode
+      streetCode
+      houseNumber
+      suffix
+      city
+      addressLine1
+      addressLine2
+      isDemo
+      createdBy
+      owners
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+
+export const listDigitalHomes = /* GraphQL */ `
+  query ListDigitalHomes(
+    $filter: ModelDigitalHomeFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listDigitalHomes(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        smartHomeId
+        country
+        postalCode
+        streetCode
+        houseNumber
+        suffix
+        city
+        addressLine1
+        addressLine2
+        isDemo
+        createdBy
+        owners
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
+
+export const getSmartHomeDesign = /* GraphQL */ `
+  query GetSmartHomeDesign($id: ID!) {
+    getSmartHomeDesign(id: $id) {
+      createdAt
+      id
+      lastModified
+      lockedAt
+      lockedBy
+      ontologyVersion
+      owners
+      smartHomeId
+      updatedAt
+      version
+      __typename
+    }
+  }
+`;
+
 export const listSmartHomeDesignBySmartHomeId = /* GraphQL */ `
   query ListSmartHomeDesignBySmartHomeId(
     $filter: ModelSmartHomeDesignFilterInput
@@ -131,6 +155,7 @@ export const listSmartHomeDesignBySmartHomeId = /* GraphQL */ `
     }
   }
 `;
+
 export const listSmartHomeDesigns = /* GraphQL */ `
   query ListSmartHomeDesigns(
     $filter: ModelSmartHomeDesignFilterInput
@@ -160,33 +185,23 @@ export const listSmartHomeDesigns = /* GraphQL */ `
     }
   }
 `;
-export const listSmartHomes = /* GraphQL */ `
-  query ListSmartHomes(
-    $filter: ModelSmartHomeFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listSmartHomes(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        address
-        country
-        createdAt
-        description
-        houseNumber
-        id
-        ownerName
-        owners
-        streetCode
-        suffix
-        updatedAt
-        zip
-        __typename
-      }
-      nextToken
+
+export const getUserProfile = /* GraphQL */ `
+  query GetUserProfile($id: ID!) {
+    getUserProfile(id: $id) {
+      createdAt
+      displayName
+      email
+      id
+      locale
+      marketingOptIn
+      owner
+      updatedAt
       __typename
     }
   }
 `;
+
 export const listUserProfiles = /* GraphQL */ `
   query ListUserProfiles(
     $filter: ModelUserProfileFilterInput

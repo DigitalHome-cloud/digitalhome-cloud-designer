@@ -197,41 +197,67 @@ const DebugPage = () => {
   const { activeHome } = useSmartHome();
   const { isAuthenticated } = useAuth();
   const id = activeHome.id;
-  const designPrefix = `public/smarthomes/${id}/design`;
+  const isDemo = activeHome.isDemo;
+  const country = id ? id.split("-")[0] || "FR" : "FR";
+
+  // Step-1 layout (abox.md): real homes go to Private/, demo homes to Public/.
+  // Both use the same `DigitalHomes/<id>/{designtime,data}/...` shape.
+  const root = isDemo ? "Public" : "Private";
+  const homePrefix = id ? `${root}/DigitalHomes/${id}` : "";
+  const designtimePrefix = id ? `${homePrefix}/designtime` : "";
+  const dataPrefix = id ? `${homePrefix}/data` : "";
 
   const isDemoWithBundle = id === "FR-DEMO-01";
-  const country = id.split("-")[0] || "FR";
 
-  const perHome = [
-    {
-      name: "A-Box JSON",
-      role: "Instance model consumed by Viewer, Drawing, BOM",
-      location: "S3",
-      path: `${designPrefix}/abox.json`,
-      s3Key: `${designPrefix}/abox.json`,
-      contentType: "application/json",
-      ...(isDemoWithBundle
-        ? { getLocal: () => JSON.stringify(frDemoAbox, null, 2) }
-        : {}),
-    },
-    {
-      name: "A-Box TTL",
-      role: "Turtle serialisation of the same A-Box",
-      location: "S3",
-      path: `${designPrefix}/abox.ttl`,
-      s3Key: `${designPrefix}/abox.ttl`,
-      contentType: "text/turtle",
-    },
-    {
-      name: "Blockly workspace",
-      role: "Design workspace (blocks + positions)",
-      location: "S3",
-      path: `${designPrefix}/workspace.json`,
-      s3Key: `${designPrefix}/workspace.json`,
-      contentType: "application/json",
-      getLocal: () => JSON.stringify(generateShellWorkspace(id, country), null, 2),
-    },
-  ];
+  const perHome = id
+    ? [
+        {
+          name: "A-Box TTL",
+          role: "Step-1 turtle authored by createDigitalHome Lambda",
+          location: "S3",
+          path: `${designtimePrefix}/abox.ttl`,
+          s3Key: `${designtimePrefix}/abox.ttl`,
+          contentType: "text/turtle",
+        },
+        {
+          name: "A-Box graph (JSON-LD)",
+          role: "Step-1 JSON-LD with inline @context — same triples as abox.ttl",
+          location: "S3",
+          path: `${designtimePrefix}/graph.jsonld`,
+          s3Key: `${designtimePrefix}/graph.jsonld`,
+          contentType: "application/ld+json",
+        },
+        {
+          name: "Data folder placeholder",
+          role: "Marker so .../data/ exists; runtime telemetry will land here",
+          location: "S3",
+          path: `${dataPrefix}/.keep`,
+          s3Key: `${dataPrefix}/.keep`,
+          contentType: "application/octet-stream",
+        },
+        {
+          name: "A-Box JSON (legacy)",
+          role: "Pre-step-1 viewer/drawing/BOM consumer — to be replaced by graph.jsonld in step 2",
+          location: "S3",
+          path: `public/smarthomes/${id}/design/abox.json`,
+          s3Key: `public/smarthomes/${id}/design/abox.json`,
+          contentType: "application/json",
+          ...(isDemoWithBundle
+            ? { getLocal: () => JSON.stringify(frDemoAbox, null, 2) }
+            : {}),
+        },
+        {
+          name: "Blockly workspace (legacy)",
+          role: "Pre-step-1 design workspace — replaced by step-2 spatial designer",
+          location: "S3",
+          path: `public/smarthomes/${id}/design/workspace.json`,
+          s3Key: `public/smarthomes/${id}/design/workspace.json`,
+          contentType: "application/json",
+          getLocal: () =>
+            JSON.stringify(generateShellWorkspace(id, country), null, 2),
+        },
+      ]
+    : [];
 
   const shared = [
     {
@@ -279,7 +305,18 @@ const DebugPage = () => {
         <section className="dhc-hero">
           <h1 className="dhc-hero-title">Debug — Content Artifacts</h1>
           <p className="dhc-hero-subtitle">
-            Data files backing each view, for active SmartHome <code>{id}</code>. Local = bundled in the app. S3 = under Amplify Storage <code>public/</code>. Generated = computed client-side on demand.
+            {id ? (
+              <>
+                Active DigitalHome <code>{id}</code>{" "}
+                <span className="dhc-nav-pill" style={{ marginLeft: "0.4rem" }}>
+                  {isDemo ? "Public/ (demo)" : "Private/ (real)"}
+                </span>
+                <br />
+                Step-1 files live under <code>{homePrefix}/</code>. Probe currently fails for <code>Private/</code> and <code>Public/DigitalHomes/</code> paths because storage rules haven&apos;t been opened to clients — verify via AWS Console or CLI for now.
+              </>
+            ) : (
+              <>No DigitalHome selected. Create one in the Manager to see its S3 layout.</>
+            )}
           </p>
         </section>
 

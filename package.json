@@ -26,6 +26,7 @@
     "three": "0.170.0"
   },
   "devDependencies": {
+    "@aws-amplify/backend-cli": "^1.7.0",
     "prettier": "^2.8.8"
   },
   "resolutions": {

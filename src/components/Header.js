@@ -8,8 +8,20 @@ import { getAppUrl } from "../utils/getAppUrl";
 const Header = () => {
   const { t } = useTranslation();
   const { languages, language, changeLanguage } = useI18next();
-  const { authState, isAuthenticated, user, signOut } = useAuth();
+  const { authState, isAuthenticated, user, groups, signOut } = useAuth();
   const { activeHome } = useSmartHome();
+
+  // Pick a single role to display from the user's group claims, in
+  // precedence order. Mirrors the precedence used on the home flow board.
+  const ROLE_PRECEDENCE = [
+    "dhc-admins",
+    "dhc-devops-engineers",
+    "dhc-modelers",
+    "dhc-professional",
+    "dhc-standard",
+    "dhc-welcome",
+  ];
+  const role = ROLE_PRECEDENCE.find((g) => (groups || []).includes(g)) || null;
 
   const handleSignOut = async () => {
     await signOut();
@@ -72,6 +84,21 @@ const Header = () => {
 
             {isAuthenticated && (
               <>
+                {role && (
+                  <span
+                    className="dhc-nav-pill"
+                    title="Cognito group with highest precedence"
+                    style={{
+                      background: "rgba(34, 197, 94, 0.10)",
+                      borderColor: "rgba(34, 197, 94, 0.4)",
+                      color: "#4ade80",
+                      fontFamily:
+                        "'SF Mono', 'Fira Code', Menlo, Consolas, monospace",
+                    }}
+                  >
+                    {role}
+                  </span>
+                )}
                 <span className="dhc-nav-pill dhc-nav-pill--ok">
                   {user?.idTokenPayload?.name ||
                     user?.idTokenPayload?.email ||

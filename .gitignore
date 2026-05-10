@@ -13,8 +13,11 @@ build/
 
 # Amplify Gen 2 — local sandbox state, never commit
 .amplify/
-# (amplify_outputs.json IS committed — it holds the public Cognito/AppSync IDs
-# that the frontend needs to talk to the deployed backend.)
+# amplify_outputs.json is generated per-branch by the Hosting build's
+# preBuild step (`ampx generate outputs`); committing it would ship one
+# environment's IDs into another. Local dev keeps a sandbox-pointed copy
+# untracked.
+src/amplify_outputs.json
 
 # Legacy Gen 1 leftovers (kept ignored just in case any old branch still
 # references these paths)

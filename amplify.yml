@@ -5,6 +5,11 @@ frontend:
       commands:
         - node -v
         - npm install
+        # Fetch the Amplify Gen 2 backend's outputs from the umbrella's
+        # deployed CFN stack matching this branch. Requires UMBRELLA_APP_ID
+        # to be set as an env var on the Hosting app and the service role
+        # to have cloudformation:DescribeStacks on the umbrella's stacks.
+        - npx ampx generate outputs --branch $AWS_BRANCH --app-id $UMBRELLA_APP_ID --out-dir src/
     build:
       commands:
         - npm run build
