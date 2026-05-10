@@ -3,12 +3,21 @@ frontend:
   phases:
     preBuild:
       commands:
+        - echo "Checking node and npm versions..."
         - node -v
+        - npm -v
+        - echo "Starting clean install..."
         - npm ci
-        # Use the variable to pull the outputs from the remote backend
+        - echo "Generating Amplify outputs for App ID $AMPLIFY_BACKEND_APP_ID..."
+        - echo "Checking Environment Variables..."
+        - echo "App ID variable is $AMPLIFY_BACKEND_APP_ID"
+        - echo "Generating Amplify outputs..."
         - npx ampx generate outputs --app-id $AMPLIFY_BACKEND_APP_ID --branch stage
-        # Copy to src/ for Gatsby compatibility
+        - echo "Verifying file existence..."
+        - ls -la amplify_outputs.json
+        - echo "Copying to src/..."
         - cp amplify_outputs.json src/amplify_outputs.json
+        - ls -la src/amplify_outputs.json
     build:
       commands:
         - npm run build

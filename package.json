@@ -3,7 +3,7 @@
   "private": true,
   "description": "A simple starter to get up and developing quickly with Gatsby",
   "version": "0.1.0",
-  "author": "Kyle Mathews <mathews.kyle@gmail.com>",
+  "author": "DL5",
   "dependencies": {
     "@aws-amplify/ui-react": "^6.15.0",
     "aws-amplify": "^6.16.2",
@@ -32,8 +32,12 @@
     "constructs": "^10.4.0",
     "prettier": "^2.8.8"
   },
+    "overrides": {
+    "graphql": "^16.8.1"
+  },
   "resolutions": {
-    "three": "0.170.0"
+    "three": "0.170.0",
+    "graphql": "^16.8.1"
   },
   "keywords": [
     "gatsby"
