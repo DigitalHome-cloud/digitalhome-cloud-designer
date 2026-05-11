@@ -6,6 +6,7 @@ frontend:
         # Standard install
         - node -v
         - npm ci
+        - npm list graphql
         # Create Backend configuration
         - echo "App ID variable is $AMPLIFY_BACKEND_APP_ID"
         - echo "App Branch variable is $AMPLIFY_BACKEND_APP_BRANCH"
