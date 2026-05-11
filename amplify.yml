@@ -3,15 +3,14 @@ frontend:
   phases:
     preBuild:
       commands:
+        # Standard install
+        - node -v
+        - npm ci
         # Create Backend configuration
         - echo "App ID variable is $AMPLIFY_BACKEND_APP_ID"
         - echo "App Branch variable is $AMPLIFY_BACKEND_APP_BRANCH"
         - npx ampx generate outputs --branch $AMPLIFY_BACKEND_APP_BRANCH --app-id $AMPLIFY_BACKEND_APP_ID --out-dir ./src
         - ls -la src/amplify_outputs.json
-
-        # Standard install
-        - npm ci
-
     build:
       commands:
         - npm run build
