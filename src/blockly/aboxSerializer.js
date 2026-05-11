@@ -2,7 +2,7 @@
  * aboxSerializer.js
  *
  * Converts a Blockly workspace into A-Box TTL and JSON representations.
- * Instance IRIs: dhc-instance:{smartHomeId}/{blockType}/{blockId}
+ * Instance IRIs: dhc-i:{smartHomeId}/{blockType}/{blockId}
  */
 import * as Blockly from "blockly";
 
@@ -10,7 +10,7 @@ const INPUT_TYPES = Blockly.inputs?.inputTypes || { VALUE: 1, STATEMENT: 3 };
 const DHC_NS = "https://digitalhome.cloud/ontology#";
 const DHC_NFC14100_NS = "https://digitalhome.cloud/ontology/nfc14100#";
 const DHC_NFC15100_NS = "https://digitalhome.cloud/ontology/nfc15100#";
-const DHC_INSTANCE_NS = "https://digitalhome.cloud/instance#";
+const DHC_INSTANCE_NS = "https://digitalhome.cloud/instance/";
 
 // Module prefix mappings: block type prefix → ontology namespace prefix
 const MODULE_PREFIXES = {
@@ -71,7 +71,7 @@ function blockTypeToClass(blockType) {
  * Generate an instance IRI from a block.
  */
 function instanceIri(smartHomeId, blockType, blockId) {
-  return `dhc-instance:${smartHomeId}/${blockType}/${blockId}`;
+  return `dhc-i:${smartHomeId}/${blockType}/${blockId}`;
 }
 
 /**
@@ -129,7 +129,7 @@ export function serializeToTTL(workspace, smartHomeId) {
   lines.push(`@prefix dhc: <${DHC_NS}> .`);
   lines.push(`@prefix dhc-nfc14100: <${DHC_NFC14100_NS}> .`);
   lines.push(`@prefix dhc-nfc15100: <${DHC_NFC15100_NS}> .`);
-  lines.push(`@prefix dhc-instance: <${DHC_INSTANCE_NS}> .`);
+  lines.push(`@prefix dhc-i: <${DHC_INSTANCE_NS}> .`);
   lines.push(`@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .`);
   lines.push(`@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .`);
   lines.push(`@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .`);
@@ -172,7 +172,7 @@ export function serializeToTTL(workspace, smartHomeId) {
     if (zoneField) {
       const zoneName = zoneField.getValue();
       if (zoneName && zoneName !== "None") {
-        const zoneIri = `dhc-instance:${smartHomeId}/zone/${encodeURIComponent(zoneName)}`;
+        const zoneIri = `dhc-i:${smartHomeId}/zone/${encodeURIComponent(zoneName)}`;
         lines.push(`  dhc:belongsToZone ${zoneIri} ;`);
         if (!emittedZones.has(zoneName)) {
           emittedZones.set(zoneName, zoneIri);
@@ -299,7 +299,7 @@ export function serializeToJSON(workspace, smartHomeId) {
     if (zoneField) {
       const zoneName = zoneField.getValue();
       if (zoneName && zoneName !== "None") {
-        const zoneIri = `dhc-instance:${smartHomeId}/zone/${encodeURIComponent(zoneName)}`;
+        const zoneIri = `dhc-i:${smartHomeId}/zone/${encodeURIComponent(zoneName)}`;
         links.push({
           source: iri,
           target: zoneIri,
