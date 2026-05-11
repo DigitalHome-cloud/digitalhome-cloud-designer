@@ -3,21 +3,15 @@ frontend:
   phases:
     preBuild:
       commands:
-        - echo "Checking node and npm versions..."
-        - node -v
-        - npm -v
-        - echo "Starting clean install..."
-        - npm ci
-        - echo "Generating Amplify outputs for App ID $AMPLIFY_BACKEND_APP_ID..."
-        - echo "Checking Environment Variables..."
+        # Create Backend configuration
         - echo "App ID variable is $AMPLIFY_BACKEND_APP_ID"
-        - echo "Generating Amplify outputs..."
-        - npx ampx generate outputs --app-id $AMPLIFY_BACKEND_APP_ID --branch stage
-        - echo "Verifying file existence..."
-        - ls -la amplify_outputs.json
-        - echo "Copying to src/..."
-        - cp amplify_outputs.json src/amplify_outputs.json
+        - echo "App Branch variable is $AMPLIFY_BACKEND_APP_BRANCH"
+        - npx ampx generate outputs --branch $AMPLIFY_BACKEND_APP_BRANCH --app-id $AMPLIFY_BACKEND_APP_ID --out-dir ./src
         - ls -la src/amplify_outputs.json
+
+        # Standard install
+        - npm ci
+
     build:
       commands:
         - npm run build
