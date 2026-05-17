@@ -58,6 +58,9 @@ const Header = () => {
             <Link to="/bom/" className="dhc-nav-link">
               {t("nav.bom")}
             </Link>
+            <Link to="/inventory/" className="dhc-nav-link">
+              {t("nav.inventory")}
+            </Link>
             <Link to="/debug/" className="dhc-nav-link">
               {t("nav.debug")}
             </Link>

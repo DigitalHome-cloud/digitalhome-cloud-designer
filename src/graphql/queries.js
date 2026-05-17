@@ -225,3 +225,152 @@ export const listUserProfiles = /* GraphQL */ `
     }
   }
 `;
+
+// ─── Device Inventory ──────────────────────────────────────────────────────
+export const getDeviceModel = /* GraphQL */ `
+  query GetDeviceModel($modelNumber: ID!) {
+    getDeviceModel(modelNumber: $modelNumber) {
+      brand
+      category
+      compatibleClasses
+      createdAt
+      description
+      deviceType
+      hasActorCapability
+      hasControllerCapability
+      hasSensorCapability
+      modelNumber
+      region
+      s3DocPath
+      s3ImgPath
+      s3SpecsPath
+      standards
+      updatedAt
+      version
+      __typename
+    }
+  }
+`;
+export const listDeviceModels = /* GraphQL */ `
+  query ListDeviceModels(
+    $filter: ModelDeviceModelFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listDeviceModels(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        brand
+        category
+        compatibleClasses
+        createdAt
+        description
+        deviceType
+        hasActorCapability
+        hasControllerCapability
+        hasSensorCapability
+        modelNumber
+        region
+        s3DocPath
+        s3ImgPath
+        s3SpecsPath
+        standards
+        updatedAt
+        version
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
+export const getDeviceInstance = /* GraphQL */ `
+  query GetDeviceInstance($id: ID!) {
+    getDeviceInstance(id: $id) {
+      createdAt
+      deviceType
+      firmwareVersion
+      id
+      installationDate
+      location
+      modelNumber
+      owners
+      purchaseDate
+      s3SpecsPath
+      serialNumber
+      smartHomeId
+      status
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const listDeviceInstances = /* GraphQL */ `
+  query ListDeviceInstances(
+    $filter: ModelDeviceInstanceFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listDeviceInstances(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        createdAt
+        deviceType
+        firmwareVersion
+        id
+        installationDate
+        location
+        modelNumber
+        owners
+        purchaseDate
+        s3SpecsPath
+        serialNumber
+        smartHomeId
+        status
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
+export const listDeviceInstanceBySmartHomeId = /* GraphQL */ `
+  query ListDeviceInstanceBySmartHomeId(
+    $filter: ModelDeviceInstanceFilterInput
+    $limit: Int
+    $nextToken: String
+    $smartHomeId: String!
+    $sortDirection: ModelSortDirection
+  ) {
+    listDeviceInstanceBySmartHomeId(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      smartHomeId: $smartHomeId
+      sortDirection: $sortDirection
+    ) {
+      items {
+        createdAt
+        deviceType
+        firmwareVersion
+        id
+        installationDate
+        location
+        modelNumber
+        owners
+        purchaseDate
+        s3SpecsPath
+        serialNumber
+        smartHomeId
+        status
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;

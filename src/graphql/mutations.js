@@ -276,3 +276,144 @@ export const deleteUserProfile = /* GraphQL */ `
     }
   }
 `;
+
+// ─── Device Inventory ──────────────────────────────────────────────────────
+const DEVICE_MODEL_FIELDS = `
+      brand
+      category
+      compatibleClasses
+      createdAt
+      description
+      deviceType
+      hasActorCapability
+      hasControllerCapability
+      hasSensorCapability
+      modelNumber
+      region
+      s3DocPath
+      s3ImgPath
+      s3SpecsPath
+      standards
+      updatedAt
+      version
+      __typename`;
+
+export const createDeviceModel = /* GraphQL */ `
+  mutation CreateDeviceModel(
+    $condition: ModelDeviceModelConditionInput
+    $input: CreateDeviceModelInput!
+  ) {
+    createDeviceModel(condition: $condition, input: $input) {${DEVICE_MODEL_FIELDS}
+    }
+  }
+`;
+export const updateDeviceModel = /* GraphQL */ `
+  mutation UpdateDeviceModel(
+    $condition: ModelDeviceModelConditionInput
+    $input: UpdateDeviceModelInput!
+  ) {
+    updateDeviceModel(condition: $condition, input: $input) {${DEVICE_MODEL_FIELDS}
+    }
+  }
+`;
+export const deleteDeviceModel = /* GraphQL */ `
+  mutation DeleteDeviceModel(
+    $condition: ModelDeviceModelConditionInput
+    $input: DeleteDeviceModelInput!
+  ) {
+    deleteDeviceModel(condition: $condition, input: $input) {
+      modelNumber
+      __typename
+    }
+  }
+`;
+
+const DEVICE_INSTANCE_FIELDS = `
+      createdAt
+      deviceType
+      firmwareVersion
+      id
+      installationDate
+      location
+      modelNumber
+      owners
+      purchaseDate
+      s3SpecsPath
+      serialNumber
+      smartHomeId
+      status
+      updatedAt
+      __typename`;
+
+export const createDeviceInstance = /* GraphQL */ `
+  mutation CreateDeviceInstance(
+    $condition: ModelDeviceInstanceConditionInput
+    $input: CreateDeviceInstanceInput!
+  ) {
+    createDeviceInstance(condition: $condition, input: $input) {${DEVICE_INSTANCE_FIELDS}
+    }
+  }
+`;
+export const updateDeviceInstance = /* GraphQL */ `
+  mutation UpdateDeviceInstance(
+    $condition: ModelDeviceInstanceConditionInput
+    $input: UpdateDeviceInstanceInput!
+  ) {
+    updateDeviceInstance(condition: $condition, input: $input) {${DEVICE_INSTANCE_FIELDS}
+    }
+  }
+`;
+export const deleteDeviceInstance = /* GraphQL */ `
+  mutation DeleteDeviceInstance(
+    $condition: ModelDeviceInstanceConditionInput
+    $input: DeleteDeviceInstanceInput!
+  ) {
+    deleteDeviceInstance(condition: $condition, input: $input) {
+      id
+      __typename
+    }
+  }
+`;
+
+export const requestDeviceFileReadUrl = /* GraphQL */ `
+  mutation RequestDeviceFileReadUrl(
+    $smartHomeId: ID!
+    $deviceType: String!
+    $serialNumber: String!
+    $fileName: String!
+  ) {
+    requestDeviceFileReadUrl(
+      smartHomeId: $smartHomeId
+      deviceType: $deviceType
+      serialNumber: $serialNumber
+      fileName: $fileName
+    ) {
+      contentType
+      expiresAt
+      url
+      __typename
+    }
+  }
+`;
+export const requestDeviceFileWriteUrl = /* GraphQL */ `
+  mutation RequestDeviceFileWriteUrl(
+    $smartHomeId: ID!
+    $deviceType: String!
+    $serialNumber: String!
+    $fileName: String!
+    $contentType: String
+  ) {
+    requestDeviceFileWriteUrl(
+      smartHomeId: $smartHomeId
+      deviceType: $deviceType
+      serialNumber: $serialNumber
+      fileName: $fileName
+      contentType: $contentType
+    ) {
+      contentType
+      expiresAt
+      url
+      __typename
+    }
+  }
+`;
