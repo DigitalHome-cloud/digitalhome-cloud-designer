@@ -16,12 +16,12 @@ DigitalHome.Cloud Designer — a Gatsby 5 / React 18 web app providing a three-m
 
 ## Local Dev Setup
 
-This app is a **frontend-only consumer** of the Amplify Gen 2 backend defined in the umbrella repo (`digitalhome-cloud-darkfactory/amplify/`). Connection details are committed here as `src/amplify_outputs.json`.
+This app is a **frontend-only consumer** of the Amplify Gen 2 backend defined in the `repos/core` submodule (`digitalhome-cloud-darkfactory/repos/core/amplify/`). Connection details are committed here as `src/amplify_outputs.json` — and this app's stage build **is wired to the stage backend and operational** (in CI the `preBuild` regenerates them via `npx ampx generate outputs`).
 
-After a backend change in the umbrella, copy the regenerated outputs in:
+After a backend change, copy the regenerated outputs in (local sandbox):
 
 ```bash
-cp ~/digitalhomeCloud/digitalhome-cloud-darkfactory/amplify_outputs.json src/
+cp ~/digitalhomeCloud/digitalhome-cloud-darkfactory/repos/core/amplify_outputs.json src/
 ```
 
 Then `yarn develop` (port 8001). For backend authoring see the umbrella's `dhc-amplify-gen2` skill.
@@ -34,7 +34,7 @@ Then `yarn develop` (port 8001). For backend authoring see the umbrella's `dhc-a
 
 ### Shared Backend
 
-This app does **not** own an Amplify backend. The Gen 2 backend (Cognito User Pool + Identity Pool, AppSync, DynamoDB, S3, Lambdas) is defined in the umbrella repo's `amplify/` directory in TypeScript. This repo is a frontend-only consumer that imports `src/amplify_outputs.json` and configures Amplify JS v6 with it.
+This app does **not** own an Amplify backend. The Gen 2 backend (Cognito User Pool + Identity Pool, AppSync, DynamoDB, S3, Lambdas) is defined in the `repos/core` submodule's `amplify/` directory in TypeScript. This repo is a frontend-only consumer that imports `src/amplify_outputs.json` and configures Amplify JS v6 with it.
 
 ### Authentication & SmartHome Context
 
@@ -79,7 +79,7 @@ Block definitions are **generated from `dhc-core.schema.ttl`** by the modeler's 
 - `src/components/EditLockToolbar.js` — Lock/save/cancel toolbar
 - `src/utils/s3.js` — S3 operations for toolbox, designs, and A-Box artifacts
 
-Design artifacts are stored on S3 under tenant-scoped paths. Real SmartHome designs use `tenant/{smartHomeId}/design/...` and are accessed exclusively through the umbrella's `dhcDesignStorageProxy` Lambda via `requestDesignReadUrl` / `requestDesignWriteUrl` AppSync mutations (DH-SPEC-203). Demo SmartHomes (`DE-DEMO`, `FR-DEMO`, `BE-DEMO`) use `public/smarthomes/{demoId}/design/...` for direct read access.
+Design artifacts are stored on S3 under tenant-scoped paths. Real SmartHome designs use `tenant/{smartHomeId}/design/...` and are accessed exclusively through the `dhcDesignStorageProxy` Lambda (in `repos/core/amplify/functions/`) via `requestDesignReadUrl` / `requestDesignWriteUrl` AppSync mutations (DH-SPEC-203). Demo SmartHomes (`DE-DEMO`, `FR-DEMO`, `BE-DEMO`) use `public/smarthomes/{demoId}/design/...` for direct read access.
 
 ### 3D A-Box Viewer
 
@@ -134,4 +134,4 @@ Amplify Hosting with branch-to-environment mapping:
 - `main` → production (`designer.digitalhome.cloud`)
 - `stage` → staging
 
-Build spec is in `amplify.yml`. The build runs `npm ci && npm run build` and deploys `public/`. The backend deploy (`npx ampx pipeline-deploy`) runs from the umbrella repo's Hosting build, not this app's.
+Build spec is in `amplify.yml`. The build's `preBuild` pulls the deployed backend config via `npx ampx generate outputs --branch $AMPLIFY_BACKEND_APP_BRANCH --app-id $AMPLIFY_BACKEND_APP_ID --out-dir ./src`, then runs the Gatsby build and deploys `public/`. The backend deploy (`npx ampx pipeline-deploy`) runs from `repos/core`'s own backend-only Hosting build, not this app's.
