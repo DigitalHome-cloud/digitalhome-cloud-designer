@@ -36,7 +36,11 @@
   "overrides": {
     "graphql": "15.8.0",
     "typescript": "^5.4.5",
-    "i18next": "^25.8.10"
+    "i18next": "^25.8.10",
+    "opentype.js": "1.3.4"
+  },
+  "resolutions": {
+    "opentype.js": "1.3.4"
   },
   "devDependencies": {
     "ajv": "^8.20.0",
