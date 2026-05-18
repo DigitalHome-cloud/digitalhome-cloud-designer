@@ -23,6 +23,10 @@ export const MODEL_COLUMNS = [
   "hasSensorCapability",
   "hasControllerCapability",
   "hasIOTCapability",
+  "powerSource",
+  "voltageV",
+  "currentA",
+  "powerW",
 ];
 export const DEVICE_COLUMNS = [
   "serialNumber",
@@ -53,6 +57,10 @@ export const CSV_TEMPLATE =
     "true", // hasSensorCapability
     "true", // hasControllerCapability
     "true", // hasIOTCapability
+    "SOCKET", // powerSource (FIXED|SOCKET|BATTERY|ACCU)
+    "220", // voltageV
+    "0.5", // currentA
+    "110", // powerW
     "SN-NVR-0001", // serialNumber
     "2026-01-15", // purchaseDate (YYYY-MM-DD)
     "2026-02-01", // installationDate
@@ -66,6 +74,19 @@ const bool = (v) =>
   v == null || v === ""
     ? null
     : /^(true|1|yes|y)$/i.test(String(v).trim());
+
+const num = (v) => {
+  if (v == null || String(v).trim() === "") return null;
+  const n = Number(String(v).trim().replace(",", "."));
+  return Number.isFinite(n) ? n : null;
+};
+
+const POWER_SOURCES = ["FIXED", "SOCKET", "BATTERY", "ACCU"];
+const normalizePowerSource = (v) => {
+  if (!v) return null;
+  const u = String(v).trim().toUpperCase();
+  return POWER_SOURCES.includes(u) ? u : null;
+};
 
 const arr = (v) =>
   v == null || String(v).trim() === ""
@@ -122,6 +143,10 @@ export function rowsToInbox(rows) {
         hasSensorCapability: bool(r.hasSensorCapability),
         hasControllerCapability: bool(r.hasControllerCapability),
         hasIOTCapability: bool(r.hasIOTCapability),
+        powerSource: normalizePowerSource(r.powerSource),
+        voltageV: num(r.voltageV),
+        currentA: num(r.currentA),
+        powerW: num(r.powerW),
         _status: "pending",
       });
     }

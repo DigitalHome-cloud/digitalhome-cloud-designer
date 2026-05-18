@@ -283,6 +283,7 @@ const DEVICE_MODEL_FIELDS = `
       category
       compatibleClasses
       createdAt
+      currentA
       description
       deviceType
       hasActorCapability
@@ -290,6 +291,8 @@ const DEVICE_MODEL_FIELDS = `
       hasIOTCapability
       hasSensorCapability
       modelNumber
+      powerSource
+      powerW
       region
       s3DocPath
       s3ImgPath
@@ -297,6 +300,7 @@ const DEVICE_MODEL_FIELDS = `
       standards
       thumbnail
       updatedAt
+      voltageV
       __typename`;
 
 export const createDeviceModel = /* GraphQL */ `

@@ -234,6 +234,7 @@ export const getDeviceModel = /* GraphQL */ `
       category
       compatibleClasses
       createdAt
+      currentA
       description
       deviceType
       hasActorCapability
@@ -241,6 +242,8 @@ export const getDeviceModel = /* GraphQL */ `
       hasIOTCapability
       hasSensorCapability
       modelNumber
+      powerSource
+      powerW
       region
       s3DocPath
       s3ImgPath
@@ -248,6 +251,7 @@ export const getDeviceModel = /* GraphQL */ `
       standards
       thumbnail
       updatedAt
+      voltageV
       __typename
     }
   }
@@ -264,6 +268,7 @@ export const listDeviceModels = /* GraphQL */ `
         category
         compatibleClasses
         createdAt
+        currentA
         description
         deviceType
         hasActorCapability
@@ -271,6 +276,8 @@ export const listDeviceModels = /* GraphQL */ `
         hasIOTCapability
         hasSensorCapability
         modelNumber
+        powerSource
+        powerW
         region
         s3DocPath
         s3ImgPath
@@ -278,6 +285,7 @@ export const listDeviceModels = /* GraphQL */ `
         standards
         thumbnail
         updatedAt
+        voltageV
         __typename
       }
       nextToken

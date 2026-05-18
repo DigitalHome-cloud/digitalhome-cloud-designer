@@ -22,6 +22,14 @@ const CAPS = [
   ["hasControllerCapability", "Controller"],
   ["hasIOTCapability", "IOT (connectable)"],
 ];
+const POWER_SOURCES = [
+  ["", "—"],
+  ["FIXED", "Fixed (hard-wired)"],
+  ["SOCKET", "Socket (plug)"],
+  ["BATTERY", "Battery"],
+  ["ACCU", "Accu (rechargeable)"],
+];
+const COMMON_VOLTAGES = ["220", "110", "48", "24", "12", "6", "5", "3.7"];
 const THUMB_MAX = 96;
 
 // Downscale an image File → small JPEG data URL (browser-only; called from a
@@ -83,6 +91,11 @@ const DeviceModelForm = ({
   const [docFiles, setDocFiles] = useState([]); // File[]
   const [imageFile, setImageFile] = useState(null); // File | null
   const [thumb, setThumb] = useState(item?.thumbnail || null);
+  const [powerSource, setPowerSource] = useState(item?.powerSource || "");
+  const numStr = (v) => (v == null ? "" : String(v));
+  const [voltageV, setVoltageV] = useState(numStr(item?.voltageV));
+  const [currentA, setCurrentA] = useState(numStr(item?.currentA));
+  const [powerW, setPowerW] = useState(numStr(item?.powerW));
   const [saving, setSaving] = useState(false);
   const [submitError, setSubmitError] = useState(null);
 
@@ -157,6 +170,10 @@ const DeviceModelForm = ({
         deviceType,
         description: description.trim() || null,
         ...caps,
+        powerSource: powerSource || null,
+        voltageV: voltageV === "" ? null : Number(voltageV),
+        currentA: currentA === "" ? null : Number(currentA),
+        powerW: powerW === "" ? null : Number(powerW),
         s3DocPath,
         s3ImgPath,
         thumbnail: thumb || null,
@@ -287,6 +304,83 @@ const DeviceModelForm = ({
               {lbl}
             </label>
           ))}
+        </div>
+      </div>
+
+      <div className="dhc-form-field">
+        <label className="dhc-form-label">Power</label>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr 1fr 1fr",
+            gap: "0.6rem",
+          }}
+        >
+          <div>
+            <div className="dhc-form-label" style={{ fontSize: "0.7rem" }}>
+              Source
+            </div>
+            <select
+              className="dhc-form-input"
+              value={powerSource}
+              disabled={ro}
+              onChange={(e) => setPowerSource(e.target.value)}
+            >
+              {POWER_SOURCES.map(([v, l]) => (
+                <option key={v} value={v}>
+                  {l}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <div className="dhc-form-label" style={{ fontSize: "0.7rem" }}>
+              Voltage (V)
+            </div>
+            <input
+              className="dhc-form-input"
+              type="number"
+              step="any"
+              list="dhc-volts"
+              value={voltageV}
+              readOnly={ro}
+              onChange={(e) => setVoltageV(e.target.value)}
+              placeholder="220"
+            />
+            <datalist id="dhc-volts">
+              {COMMON_VOLTAGES.map((v) => (
+                <option key={v} value={v} />
+              ))}
+            </datalist>
+          </div>
+          <div>
+            <div className="dhc-form-label" style={{ fontSize: "0.7rem" }}>
+              Current (A)
+            </div>
+            <input
+              className="dhc-form-input"
+              type="number"
+              step="any"
+              value={currentA}
+              readOnly={ro}
+              onChange={(e) => setCurrentA(e.target.value)}
+              placeholder="0.5"
+            />
+          </div>
+          <div>
+            <div className="dhc-form-label" style={{ fontSize: "0.7rem" }}>
+              Power in (W)
+            </div>
+            <input
+              className="dhc-form-input"
+              type="number"
+              step="any"
+              value={powerW}
+              readOnly={ro}
+              onChange={(e) => setPowerW(e.target.value)}
+              placeholder="110"
+            />
+          </div>
         </div>
       </div>
 
