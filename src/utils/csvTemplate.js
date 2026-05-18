@@ -22,6 +22,7 @@ export const MODEL_COLUMNS = [
   "hasActorCapability",
   "hasSensorCapability",
   "hasControllerCapability",
+  "hasIOTCapability",
 ];
 export const DEVICE_COLUMNS = [
   "serialNumber",
@@ -51,6 +52,7 @@ export const CSV_TEMPLATE =
     "false", // hasActorCapability
     "true", // hasSensorCapability
     "true", // hasControllerCapability
+    "true", // hasIOTCapability
     "SN-NVR-0001", // serialNumber
     "2026-01-15", // purchaseDate (YYYY-MM-DD)
     "2026-02-01", // installationDate
@@ -119,6 +121,7 @@ export function rowsToInbox(rows) {
         hasActorCapability: bool(r.hasActorCapability),
         hasSensorCapability: bool(r.hasSensorCapability),
         hasControllerCapability: bool(r.hasControllerCapability),
+        hasIOTCapability: bool(r.hasIOTCapability),
         _status: "pending",
       });
     }

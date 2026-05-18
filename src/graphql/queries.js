@@ -238,6 +238,7 @@ export const getDeviceModel = /* GraphQL */ `
       deviceType
       hasActorCapability
       hasControllerCapability
+      hasIOTCapability
       hasSensorCapability
       modelNumber
       region
@@ -245,6 +246,7 @@ export const getDeviceModel = /* GraphQL */ `
       s3ImgPath
       s3SpecsPath
       standards
+      thumbnail
       updatedAt
       __typename
     }
@@ -266,6 +268,7 @@ export const listDeviceModels = /* GraphQL */ `
         deviceType
         hasActorCapability
         hasControllerCapability
+        hasIOTCapability
         hasSensorCapability
         modelNumber
         region
@@ -273,6 +276,7 @@ export const listDeviceModels = /* GraphQL */ `
         s3ImgPath
         s3SpecsPath
         standards
+        thumbnail
         updatedAt
         __typename
       }

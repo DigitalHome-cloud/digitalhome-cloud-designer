@@ -287,6 +287,7 @@ const DEVICE_MODEL_FIELDS = `
       deviceType
       hasActorCapability
       hasControllerCapability
+      hasIOTCapability
       hasSensorCapability
       modelNumber
       region
@@ -294,6 +295,7 @@ const DEVICE_MODEL_FIELDS = `
       s3ImgPath
       s3SpecsPath
       standards
+      thumbnail
       updatedAt
       __typename`;
 

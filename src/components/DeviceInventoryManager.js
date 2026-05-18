@@ -45,6 +45,26 @@ const DeviceInventoryManager = () => {
   const [error, setError] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
+  const [formMode, setFormMode] = useState("edit"); // 'view' | 'edit'
+
+  const thumbOf = (mn) => {
+    const t = (models.find((m) => m.modelNumber === mn) || {}).thumbnail;
+    return t ? (
+      <img
+        src={t}
+        alt=""
+        style={{
+          width: 32,
+          height: 32,
+          objectFit: "cover",
+          borderRadius: "0.3rem",
+          border: "1px solid rgba(148,163,184,0.3)",
+        }}
+      />
+    ) : (
+      <span style={{ color: "#64748b", fontSize: "0.75rem" }}>—</span>
+    );
+  };
 
   const fetchInstances = useCallback(async () => {
     if (!isAuthenticated || !homeId || typeof window === "undefined") return;
@@ -153,6 +173,7 @@ const DeviceInventoryManager = () => {
             className="dhc-button-primary"
             onClick={() => {
               setEditingItem(null);
+              setFormMode("edit");
               setShowForm(true);
             }}
             disabled={!isAuthenticated}
@@ -174,6 +195,7 @@ const DeviceInventoryManager = () => {
           <DeviceInstanceForm
             item={editingItem}
             models={models}
+            mode={formMode}
             onSave={handleSave}
             onCancel={() => {
               setShowForm(false);
@@ -189,6 +211,7 @@ const DeviceInventoryManager = () => {
         <table className="dhc-manager-table">
           <thead>
             <tr>
+              <th>Img</th>
               <th>Serial</th>
               <th>Model</th>
               <th>Type</th>
@@ -201,7 +224,7 @@ const DeviceInventoryManager = () => {
             {items.length === 0 ? (
               <tr>
                 <td
-                  colSpan={6}
+                  colSpan={7}
                   style={{
                     textAlign: "center",
                     padding: "1.5rem",
@@ -214,6 +237,7 @@ const DeviceInventoryManager = () => {
             ) : (
               items.map((it) => (
                 <tr key={it.id}>
+                  <td>{thumbOf(it.modelNumber)}</td>
                   <td style={{ fontFamily: "monospace" }}>
                     {it.serialNumber}
                   </td>
@@ -233,6 +257,19 @@ const DeviceInventoryManager = () => {
                       className="dhc-button-ghost"
                       onClick={() => {
                         setEditingItem(it);
+                        setFormMode("view");
+                        setShowForm(true);
+                      }}
+                      style={{ marginRight: "0.4rem" }}
+                    >
+                      View
+                    </button>
+                    <button
+                      type="button"
+                      className="dhc-button-ghost"
+                      onClick={() => {
+                        setEditingItem(it);
+                        setFormMode("edit");
                         setShowForm(true);
                       }}
                       style={{ marginRight: "0.4rem" }}

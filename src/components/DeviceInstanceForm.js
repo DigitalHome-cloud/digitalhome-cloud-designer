@@ -20,8 +20,17 @@ const LIFECYCLE = [
  * Props: { item, models, onSave, onCancel }. `models` = DeviceModel[] from
  * the catalogue. smartHomeId + owners are injected by the caller.
  */
-const DeviceInstanceForm = ({ item, models = [], onSave, onCancel }) => {
+const DeviceInstanceForm = ({
+  item,
+  models = [],
+  mode = "edit",
+  canEdit = true,
+  onSave,
+  onCancel,
+}) => {
   const isEdit = !!item;
+  const [editing, setEditing] = useState(mode !== "view" && canEdit);
+  const ro = !editing;
   const knownModel = models.find((m) => m.modelNumber === item?.modelNumber);
   const legacy = isEdit && !!item?.modelNumber && !knownModel;
 
@@ -98,9 +107,31 @@ const DeviceInstanceForm = ({ item, models = [], onSave, onCancel }) => {
 
   return (
     <form className="dhc-manager-form" onSubmit={handleSubmit}>
-      <h3 style={{ margin: "0 0 1rem", fontSize: "1rem" }}>
-        {isEdit ? `Modify device ${item.serialNumber}` : "Add device"}
-      </h3>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          margin: "0 0 1rem",
+        }}
+      >
+        <h3 style={{ margin: 0, fontSize: "1rem" }}>
+          {!isEdit
+            ? "Add device"
+            : ro
+            ? `View device ${item.serialNumber}`
+            : `Modify device ${item.serialNumber}`}
+        </h3>
+        {isEdit && canEdit && (
+          <button
+            type="button"
+            className="dhc-button-ghost"
+            onClick={() => setEditing((v) => !v)}
+          >
+            {ro ? "Modify" : "View"}
+          </button>
+        )}
+      </div>
 
       {legacy && (
         <p
@@ -128,7 +159,7 @@ const DeviceInstanceForm = ({ item, models = [], onSave, onCancel }) => {
           <select
             className="dhc-form-input"
             value={category}
-            disabled={legacy}
+            disabled={legacy || ro}
             onChange={(e) => {
               setCategory(e.target.value);
               setModelNumber("");
@@ -156,6 +187,7 @@ const DeviceInstanceForm = ({ item, models = [], onSave, onCancel }) => {
               className="dhc-form-input"
               value={modelNumber}
               onChange={(e) => setModelNumber(e.target.value)}
+              disabled={ro}
               required
             >
               <option value="">— select a model —</option>
@@ -205,7 +237,7 @@ const DeviceInstanceForm = ({ item, models = [], onSave, onCancel }) => {
             value={serialNumber}
             onChange={(e) => setSerialNumber(e.target.value)}
             placeholder="SN-000123"
-            readOnly={isEdit}
+            readOnly={isEdit || ro}
             required
           />
         </div>
@@ -216,6 +248,7 @@ const DeviceInstanceForm = ({ item, models = [], onSave, onCancel }) => {
             type="date"
             value={purchaseDate}
             onChange={(e) => setPurchaseDate(e.target.value)}
+            readOnly={ro}
           />
         </div>
         <div className="dhc-form-field">
@@ -225,6 +258,7 @@ const DeviceInstanceForm = ({ item, models = [], onSave, onCancel }) => {
             type="date"
             value={installationDate}
             onChange={(e) => setInstallationDate(e.target.value)}
+            readOnly={ro}
           />
         </div>
         <div className="dhc-form-field">
@@ -234,6 +268,7 @@ const DeviceInstanceForm = ({ item, models = [], onSave, onCancel }) => {
             value={firmwareVersion}
             onChange={(e) => setFirmwareVersion(e.target.value)}
             placeholder="2.4.1"
+            readOnly={ro}
           />
         </div>
         <div className="dhc-form-field">
@@ -242,6 +277,7 @@ const DeviceInstanceForm = ({ item, models = [], onSave, onCancel }) => {
             className="dhc-form-input"
             value={lifecycleState}
             onChange={(e) => setLifecycleState(e.target.value)}
+            disabled={ro}
           >
             {LIFECYCLE.map((l) => (
               <option key={l.value} value={l.value}>
@@ -257,6 +293,7 @@ const DeviceInstanceForm = ({ item, models = [], onSave, onCancel }) => {
             value={location}
             onChange={(e) => setLocation(e.target.value)}
             placeholder="Server room / Living room"
+            readOnly={ro}
           />
         </div>
       </div>
@@ -268,15 +305,17 @@ const DeviceInstanceForm = ({ item, models = [], onSave, onCancel }) => {
       )}
 
       <div className="dhc-form-actions">
-        <button
-          type="submit"
-          className="dhc-button-primary"
-          disabled={!canSubmit}
-        >
-          {saving ? (isEdit ? "Saving…" : "Adding…") : isEdit ? "Save" : "Add"}
-        </button>
+        {!ro && (
+          <button
+            type="submit"
+            className="dhc-button-primary"
+            disabled={!canSubmit}
+          >
+            {saving ? (isEdit ? "Saving…" : "Adding…") : isEdit ? "Save" : "Add"}
+          </button>
+        )}
         <button type="button" className="dhc-button-ghost" onClick={onCancel}>
-          Cancel
+          {ro ? "Close" : "Cancel"}
         </button>
       </div>
     </form>
