@@ -3,6 +3,7 @@ import { graphql } from "gatsby";
 import Layout from "../components/Layout";
 import DeviceCatalogue from "../components/DeviceCatalogue";
 import DeviceInventoryManager from "../components/DeviceInventoryManager";
+import DeviceInbox from "../components/DeviceInbox";
 import { useTranslation } from "gatsby-plugin-react-i18next";
 
 const InventoryPage = () => {
@@ -39,9 +40,20 @@ const InventoryPage = () => {
           >
             {t("inventory.tab.catalogue")}
           </button>
+          <button
+            type="button"
+            className={
+              tab === "inbox" ? "dhc-button-primary" : "dhc-button-ghost"
+            }
+            onClick={() => setTab("inbox")}
+          >
+            {t("inventory.tab.inbox")}
+          </button>
         </div>
 
-        {tab === "inventory" ? <DeviceInventoryManager /> : <DeviceCatalogue />}
+        {tab === "inventory" && <DeviceInventoryManager />}
+        {tab === "catalogue" && <DeviceCatalogue />}
+        {tab === "inbox" && <DeviceInbox />}
       </main>
     </Layout>
   );

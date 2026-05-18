@@ -283,3 +283,43 @@ export async function writeDeviceFile(
     throw new Error(`S3 PUT device ${fileName} failed: ${res.status}`);
   }
 }
+
+// ─── CSV mass-import inbox (devices/inbox.json) ────────────────────────────
+// Fixed file directly under devices/ — its own signed-URL mutations (the
+// per-device ones require a deviceType/serialNumber segment). The Lambda
+// resolves Private/ vs Public/ from DigitalHome.isDemo.
+
+/** Read devices/inbox.json. Returns the parsed object, or null on 404. */
+export async function readInbox(smartHomeId) {
+  const client = generateClient();
+  const { requestDeviceInboxReadUrl } = await import("../graphql/mutations");
+  const result = await client.graphql({
+    query: requestDeviceInboxReadUrl,
+    variables: { smartHomeId },
+  });
+  const res = await fetch(result.data.requestDeviceInboxReadUrl.url);
+  if (!res.ok) {
+    if (res.status === 404) return null;
+    throw new Error(`S3 GET inbox.json failed: ${res.status}`);
+  }
+  return res.json();
+}
+
+/** Write devices/inbox.json (the full inbox object). */
+export async function writeInbox(smartHomeId, obj) {
+  const client = generateClient();
+  const { requestDeviceInboxWriteUrl } = await import("../graphql/mutations");
+  const contentType = "application/json";
+  const result = await client.graphql({
+    query: requestDeviceInboxWriteUrl,
+    variables: { smartHomeId, contentType },
+  });
+  const res = await fetch(result.data.requestDeviceInboxWriteUrl.url, {
+    method: "PUT",
+    headers: { "Content-Type": contentType },
+    body: JSON.stringify(obj, null, 2),
+  });
+  if (!res.ok) {
+    throw new Error(`S3 PUT inbox.json failed: ${res.status}`);
+  }
+}

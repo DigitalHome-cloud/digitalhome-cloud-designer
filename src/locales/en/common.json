@@ -56,6 +56,7 @@
   "inventory.subtitle": "Devices and equipment in this SmartHome, plus the device catalogue.",
   "inventory.tab.inventory": "My devices",
   "inventory.tab.catalogue": "Catalogue",
+  "inventory.tab.inbox": "Import (CSV)",
   "validation.title": "Validation",
   "validation.noIssues": "No validation issues found.",
   "lock.viewMode": "View Mode",

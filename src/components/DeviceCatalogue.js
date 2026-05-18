@@ -1,25 +1,20 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useAuth } from "../context/AuthContext";
 import { generateClient } from "aws-amplify/api";
 import { listDeviceModels } from "../graphql/queries";
-import { createDeviceModel, deleteDeviceModel } from "../graphql/mutations";
+import {
+  createDeviceModel,
+  updateDeviceModel,
+  deleteDeviceModel,
+} from "../graphql/mutations";
 import { DEVICE_CATEGORIES, CATEGORY_LABEL } from "../constants/deviceTypes";
+import DeviceModelForm from "./DeviceModelForm";
 
 /**
  * Device-product catalogue (DeviceModel). Browse/search/filter by the
- * app-level device taxonomy; dhc-admins can add/remove models. Mirrors the
- * SmartHomeManager fetch/CRUD shape + the CatalogueAttachment capability
- * badges. Read flow is open to any authenticated user.
+ * app-level device taxonomy; dhc-admins can add / modify / remove models
+ * via the shared DeviceModelForm. Read flow is open to any signed-in user.
  */
-const EMPTY_FORM = {
-  modelNumber: "",
-  brand: "",
-  category: DEVICE_CATEGORIES[0].id,
-  deviceType: DEVICE_CATEGORIES[0].subTypes[0].label,
-  description: "",
-  version: "1.0.0",
-};
-
 const DeviceCatalogue = () => {
   const { isAuthenticated, hasGroup } = useAuth();
   const isAdmin = hasGroup("dhc-admins");
@@ -30,8 +25,7 @@ const DeviceCatalogue = () => {
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
   const [showForm, setShowForm] = useState(false);
-  const [form, setForm] = useState(EMPTY_FORM);
-  const [saving, setSaving] = useState(false);
+  const [editing, setEditing] = useState(null);
 
   const fetchModels = useCallback(async () => {
     if (!isAuthenticated || typeof window === "undefined") return;
@@ -53,11 +47,6 @@ const DeviceCatalogue = () => {
     fetchModels();
   }, [fetchModels]);
 
-  const subTypes = useMemo(() => {
-    const cat = DEVICE_CATEGORIES.find((c) => c.id === form.category);
-    return cat ? cat.subTypes : [];
-  }, [form.category]);
-
   const filtered = items.filter((it) => {
     const q = search.toLowerCase();
     const matchesSearch =
@@ -70,34 +59,22 @@ const DeviceCatalogue = () => {
     return matchesSearch && matchesCat;
   });
 
-  const handleCreate = async (e) => {
-    e.preventDefault();
-    if (!form.modelNumber.trim() || !form.brand.trim() || saving) return;
-    setSaving(true);
-    setError(null);
-    try {
-      const client = generateClient();
+  const handleSave = async ({ _isEdit, ...input }) => {
+    const client = generateClient();
+    if (_isEdit) {
+      await client.graphql({
+        query: updateDeviceModel,
+        variables: { input },
+      });
+    } else {
       await client.graphql({
         query: createDeviceModel,
-        variables: {
-          input: {
-            modelNumber: form.modelNumber.trim(),
-            brand: form.brand.trim(),
-            category: form.category,
-            deviceType: form.deviceType,
-            description: form.description.trim() || null,
-            version: form.version.trim() || "1.0.0",
-          },
-        },
+        variables: { input },
       });
-      setShowForm(false);
-      setForm(EMPTY_FORM);
-      await fetchModels();
-    } catch (err) {
-      setError(err?.errors?.[0]?.message || err?.message || String(err));
-    } finally {
-      setSaving(false);
     }
+    setShowForm(false);
+    setEditing(null);
+    await fetchModels();
   };
 
   const handleDelete = async (it) => {
@@ -113,19 +90,6 @@ const DeviceCatalogue = () => {
       setError(err?.errors?.[0]?.message || err?.message || String(err));
     }
   };
-
-  const set = (k) => (e) =>
-    setForm((f) => ({
-      ...f,
-      [k]: e.target.value,
-      ...(k === "category"
-        ? {
-            deviceType:
-              (DEVICE_CATEGORIES.find((c) => c.id === e.target.value) || {})
-                .subTypes?.[0]?.label || "",
-          }
-        : {}),
-    }));
 
   return (
     <div className="dhc-manager-list">
@@ -164,7 +128,10 @@ const DeviceCatalogue = () => {
           <button
             type="button"
             className="dhc-button-primary"
-            onClick={() => setShowForm(true)}
+            onClick={() => {
+              setEditing(null);
+              setShowForm(true);
+            }}
           >
             + Add model
           </button>
@@ -176,106 +143,16 @@ const DeviceCatalogue = () => {
       )}
 
       {showForm && isAdmin && (
-        <form
-          className="dhc-manager-form"
-          onSubmit={handleCreate}
-          style={{ marginBottom: "1.5rem" }}
-        >
-          <h3 style={{ margin: "0 0 1rem", fontSize: "1rem" }}>
-            Add catalogue model
-          </h3>
-          <div className="dhc-form-field">
-            <label className="dhc-form-label">Model number</label>
-            <input
-              className="dhc-form-input"
-              value={form.modelNumber}
-              onChange={set("modelNumber")}
-              placeholder="ACME-NVR-8CH"
-              required
-            />
-          </div>
-          <div className="dhc-form-field">
-            <label className="dhc-form-label">Brand</label>
-            <input
-              className="dhc-form-input"
-              value={form.brand}
-              onChange={set("brand")}
-              placeholder="ACME"
-              required
-            />
-          </div>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: "0.6rem",
+        <div style={{ marginBottom: "1.5rem" }}>
+          <DeviceModelForm
+            item={editing}
+            onSave={handleSave}
+            onCancel={() => {
+              setShowForm(false);
+              setEditing(null);
             }}
-          >
-            <div className="dhc-form-field">
-              <label className="dhc-form-label">Category</label>
-              <select
-                className="dhc-form-input"
-                value={form.category}
-                onChange={set("category")}
-              >
-                {DEVICE_CATEGORIES.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="dhc-form-field">
-              <label className="dhc-form-label">Device type</label>
-              <select
-                className="dhc-form-input"
-                value={form.deviceType}
-                onChange={set("deviceType")}
-              >
-                {subTypes.map((s) => (
-                  <option key={s.label} value={s.label}>
-                    {s.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-          <div className="dhc-form-field">
-            <label className="dhc-form-label">Description</label>
-            <input
-              className="dhc-form-input"
-              value={form.description}
-              onChange={set("description")}
-            />
-          </div>
-          <div className="dhc-form-field">
-            <label className="dhc-form-label">Version</label>
-            <input
-              className="dhc-form-input"
-              value={form.version}
-              onChange={set("version")}
-            />
-          </div>
-          <div className="dhc-form-actions">
-            <button
-              type="submit"
-              className="dhc-button-primary"
-              disabled={saving}
-            >
-              {saving ? "Adding…" : "Add"}
-            </button>
-            <button
-              type="button"
-              className="dhc-button-ghost"
-              onClick={() => {
-                setShowForm(false);
-                setForm(EMPTY_FORM);
-              }}
-            >
-              Cancel
-            </button>
-          </div>
-        </form>
+          />
+        </div>
       )}
 
       {loading ? (
@@ -288,7 +165,6 @@ const DeviceCatalogue = () => {
               <th>Brand</th>
               <th>Category</th>
               <th>Type</th>
-              <th>Version</th>
               {isAdmin && <th>Actions</th>}
             </tr>
           </thead>
@@ -296,7 +172,7 @@ const DeviceCatalogue = () => {
             {filtered.length === 0 ? (
               <tr>
                 <td
-                  colSpan={isAdmin ? 6 : 5}
+                  colSpan={isAdmin ? 5 : 4}
                   style={{
                     textAlign: "center",
                     padding: "1.5rem",
@@ -319,9 +195,19 @@ const DeviceCatalogue = () => {
                     </span>
                   </td>
                   <td>{it.deviceType}</td>
-                  <td>{it.version}</td>
                   {isAdmin && (
                     <td>
+                      <button
+                        type="button"
+                        className="dhc-button-ghost"
+                        onClick={() => {
+                          setEditing(it);
+                          setShowForm(true);
+                        }}
+                        style={{ marginRight: "0.4rem" }}
+                      >
+                        Modify
+                      </button>
                       <button
                         type="button"
                         className="dhc-button-danger"

@@ -1,26 +1,45 @@
 import React, { useState, useMemo } from "react";
 import { DEVICE_CATEGORIES } from "../constants/deviceTypes";
 
-const STATUS_OPTIONS = ["Active", "Inactive", "Faulty", "Decommissioned"];
+// DeviceLifecycle enum (backend) → display labels.
+const LIFECYCLE = [
+  { value: "NEW", label: "New" },
+  { value: "ACTIVE", label: "Active" },
+  { value: "END_OF_LIFE", label: "End of life" },
+  { value: "DECOMMISSIONED", label: "Decommissioned" },
+];
 
 /**
- * Create / edit a DeviceInstance. Mirrors SmartHomeForm: controlled fields,
- * a `canSubmit` guard, inline submit error. smartHomeId + owners are injected
- * by DeviceInventoryManager (not user-editable).
+ * Create / edit a DeviceInstance — **model-first**: pick a Category, then an
+ * existing DeviceModel from the catalogue (filtered by category); the chosen
+ * model drives `modelNumber` + `deviceType`. You cannot record a device for a
+ * model that doesn't exist (add it in Catalogue/Inbox first). Editing a
+ * legacy instance whose model is no longer in the catalogue falls back to a
+ * read-only modelNumber so the row stays editable.
+ *
+ * Props: { item, models, onSave, onCancel }. `models` = DeviceModel[] from
+ * the catalogue. smartHomeId + owners are injected by the caller.
  */
-const DeviceInstanceForm = ({ item, onSave, onCancel }) => {
+const DeviceInstanceForm = ({ item, models = [], onSave, onCancel }) => {
   const isEdit = !!item;
-  const [modelNumber, setModelNumber] = useState(item?.modelNumber || "");
-  const [serialNumber, setSerialNumber] = useState(item?.serialNumber || "");
+  const knownModel = models.find((m) => m.modelNumber === item?.modelNumber);
+  const legacy = isEdit && !!item?.modelNumber && !knownModel;
+
   const initialCat =
+    (models.find((m) => m.modelNumber === item?.modelNumber)?.category &&
+      DEVICE_CATEGORIES.find(
+        (c) =>
+          c.id ===
+          models.find((m) => m.modelNumber === item?.modelNumber)?.category
+      )?.id) ||
     DEVICE_CATEGORIES.find((c) =>
       c.subTypes.some((s) => s.label === item?.deviceType)
-    )?.id || DEVICE_CATEGORIES[0].id;
+    )?.id ||
+    DEVICE_CATEGORIES[0].id;
+
   const [category, setCategory] = useState(initialCat);
-  const [deviceType, setDeviceType] = useState(
-    item?.deviceType ||
-      DEVICE_CATEGORIES.find((c) => c.id === initialCat).subTypes[0].label
-  );
+  const [modelNumber, setModelNumber] = useState(item?.modelNumber || "");
+  const [serialNumber, setSerialNumber] = useState(item?.serialNumber || "");
   const [purchaseDate, setPurchaseDate] = useState(item?.purchaseDate || "");
   const [installationDate, setInstallationDate] = useState(
     item?.installationDate || ""
@@ -28,18 +47,30 @@ const DeviceInstanceForm = ({ item, onSave, onCancel }) => {
   const [firmwareVersion, setFirmwareVersion] = useState(
     item?.firmwareVersion || ""
   );
-  const [status, setStatus] = useState(item?.status || "Active");
+  const [lifecycleState, setLifecycleState] = useState(
+    item?.lifecycleState || "NEW"
+  );
   const [location, setLocation] = useState(item?.location || "");
   const [saving, setSaving] = useState(false);
   const [submitError, setSubmitError] = useState(null);
 
-  const subTypes = useMemo(
-    () => DEVICE_CATEGORIES.find((c) => c.id === category)?.subTypes || [],
-    [category]
+  const modelsInCat = useMemo(
+    () => models.filter((m) => m.category === category),
+    [models, category]
   );
 
+  const selectedModel = models.find((m) => m.modelNumber === modelNumber);
+  // deviceType is driven by the chosen model (or kept from a legacy instance).
+  const deviceType = legacy
+    ? item.deviceType
+    : selectedModel?.deviceType || "";
+
   const canSubmit =
-    !!modelNumber.trim() && !!serialNumber.trim() && !!deviceType && !saving;
+    !!modelNumber.trim() &&
+    !!serialNumber.trim() &&
+    !!deviceType &&
+    !saving &&
+    (legacy || !!selectedModel);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -55,7 +86,7 @@ const DeviceInstanceForm = ({ item, onSave, onCancel }) => {
         purchaseDate: purchaseDate || null,
         installationDate: installationDate || null,
         firmwareVersion: firmwareVersion.trim() || null,
-        status,
+        lifecycleState,
         location: location.trim() || null,
       });
     } catch (err) {
@@ -71,6 +102,86 @@ const DeviceInstanceForm = ({ item, onSave, onCancel }) => {
         {isEdit ? `Modify device ${item.serialNumber}` : "Add device"}
       </h3>
 
+      {legacy && (
+        <p
+          style={{
+            fontSize: "0.75rem",
+            color: "#fbbf24",
+            margin: "-0.5rem 0 1rem",
+          }}
+        >
+          This device references model <code>{item.modelNumber}</code> which is
+          no longer in the catalogue — model/type are read-only.
+        </p>
+      )}
+
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          gap: "0.6rem",
+        }}
+      >
+        {/* ── model-first: Category → Model → derived deviceType ── */}
+        <div className="dhc-form-field">
+          <label className="dhc-form-label">Category</label>
+          <select
+            className="dhc-form-input"
+            value={category}
+            disabled={legacy}
+            onChange={(e) => {
+              setCategory(e.target.value);
+              setModelNumber("");
+            }}
+          >
+            {DEVICE_CATEGORIES.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.label}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="dhc-form-field">
+          <label className="dhc-form-label">Model</label>
+          {legacy ? (
+            <input
+              className="dhc-form-input"
+              value={item.modelNumber}
+              readOnly
+              style={{ fontFamily: "monospace", opacity: 0.8 }}
+            />
+          ) : (
+            <select
+              className="dhc-form-input"
+              value={modelNumber}
+              onChange={(e) => setModelNumber(e.target.value)}
+              required
+            >
+              <option value="">— select a model —</option>
+              {modelsInCat.map((m) => (
+                <option key={m.modelNumber} value={m.modelNumber}>
+                  {m.modelNumber} — {m.brand}
+                </option>
+              ))}
+            </select>
+          )}
+        </div>
+      </div>
+
+      {!legacy && modelsInCat.length === 0 && (
+        <p
+          style={{
+            fontSize: "0.78rem",
+            color: "#fbbf24",
+            margin: "0.25rem 0 0.75rem",
+          }}
+        >
+          No models in this category yet. Add one in the <strong>Catalogue</strong>{" "}
+          tab (or via the <strong>Inbox</strong>) before recording a device.
+        </p>
+      )}
+
       <div
         style={{
           display: "grid",
@@ -79,13 +190,12 @@ const DeviceInstanceForm = ({ item, onSave, onCancel }) => {
         }}
       >
         <div className="dhc-form-field">
-          <label className="dhc-form-label">Model number</label>
+          <label className="dhc-form-label">Device type (from model)</label>
           <input
             className="dhc-form-input"
-            value={modelNumber}
-            onChange={(e) => setModelNumber(e.target.value)}
-            placeholder="ACME-NVR-8CH"
-            required
+            value={deviceType || "—"}
+            readOnly
+            style={{ opacity: 0.8 }}
           />
         </div>
         <div className="dhc-form-field">
@@ -98,40 +208,6 @@ const DeviceInstanceForm = ({ item, onSave, onCancel }) => {
             readOnly={isEdit}
             required
           />
-        </div>
-        <div className="dhc-form-field">
-          <label className="dhc-form-label">Category</label>
-          <select
-            className="dhc-form-input"
-            value={category}
-            onChange={(e) => {
-              setCategory(e.target.value);
-              const c = DEVICE_CATEGORIES.find(
-                (x) => x.id === e.target.value
-              );
-              setDeviceType(c.subTypes[0].label);
-            }}
-          >
-            {DEVICE_CATEGORIES.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.label}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="dhc-form-field">
-          <label className="dhc-form-label">Device type</label>
-          <select
-            className="dhc-form-input"
-            value={deviceType}
-            onChange={(e) => setDeviceType(e.target.value)}
-          >
-            {subTypes.map((s) => (
-              <option key={s.label} value={s.label}>
-                {s.label}
-              </option>
-            ))}
-          </select>
         </div>
         <div className="dhc-form-field">
           <label className="dhc-form-label">Purchase date</label>
@@ -161,15 +237,15 @@ const DeviceInstanceForm = ({ item, onSave, onCancel }) => {
           />
         </div>
         <div className="dhc-form-field">
-          <label className="dhc-form-label">Status</label>
+          <label className="dhc-form-label">Lifecycle</label>
           <select
             className="dhc-form-input"
-            value={status}
-            onChange={(e) => setStatus(e.target.value)}
+            value={lifecycleState}
+            onChange={(e) => setLifecycleState(e.target.value)}
           >
-            {STATUS_OPTIONS.map((s) => (
-              <option key={s} value={s}>
-                {s}
+            {LIFECYCLE.map((l) => (
+              <option key={l.value} value={l.value}>
+                {l.label}
               </option>
             ))}
           </select>
@@ -199,11 +275,7 @@ const DeviceInstanceForm = ({ item, onSave, onCancel }) => {
         >
           {saving ? (isEdit ? "Saving…" : "Adding…") : isEdit ? "Save" : "Add"}
         </button>
-        <button
-          type="button"
-          className="dhc-button-ghost"
-          onClick={onCancel}
-        >
+        <button type="button" className="dhc-button-ghost" onClick={onCancel}>
           Cancel
         </button>
       </div>

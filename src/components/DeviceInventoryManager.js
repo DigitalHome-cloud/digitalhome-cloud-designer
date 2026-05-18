@@ -3,12 +3,23 @@ import { useAuth } from "../context/AuthContext";
 import { useSmartHome } from "../context/SmartHomeContext";
 import DeviceInstanceForm from "./DeviceInstanceForm";
 import { generateClient } from "aws-amplify/api";
-import { listDeviceInstanceBySmartHomeId } from "../graphql/queries";
+import {
+  listDeviceInstanceBySmartHomeId,
+  listDeviceModels,
+} from "../graphql/queries";
 import {
   createDeviceInstance,
   updateDeviceInstance,
   deleteDeviceInstance,
 } from "../graphql/mutations";
+
+// DeviceLifecycle enum → display label.
+const LIFECYCLE_LABEL = {
+  NEW: "New",
+  ACTIVE: "Active",
+  END_OF_LIFE: "End of life",
+  DECOMMISSIONED: "Decommissioned",
+};
 
 /**
  * Per-SmartHome device inventory. Mirrors SmartHomeManager: list + form
@@ -29,6 +40,7 @@ const DeviceInventoryManager = () => {
   const isAdmin = hasGroup("dhc-admins");
 
   const [items, setItems] = useState([]);
+  const [models, setModels] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [showForm, setShowForm] = useState(false);
@@ -40,13 +52,15 @@ const DeviceInventoryManager = () => {
     setError(null);
     try {
       const client = generateClient();
-      const result = await client.graphql({
-        query: listDeviceInstanceBySmartHomeId,
-        variables: { smartHomeId: homeId },
-      });
-      setItems(
-        result.data.listDeviceInstanceBySmartHomeId.items || []
-      );
+      const [instRes, modelRes] = await Promise.all([
+        client.graphql({
+          query: listDeviceInstanceBySmartHomeId,
+          variables: { smartHomeId: homeId },
+        }),
+        client.graphql({ query: listDeviceModels }),
+      ]);
+      setItems(instRes.data.listDeviceInstanceBySmartHomeId.items || []);
+      setModels(modelRes.data.listDeviceModels.items || []);
     } catch (err) {
       console.error("[DeviceInventory] fetch failed:", err);
       setError("Failed to load devices for this SmartHome.");
@@ -159,6 +173,7 @@ const DeviceInventoryManager = () => {
         <div style={{ marginBottom: "1.5rem" }}>
           <DeviceInstanceForm
             item={editingItem}
+            models={models}
             onSave={handleSave}
             onCancel={() => {
               setShowForm(false);
@@ -177,7 +192,7 @@ const DeviceInventoryManager = () => {
               <th>Serial</th>
               <th>Model</th>
               <th>Type</th>
-              <th>Status</th>
+              <th>Lifecycle</th>
               <th>Installed</th>
               <th>Actions</th>
             </tr>
@@ -205,7 +220,11 @@ const DeviceInventoryManager = () => {
                   <td>{it.modelNumber}</td>
                   <td>{it.deviceType}</td>
                   <td>
-                    <span className="dhc-nav-pill">{it.status || "—"}</span>
+                    <span className="dhc-nav-pill">
+                      {LIFECYCLE_LABEL[it.lifecycleState] ||
+                        it.lifecycleState ||
+                        "—"}
+                    </span>
                   </td>
                   <td>{it.installationDate || "—"}</td>
                   <td>

@@ -246,7 +246,6 @@ export const getDeviceModel = /* GraphQL */ `
       s3SpecsPath
       standards
       updatedAt
-      version
       __typename
     }
   }
@@ -275,7 +274,6 @@ export const listDeviceModels = /* GraphQL */ `
         s3SpecsPath
         standards
         updatedAt
-        version
         __typename
       }
       nextToken
@@ -291,6 +289,7 @@ export const getDeviceInstance = /* GraphQL */ `
       firmwareVersion
       id
       installationDate
+      lifecycleState
       location
       modelNumber
       owners
@@ -298,7 +297,6 @@ export const getDeviceInstance = /* GraphQL */ `
       s3SpecsPath
       serialNumber
       smartHomeId
-      status
       updatedAt
       __typename
     }
@@ -321,6 +319,7 @@ export const listDeviceInstances = /* GraphQL */ `
         firmwareVersion
         id
         installationDate
+        lifecycleState
         location
         modelNumber
         owners
@@ -328,7 +327,6 @@ export const listDeviceInstances = /* GraphQL */ `
         s3SpecsPath
         serialNumber
         smartHomeId
-        status
         updatedAt
         __typename
       }
@@ -358,6 +356,7 @@ export const listDeviceInstanceBySmartHomeId = /* GraphQL */ `
         firmwareVersion
         id
         installationDate
+        lifecycleState
         location
         modelNumber
         owners
@@ -365,7 +364,6 @@ export const listDeviceInstanceBySmartHomeId = /* GraphQL */ `
         s3SpecsPath
         serialNumber
         smartHomeId
-        status
         updatedAt
         __typename
       }

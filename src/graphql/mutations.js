@@ -295,7 +295,6 @@ const DEVICE_MODEL_FIELDS = `
       s3SpecsPath
       standards
       updatedAt
-      version
       __typename`;
 
 export const createDeviceModel = /* GraphQL */ `
@@ -334,6 +333,7 @@ const DEVICE_INSTANCE_FIELDS = `
       firmwareVersion
       id
       installationDate
+      lifecycleState
       location
       modelNumber
       owners
@@ -341,7 +341,6 @@ const DEVICE_INSTANCE_FIELDS = `
       s3SpecsPath
       serialNumber
       smartHomeId
-      status
       updatedAt
       __typename`;
 
@@ -408,6 +407,32 @@ export const requestDeviceFileWriteUrl = /* GraphQL */ `
       deviceType: $deviceType
       serialNumber: $serialNumber
       fileName: $fileName
+      contentType: $contentType
+    ) {
+      contentType
+      expiresAt
+      url
+      __typename
+    }
+  }
+`;
+export const requestDeviceInboxReadUrl = /* GraphQL */ `
+  mutation RequestDeviceInboxReadUrl($smartHomeId: ID!) {
+    requestDeviceInboxReadUrl(smartHomeId: $smartHomeId) {
+      contentType
+      expiresAt
+      url
+      __typename
+    }
+  }
+`;
+export const requestDeviceInboxWriteUrl = /* GraphQL */ `
+  mutation RequestDeviceInboxWriteUrl(
+    $smartHomeId: ID!
+    $contentType: String
+  ) {
+    requestDeviceInboxWriteUrl(
+      smartHomeId: $smartHomeId
       contentType: $contentType
     ) {
       contentType
