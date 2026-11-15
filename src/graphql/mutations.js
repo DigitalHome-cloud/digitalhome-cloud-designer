@@ -303,36 +303,6 @@ const DEVICE_MODEL_FIELDS = `
       voltageV
       __typename`;
 
-export const createDeviceModel = /* GraphQL */ `
-  mutation CreateDeviceModel(
-    $condition: ModelDeviceModelConditionInput
-    $input: CreateDeviceModelInput!
-  ) {
-    createDeviceModel(condition: $condition, input: $input) {${DEVICE_MODEL_FIELDS}
-    }
-  }
-`;
-export const updateDeviceModel = /* GraphQL */ `
-  mutation UpdateDeviceModel(
-    $condition: ModelDeviceModelConditionInput
-    $input: UpdateDeviceModelInput!
-  ) {
-    updateDeviceModel(condition: $condition, input: $input) {${DEVICE_MODEL_FIELDS}
-    }
-  }
-`;
-export const deleteDeviceModel = /* GraphQL */ `
-  mutation DeleteDeviceModel(
-    $condition: ModelDeviceModelConditionInput
-    $input: DeleteDeviceModelInput!
-  ) {
-    deleteDeviceModel(condition: $condition, input: $input) {
-      modelNumber
-      __typename
-    }
-  }
-`;
-
 const DEVICE_INSTANCE_FIELDS = `
       createdAt
       deviceType
